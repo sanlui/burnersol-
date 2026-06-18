@@ -40,7 +40,7 @@ import ProtocolDocs from "./components/ProtocolDocs";
 
 import CombustionChamber from "./components/CombustionChamber";
 import { TrashItem, BurnTransaction } from "./types";
-import { translations, languages, Language } from "./utils/translations";
+import { useLanguage } from "./contexts/LanguageContext";
 import { sound } from "./utils/audio";
 import { getSmartDynamicFeePercent } from "./utils/riskEngine";
 import { simulateAndValidateBurn } from "./utils/transactionSafety";
@@ -320,40 +320,10 @@ export default function App({ defaultLanguage }: { defaultLanguage?: Language })
   };
 
   // Language Support — priority: route > localStorage > browser > default
-  const detectedLang = (() => {
-    if (defaultLanguage) return defaultLanguage;
-    try {
-      const stored = localStorage.getItem("burner_preferred_lang");
-      if (stored && ["en", "it", "es", "zh", "ja", "de", "fr", "ru"].includes(stored)) {
-        return stored as Language;
-      }
-    } catch {}
-    try {
-      const locales = [...(navigator.languages || []), navigator.language].filter(Boolean);
-      for (const locale of locales) {
-        const prefix = locale.split("-")[0].toLowerCase();
-        if (["en", "it", "es", "zh", "ja", "de", "fr", "ru"].includes(prefix)) {
-          return prefix as Language;
-        }
-      }
-    } catch {}
-    return "en" as Language;
-  })();
-  const [language, setLanguage] = useState<Language>(detectedLang);
-  const t = translations[language];
-
-  const handleLanguageChange = (lang: Language) => {
-    setLanguage(lang);
-    document.documentElement.lang = lang;
-    try {
-      localStorage.setItem("burner_preferred_lang", lang);
-    } catch {}
-  };
-
-  // Set initial lang attribute
+const { language, t } = useLanguage();
   useEffect(() => {
     document.documentElement.lang = language;
-  }, []);
+  }, [language]);
 
   // Wallet Balances (Synchronized)
   const [walletBalance, setWalletBalance] = useState(1.452); // SOL
@@ -792,7 +762,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
 
           {/* Balance indicators & Hamburger Button */}
           <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-            <LanguageSwitcher currentLang={language} onLangChange={handleLanguageChange} />
+            <LanguageSwitcher />
 
             {/* Quick Balance for mobile and desktop */}
             <div className="flex items-center gap-2.5 px-3 py-1.5 border border-white/10 text-[11px] font-mono bg-white/[0.02]">
