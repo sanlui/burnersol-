@@ -14,7 +14,6 @@ import {
   Wallet
 } from "lucide-react";
 import { sound } from "../utils/audio";
-import { useLanguage } from "../contexts/LanguageContext";
 
 interface GlobalBurnFeedProps {
   userWalletAddress?: string | null;
@@ -49,47 +48,9 @@ interface FeedItem {
   walletName?: string;
 }
 
-export default function GlobalBurnFeed({ personalBurnHistory = [] }: Omit<GlobalBurnFeedProps, "t">) {
-  const { t } = useLanguage();
-  const [feed, setFeed] = useState<FeedItem[]>([]);
-  const [networkSpeed, setNetworkSpeed] = useState(1.4);
-  const [filterType, setFilterType] = useState<"all" | "spam" | "empty">("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isPaused, setIsPaused] = useState(false);
-  const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
-  const [cumulativeSol, setCumulativeSol] = useState(0);
-  const [cumulativePurges, setCumulativePurges] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const isIt = t.globalFeedColAddress === "INDIRIZZO WALLET";
-
-  const labels = isIt ? {
-    searchPlace: "Filtra per asset, indirizzo o hash...",
-    allPurges: "Tutte le Chiusure",
-    spamOnly: "Solo Spam / Scam",
-    emptyAcc: "Account Inattivi",
-    liveOn: "LIVE ATTIVO",
-    liveOff: "FEED SOSPESO",
-    activeNodes: "NODI BURNERSOL ATTIVI",
-    reclaimedTotal: "SOL TOTALI RECUPERATI DAGLI UTENTI",
-    totalPurges: "TRANSAZIONI BURNERSOL",
-    nodePing: "Latenza",
-    txReceipt: "Attestato Verificato",
-    nodeLocation: "Indirizzo Wallet",
-    reclaimAuth: "Transazione Verificata",
-    viewSolscan: "Ispeziona su Solscan",
-    close: "Chiudi Dettagli",
-    feedControls: "Controlli Feed",
-    searchTitle: "Strumento di Ricerca",
-    statusBadge: "STATO STABILE",
-    gasPaid: "Gas Rete",
-    nodeIp: "TX Signature",
-    riskRating: "Tipo Transazione",
-    cumulativeStats: "METRICHE GLOBALI",
-    personalBurns: "Transazioni del Sito",
-    noHistory: "Nessuna transazione registrata. Usa lo strumento BurnerSol per bruciare i tuoi account.",
-    loading: "Caricamento...",
-  } : {
+export default function GlobalBurnFeed({ personalBurnHistory = [] }: GlobalBurnFeedProps) {
+  // Static English labels
+  const labels = {
     searchPlace: "Search by asset, address or hash...",
     allPurges: "All Closures",
     spamOnly: "Scam / Spam Only",
@@ -116,6 +77,16 @@ export default function GlobalBurnFeed({ personalBurnHistory = [] }: Omit<Global
     noHistory: "No transactions recorded yet. Use BurnerSol to burn your accounts.",
     loading: "Loading...",
   };
+
+  const [feed, setFeed] = useState<FeedItem[]>([]);
+  const [networkSpeed, setNetworkSpeed] = useState(1.4);
+  const [filterType, setFilterType] = useState<"all" | "spam" | "empty">("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isPaused, setIsPaused] = useState(false);
+  const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
+  const [cumulativeSol, setCumulativeSol] = useState(0);
+  const [cumulativePurges, setCumulativePurges] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadFeed = useCallback(() => {
     const personalTxs: FeedItem[] = personalBurnHistory.map((tx) => ({

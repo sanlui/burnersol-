@@ -31,11 +31,9 @@ import TokenDistributionChart from "./components/TokenDistributionChart";
 import ScannerTerminal from "./components/ScannerTerminal";
 import SwapTerminal from "./components/SwapTerminal";
 import GlobalBurnFeed from "./components/GlobalBurnFeed";
-import LanguageSwitcher from "./components/LanguageSwitcher";
 
 import CombustionChamber from "./components/CombustionChamber";
 import { TrashItem, BurnTransaction } from "./types";
-import { useLanguage } from "./contexts/LanguageContext";
 import { sound } from "./utils/audio";
 import { getSmartDynamicFeePercent } from "./utils/riskEngine";
 import { simulateAndValidateBurn } from "./utils/transactionSafety";
@@ -292,6 +290,22 @@ export const FOOTER_DETAILS: Record<string, {
 };
 
 export default function App() {
+  // English translations (inline, no external files)
+  const t = {
+    statusBanner: "RECLAIM ACTIVE PROTOCOL",
+    heroHeadingBurn: "BURN",
+    heroHeadingFast: "FAST",
+    heroHeadingReclaim: "RECLAIM",
+    heroSubtitle: "The definitive hyper-deflationary protocol built on Solana. Harness institutional-grade memory closure mechanics to secure your wallet by reclaiming locked SOL deposits from toxic coins, unused mint accounts, and spam dust.",
+    modalCompleted: "INCINERATION COMPLETED",
+    modalSub: "Rent Recovered in SOL Securely",
+    modalClosed: "ACCOUNTS CLOSED:",
+    ledgerColAccounts: "ACCOUNTS MELTED",
+    modalRaw: "RECOVERED RAW RENT:",
+    modalStateMsg: "MELTED TARGET ACCOUNT DATA ERASED FROM LEDGER REGISTRY CONSTANTS. RECLAIMED SOL RENT APPLIED SUCCESSFULLY TO THE WALLET BALANCE.",
+    modalCloseBtn: "FURNACE VENT CLOSED",
+  };
+  
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -304,7 +318,7 @@ export default function App() {
     setHoveredSection(sectionId);
   };
 
-  const handleMouseLeaveSection = () => {
+const handleMouseLeaveSection = () => {
     if (hoverTimeout) {
       clearTimeout(hoverTimeout);
     }
@@ -314,106 +328,11 @@ export default function App() {
     setHoverTimeout(timer);
   };
 
-  // Language Support — priority: route > localStorage > browser > default
-const { language, t, hreflangLinks } = useLanguage();
+  // Static English SEO meta tags
   useEffect(() => {
-    document.documentElement.lang = language;
-    
-    // Update SEO meta tags based on language
-    const titles: Record<string, { title: string; description: string }> = {
-      en: {
-        title: "BurnerSOL - Blockchain State Rent Recovery & SOL Burner",
-        description: "The definitive hyper-deflationary protocol on Solana. Reclaim locked SOL from unused accounts, expired token mints, and spam dust. Institutional-grade memory closure mechanics."
-      },
-      it: {
-        title: "BurnerSOL - Recupero Rent e Brucia SOL su Solana",
-        description: "Il protocollo iper-deflazionistico definitivo su Solana. Recupera SOL bloccati da account inutilizzati, mint di token scaduti e spam dust. Meccaniche di chiusura memoria di livello istituzionale."
-      },
-      es: {
-        title: "BurnerSOL - Recuperación de Rent y Quema de SOL en Solana",
-        description: "El protocolo hiperdeflacionario definitivo en Solana. Recupera SOL bloqueados de cuentas no utilizadas, mints de tokens caducados y polvo de estafa."
-      },
-      fr: {
-        title: "BurnerSOL - Récupération de Rent et Brûlage SOL sur Solana",
-        description: "Le protocole hyper-deflationniste définitif sur Solana. Récupérez les SOL bloqués des comptes inutilisés, des mints de tokens expirés et des poussière d'arnaque."
-      },
-      de: {
-        title: "BurnerSOL - Rent-Wiederherstellung und SOL-Verbrennung auf Solana",
-        description: "Das definitive hyper-deflationäre Protokoll auf Solana. Geben Sie gesperrte SOL aus ungenutzten Konten, abgelaufenen Token-Mints und Spam-Staub frei."
-      },
-      pt: {
-        title: "BurnerSOL - Recuperação de Rent e Queima de SOL na Solana",
-        description: "O protocolo hiper-deflacionário definitivo na Solana. Recupere SOL bloqueados de contas não utilizadas, mints de tokens expirados e pó de golpe."
-      },
-      ru: {
-        title: "BurnerSOL - Восстановление аренды и сжигание SOL на Solana",
-        description: "Окончательный гипердефляционный протокол на Solana. Верните заблокированные SOL с неиспользуемых аккаунтов, просроченных токенов и спам-пыли."
-      },
-      tr: {
-        title: "BurnerSOL - Solana'da Rent Geri Alma ve SOL Yakma",
-        description: "Solana'daki kesin hiper-enflasyonist protokol. Kullanılmayan hesaplardan, süresi dolmuş token mint'lerinden ve spam tozlarından kilitli SOL'ları geri alın."
-      },
-      nl: {
-        title: "BurnerSOL - Renteteruggave en SOL-verbranding op Solana",
-        description: "Het definitieve hyper-deflationaire protocol op Solana. Herstel vergrendelde SOL van ongebruikte accounts, verlopen token-mints en spam-stof."
-      },
-      ar: {
-        title: "BurnerSOL - استرداد الإيجار وحرق SOL على سولانا",
-        description: "بروتوكول الانكماش المفرط النهائي على سولانا. استرداد SOL المجمدة من الحسابات غير المستخدمة ورموز Mint المنتهية الصلاحية والغبار الاحتيالي."
-      },
-      ko: {
-        title: "BurnerSOL - 솔라나에서 임대료回収 및 SOL 소각",
-        description: "솔라나의 최종 초탈flation 프로토콜. 미사용 계정, 만료된 토큰 민트 및 스팸 더스트에서 잠긴 SOL을回収합니다."
-      },
-      zh: {
-        title: "BurnerSOL - Solana区块链租金回收与SOL销毁",
-        description: "Solana上终极超通缩协议。从闲置账户、过期货币铸造和垃圾粉尘中回收锁定的SOL。机构级内存关闭机制。"
-      },
-    };
-    
-    const seo = titles[language] || titles.en;
-    
-    document.title = seo.title;
-    
-    // Update or create meta description
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.setAttribute('name', 'description');
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.setAttribute('content', seo.description);
-    
-    // Update og:tags
-    const ogTitle = document.querySelector('meta[property="og:title"]') || (() => {
-      const el = document.createElement('meta');
-      el.setAttribute('property', 'og:title');
-      document.head.appendChild(el);
-      return el;
-    })();
-    ogTitle.setAttribute('content', seo.title);
-    
-    const ogDesc = document.querySelector('meta[property="og:description"]') || (() => {
-      const el = document.createElement('meta');
-      el.setAttribute('property', 'og:description');
-      document.head.appendChild(el);
-      return el;
-    })();
-    ogDesc.setAttribute('content', seo.description);
-    
-    // Update hreflang links
-    const existingHreflangs = document.querySelectorAll('link[rel="alternate"][hreflang]');
-    existingHreflangs.forEach(el => el.remove());
-    
-    hreflangLinks.forEach(({ lang, path }) => {
-      const link = document.createElement('link');
-      link.setAttribute('rel', 'alternate');
-      link.setAttribute('hreflang', lang);
-      link.setAttribute('href', `${window.location.origin}${path}`);
-      document.head.appendChild(link);
-    });
-    
-  }, [language, hreflangLinks]);
+    document.title = "BurnerSOL - Blockchain State Rent Recovery & SOL Burner";
+    document.documentElement.lang = "en";
+  }, []);
 
   // Wallet Balances (Synchronized)
   const [walletBalance, setWalletBalance] = useState(1.452); // SOL

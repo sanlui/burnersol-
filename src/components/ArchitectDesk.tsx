@@ -25,7 +25,6 @@ import {
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { sound } from "../utils/audio";
-import { useLanguage } from "../contexts/LanguageContext";
 
 interface ArchitectDeskProps {
   coinName: string;
@@ -79,7 +78,6 @@ export default function ArchitectDesk({
   cumulativeBuybacks,
   setCumulativeBuybacks,
 }: ArchitectDeskProps) {
-  const { t } = useLanguage();
   const [localName, setLocalName] = useState(coinName);
   const [localSymbol, setLocalSymbol] = useState(coinSymbol);
   const [isUpdating, setIsUpdating] = useState(false);

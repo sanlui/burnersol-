@@ -1,6 +1,12 @@
 import React from "react";
 import { X } from "lucide-react";
-import { EIP6963Wallet } from "../hooks/useEIP6963Wallets";
+
+interface EIP6963Wallet {
+  rdns: string;
+  name: string;
+  icon: string;
+  provider: unknown;
+}
 
 interface WalletSelectionModalProps {
   wallets: EIP6963Wallet[];

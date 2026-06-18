@@ -1,12 +1,64 @@
-import { useState, useEffect } from "react";
-import { useEIP6963Wallets, EIP6963Wallet, connectSolanaWallet } from "../hooks/useEIP6963Wallets";
+import { useState, useEffect, useCallback } from "react";
 import WalletSelectionModal from "./WalletSelectionModal";
+
+interface EIP6963Wallet {
+  rdns: string;
+  name: string;
+  icon: string;
+  provider: unknown;
+}
 
 interface WalletConnectorProps {
   onConnected: (address: string, walletId: string) => void;
   onDisconnected: () => void;
   connectedAddress: string | null;
   language: "en" | "it";
+}
+
+function isSolanaWallet(wallet: EIP6963Wallet): boolean {
+  const provider = wallet.provider as { chains?: string[]; features?: Record<string, unknown> };
+  if (!provider) return false;
+  const chains = provider.chains;
+  if (chains && Array.isArray(chains)) {
+    return chains.some((chain) => typeof chain === "string" && chain.startsWith("solana:"));
+  }
+  return true;
+}
+
+function useEIP6963Wallets() {
+  const [wallets, setWallets] = useState<EIP6963Wallet[]>([]);
+
+  const handleEIP6963 = useCallback((event: CustomEvent) => {
+    const wallet: EIP6963Wallet = {
+      rdns: event.detail.info.rdns,
+      name: event.detail.info.name || event.detail.info.rdns,
+      icon: event.detail.info.icon,
+      provider: event.detail.provider,
+    };
+    if (!isSolanaWallet(wallet)) return;
+    setWallets((prev) => {
+      const exists = prev.some((w) => w.rdns === wallet.rdns);
+      if (exists) return prev;
+      return [...prev, wallet];
+    });
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handler = (event: Event) => handleEIP6963(event as CustomEvent);
+    window.addEventListener("eip6963:announceProvider", handler);
+    window.dispatchEvent(new Event("eip6963:requestProvider"));
+    return () => window.removeEventListener("eip6963:announceProvider", handler);
+  }, [handleEIP6963]);
+
+  return wallets;
+}
+
+async function connectSolanaWallet(provider: unknown, chain: string = "solana:mainnet"): Promise<string> {
+  const wallet = provider as { connect: (opts?: { chain?: string }) => Promise<{ publicKey: { toString: () => string } }> };
+  if (!wallet.connect) throw new Error("Wallet does not support standard connect");
+  const response = await wallet.connect({ chain });
+  return response.publicKey.toString();
 }
 
 export default function WalletConnector({
@@ -72,9 +124,7 @@ export default function WalletConnector({
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Connection failed";
       if (!message.includes("User rejected") && !message.includes("rejected")) {
-        setConnectionError(
-          language === "it" ? `Errore: ${message}` : `Error: ${message}`
-        );
+        setConnectionError(language === "it" ? `Errore: ${message}` : `Error: ${message}`);
       }
     } finally {
       setConnectingWallet(null);

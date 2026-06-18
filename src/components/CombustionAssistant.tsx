@@ -1,54 +1,20 @@
 import { useState, useRef, useEffect } from "react";
 import { ChatMessage } from "../types";
 import { Send, MessageSquare, Trash, RefreshCw, Flame, User } from "lucide-react";
-import { useLanguage } from "../contexts/LanguageContext";
 
 interface CombustionAssistantProps {}
 
+const WELCOME_MESSAGE = "🔥 Sparks and flames! I'm Cinder, the resident combustion assistant here at BurnerSol! I eat digital garbage for breakfast, lunch, and dinner, and spit out shiny reclaimed SOL! Tell me Scrappy—got some nasty scam tokens or useless NFTs clogging your wallet? Ask me how to melt them! 🔥";
+
 export default function CombustionAssistant({}: CombustionAssistantProps) {
-  const { t, language } = useLanguage();
-
-  const getWelcomeMessage = (lang: string) => {
-    switch (lang) {
-      case "it":
-        return "🔥 Scintille e fiamme! Sono Cinder, il tuo assistente per la combustione qui su BurnerSol! Mangio spazzatura digitale a colazione, pranzo e cena, e sputo SOL freschi di recupero! Dimmi, Scrappy, hai dei token scam o degli NFT inutilizzabili che ti intasano il wallet? Chiedimi come incenerirli! 🔥";
-      case "es":
-        return "🔥 ¡Chispas y llamas! ¡Soy Cinder, el asistente de combustión de BurnerSol! Como basura digital en el desayuno, almuerzo y cena, ¡y devuelvo SOL líquidos! Dime Scrappy, ¿tienes tokens basura o NFT inútiles en tu billetera? ¡Pregúntame cómo purgarlos! 🔥";
-      case "zh":
-        return "🔥 火光四射！我是 Cinder，BurnerSol 的智能销毁助手！我早中晚都在吞食链上垃圾账户，并为您吐出真金白银的 SOL 空间租金！兄弟，你钱包里有垃圾欺诈代币或无用的 NFT 插槽吗？快来向我请教如何清理它们吧！🔥";
-      case "ja":
-        return "🔥 炎と火花！BurnerSolの専属バーンアシスタント、Cinderです！デジタルゴミを朝昼晩と貪り、新鮮な解放SOLを吐き出します！なぁ、キミのウォレットに不要なスキャムやNFTアドレスは眠ってないかい？消去方法について何でも聞いてね！🔥";
-      case "de":
-        return "🔥 Funken und Flammen! Ich bin Cinder, dein Verbrennungsassistent hier bei BurnerSol! Ich fresse digitalen Müll morgens, mittags und abends und spucke reines SOL aus! Sag mir, Scrappy – hast du Betrugs-Token oder ungenutzte NFTs im Wallet? Frag mich, wie man sie einschmilzt! 🔥";
-      case "fr":
-        return "🔥 Étincelles et flammes ! Je suis Cinder, ton assistant de combustion attitré chez BurnerSol ! Je dévore les déchets numériques et recrache du SOL liquide tout frais ! Dis-moi, as-tu des jetons d'escroquerie ou des NFT inutiles qui encombrent ton portefeuille ? Demande-moi comment les liquider ! 🔥";
-      case "ru":
-        return "🔥 Искры и пламя! Я Cinder, ваш ИИ-помощник по сжиганию мусора в BurnerSol! Я ем цифровой мусор на завтрак, обед и ужин и возвращаю вам чистый SOL! Скажи, Scrappy — у тебя накопились скам-токены или ненужные NFT? Спроси меня, как их стереть! 🔥";
-      default:
-        return "🔥 Sparks and flames! I'm Cinder, the resident combustion assistant here at BurnerSol! I eat digital garbage for breakfast, lunch, and dinner, and spit out shiny reclaimed SOL! Tell me Scrappy—got some nasty scam tokens or useless NFTs clogging your wallet? Ask me how to melt them! 🔥";
-    }
-  };
-
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "init",
       role: "assistant",
-      content: getWelcomeMessage(language),
+      content: WELCOME_MESSAGE,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
-
-  // Reset welcome message on language change for immediate user feedback
-  useEffect(() => {
-    setMessages([
-      {
-        id: `init-${Date.now()}`,
-        role: "assistant",
-        content: getWelcomeMessage(language),
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      }
-    ]);
-  }, [language]);
 
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);

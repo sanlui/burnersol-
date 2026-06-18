@@ -25,7 +25,6 @@ import { generateBurnPreview, BurnPreviewReport } from "../utils/burnPreview";
 import { fetchJupiterPrices } from "../utils/marketData";
 import { enforceSpamThresholdCapping } from "../utils/solana";
 import ResilientImage from "./ResilientImage";
-import { useLanguage } from "../contexts/LanguageContext";
 
 interface ScannerTerminalProps {
   walletAddress?: string | null;
@@ -37,6 +36,15 @@ interface ScannerTerminalProps {
   sessionReclaimedSol?: number;
   analyzedWalletsCount?: number;
 }
+
+// Static English t object
+const t = {
+  step1Badge: "DIAGNOSTICS",
+  step2Badge: "ISOLATION", 
+  step3Badge: "COMBUSTION",
+  p_diagnostics: "Run Diagnostics",
+  heroHeadingBurn: "BURN & RECLAIM",
+};
 
 // Concrete inputs to drive the Advanced Risk Scoring Engine for the default dataset
 const RAW_TRASH_ITEMS = [
@@ -187,7 +195,6 @@ export default function ScannerTerminal({
   sessionReclaimedSol = 0.0,
   analyzedWalletsCount = 0,
 }: ScannerTerminalProps) {
-  const { t } = useLanguage();
   const [items, setItems] = useState<TrashItem[]>([]);
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
