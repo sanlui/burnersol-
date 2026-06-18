@@ -1,7 +1,6 @@
 import React from "react";
 import { X } from "lucide-react";
 import { EIP6963Wallet } from "../hooks/useEIP6963Wallets";
-import { getIconForRdns, getNameForRdns } from "../hooks/useEIP6963Wallets";
 
 interface WalletSelectionModalProps {
   wallets: EIP6963Wallet[];
@@ -10,6 +9,30 @@ interface WalletSelectionModalProps {
   connectingWallet: string | null;
   error: string | null;
   language: "en" | "it";
+}
+
+function WalletIcon({ wallet }: { wallet: EIP6963Wallet }) {
+  if (wallet.icon?.startsWith("data:image") || wallet.icon?.startsWith("http")) {
+    return (
+      <img
+        src={wallet.icon}
+        alt={wallet.name}
+        className="w-8 h-8 object-contain"
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.style.display = "none";
+          target.parentElement!.innerHTML = `<svg width="26" height="26" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="64" cy="64" r="64" fill="#666"/><rect x="44" y="54" width="40" height="32" rx="4" fill="white"/><rect x="54" y="86" width="20" height="10" fill="white"/></svg>`;
+        }}
+      />
+    );
+  }
+  return (
+    <svg width="26" height="26" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="64" cy="64" r="64" fill="#666"/>
+      <rect x="44" y="54" width="40" height="32" rx="4" fill="white"/>
+      <rect x="54" y="86" width="20" height="10" fill="white"/>
+    </svg>
+  );
 }
 
 export default function WalletSelectionModal({
@@ -65,19 +88,11 @@ export default function WalletSelectionModal({
               >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 flex items-center justify-center shrink-0">
-                    {wallet.icon.startsWith("data:image") ? (
-                      <img
-                        src={wallet.icon}
-                        alt={wallet.name}
-                        className="w-8 h-8"
-                      />
-                    ) : (
-                      getIconForRdns(wallet.rdns)
-                    )}
+                    <WalletIcon wallet={wallet} />
                   </div>
                   <div className="text-left">
                     <p className="font-mono text-xs font-bold text-white uppercase tracking-wider">
-                      {wallet.name || getNameForRdns(wallet.rdns)}
+                      {wallet.name || wallet.rdns}
                     </p>
                   </div>
                 </div>
@@ -93,8 +108,8 @@ export default function WalletSelectionModal({
 
         <p className="text-[9px] text-slate-500 leading-relaxed font-light text-left">
           {language === "it"
-            ? "Solo i wallet installati come estensione del browser vengono rilevati."
-            : "Only browser extension wallets that have been installed are detected."}
+            ? "Solo wallet compatibili con Solana Mainnet."
+            : "Only Solana Mainnet compatible wallets."}
         </p>
       </div>
     </div>

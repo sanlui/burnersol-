@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useEIP6963Wallets, EIP6963Wallet } from "../hooks/useEIP6963Wallets";
+import { useEIP6963Wallets, EIP6963Wallet, connectSolanaWallet } from "../hooks/useEIP6963Wallets";
 import WalletSelectionModal from "./WalletSelectionModal";
 
 interface WalletConnectorProps {
@@ -62,12 +62,7 @@ export default function WalletConnector({
     setConnectionError(null);
 
     try {
-      const provider = wallet.provider as {
-        connect: (opts?: { chain?: string }) => Promise<{ publicKey: { toString: () => string } }>;
-      };
-
-      const response = await provider.connect({ chain: "solana:mainnet" });
-      const address = response.publicKey.toString();
+      const address = await connectSolanaWallet(wallet.provider, "solana:mainnet");
 
       localStorage.setItem("burner_solana_wallet_address", address);
       localStorage.setItem("burner_solana_wallet_provider", wallet.rdns);
@@ -84,13 +79,6 @@ export default function WalletConnector({
     } finally {
       setConnectingWallet(null);
     }
-  };
-
-  const handleDisconnect = () => {
-    localStorage.removeItem("burner_solana_wallet_address");
-    localStorage.removeItem("burner_solana_wallet_provider");
-    onDisconnected();
-    setHasAutoConnected(false);
   };
 
   return (
