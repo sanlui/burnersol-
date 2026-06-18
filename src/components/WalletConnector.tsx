@@ -12,7 +12,6 @@ interface WalletConnectorProps {
   onConnected: (address: string, walletId: string) => void;
   onDisconnected: () => void;
   connectedAddress: string | null;
-  language: "en" | "it";
 }
 
 function isSolanaWallet(wallet: EIP6963Wallet): boolean {
@@ -65,7 +64,6 @@ export default function WalletConnector({
   onConnected,
   onDisconnected,
   connectedAddress,
-  language,
 }: WalletConnectorProps) {
   const eip6963Wallets = useEIP6963Wallets();
   const [showModal, setShowModal] = useState(false);
@@ -124,7 +122,7 @@ export default function WalletConnector({
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Connection failed";
       if (!message.includes("User rejected") && !message.includes("rejected")) {
-        setConnectionError(language === "it" ? `Errore: ${message}` : `Error: ${message}`);
+        setConnectionError(`Error: ${message}`);
       }
     } finally {
       setConnectingWallet(null);
@@ -143,7 +141,6 @@ export default function WalletConnector({
           onClose={() => setShowModal(false)}
           connectingWallet={connectingWallet}
           error={connectionError}
-          language={language}
         />
       )}
     </>

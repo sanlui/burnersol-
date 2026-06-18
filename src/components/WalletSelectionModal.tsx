@@ -14,7 +14,6 @@ interface WalletSelectionModalProps {
   onClose: () => void;
   connectingWallet: string | null;
   error: string | null;
-  language: "en" | "it";
 }
 
 function WalletIcon({ wallet }: { wallet: EIP6963Wallet }) {
@@ -47,7 +46,6 @@ export default function WalletSelectionModal({
   onClose,
   connectingWallet,
   error,
-  language,
 }: WalletSelectionModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in">
@@ -61,7 +59,7 @@ export default function WalletSelectionModal({
           <div className="flex items-center gap-2 text-left">
             <div className="w-2 h-2 bg-flame-orange rounded-full animate-pulse" />
             <h3 className="font-display font-medium text-white tracking-widest uppercase text-[10px]">
-              {language === "it" ? "SELEZIONA WALLET" : "SELECT WALLET"}
+              SELECT WALLET
             </h3>
           </div>
           <button
@@ -113,9 +111,7 @@ export default function WalletSelectionModal({
         </div>
 
         <p className="text-[9px] text-slate-500 leading-relaxed font-light text-left">
-          {language === "it"
-            ? "Solo wallet compatibili con Solana Mainnet."
-            : "Only Solana Mainnet compatible wallets."}
+          Only Solana Mainnet compatible wallets.
         </p>
       </div>
     </div>

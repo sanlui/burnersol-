@@ -28,9 +28,6 @@ export default function ProtocolDocs({ sound }: ProtocolDocsProps) {
   const language = "en";
 
   const handleCopy = (text: string, id: string) => {
-  const [copiedText, setCopiedText] = useState<string | null>(null);
-
-  const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedText(id);
     if (sound?.playHoverPluck) sound.playHoverPluck();
