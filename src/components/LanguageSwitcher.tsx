@@ -4,6 +4,36 @@ import { supportedLanguages, useLanguage, LanguageCode } from "../contexts/Langu
 import { sound } from "../utils/audio";
 import { Globe, ChevronDown } from "lucide-react";
 
+function getLanguageFromPath(path: string): LanguageCode {
+  const segments = path.split("/").filter(Boolean);
+  const firstSegment = segments[0]?.toLowerCase();
+  
+  const langMap: Record<string, LanguageCode> = {
+    "en": "en", "it": "it", "es": "es", "fr": "fr", "de": "de",
+    "pt": "pt", "ru": "ru", "tr": "tr", "nl": "nl", "ar": "ar", "ko": "ko", "zh": "zh",
+  };
+  
+  return langMap[firstSegment || ""] || "en";
+}
+
+function replaceLanguageInPath(path: string, newLang: LanguageCode): string {
+  const segments = path.split("/").filter(Boolean);
+  const currentLang = getLanguageFromPath("/" + segments.join("/"));
+  
+  if (currentLang === newLang) return path;
+  
+  if (currentLang === "en") {
+    return newLang === "en" ? path : `/${newLang}${path}`;
+  }
+  
+  if (newLang === "en") {
+    return "/" + segments.slice(1).join("/") || "/";
+  }
+  
+  segments[0] = newLang;
+  return "/" + segments.join("/");
+}
+
 export default function LanguageSwitcher() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -27,6 +57,8 @@ export default function LanguageSwitcher() {
     sound.playHoverPluck();
     setOpen(false);
     setLanguage(lang);
+    const newPath = replaceLanguageInPath(location.pathname, lang);
+    navigate(newPath);
   };
 
   return (

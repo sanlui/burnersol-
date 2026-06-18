@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import enData from "../locales/en.json";
 import itData from "../locales/it.json";
 
-export type LanguageCode = "en" | "it" | "es" | "zh" | "ja" | "de" | "fr" | "ru";
+export type LanguageCode = "en" | "it" | "es" | "fr" | "de" | "pt" | "ru" | "tr" | "nl" | "ar" | "ko" | "zh";
 
 interface LanguageData {
   code: LanguageCode;
@@ -15,53 +15,88 @@ interface LanguageContextType {
   t: LanguageData;
   setLanguage: (lang: LanguageCode) => void;
   isLoading: boolean;
+  hreflangLinks: { lang: string; path: string }[];
 }
 
 const translations: Record<LanguageCode, LanguageData> = {
   en: enData,
   it: itData,
   es: enData,
-  zh: enData,
-  ja: enData,
-  de: enData,
   fr: enData,
+  de: enData,
+  pt: enData,
   ru: enData,
+  tr: enData,
+  nl: enData,
+  ar: enData,
+  ko: enData,
+  zh: enData,
 };
 
 const LanguageContext = createContext<LanguageContextType | null>(null);
 
-function detectInitialLanguage(): LanguageCode {
-  try {
-    const stored = localStorage.getItem("burner_language") as LanguageCode;
-    if (stored && translations[stored]) return stored;
-  } catch {}
-
-  try {
-    const langParam = new URLSearchParams(window.location.search).get("lang") as LanguageCode;
-    if (langParam && translations[langParam]) return langParam;
-  } catch {}
-
-  try {
-    const browserLangs = navigator.languages || [navigator.language];
-    for (const lang of browserLangs) {
-      const prefix = lang.split("-")[0].toLowerCase();
-      const langCode = prefix as LanguageCode;
-      if (translations[langCode]) return langCode;
-    }
-  } catch {}
-
-  return "en";
+export function getLanguageFromPath(path: string): LanguageCode {
+  if (!path) return "en";
+  const segments = path.split("/").filter(Boolean);
+  const firstSegment = segments[0]?.toLowerCase();
+  
+  const langMap: Record<string, LanguageCode> = {
+    "en": "en",
+    "it": "it",
+    "es": "es",
+    "fr": "fr",
+    "de": "de",
+    "pt": "pt",
+    "ru": "ru",
+    "tr": "tr",
+    "nl": "nl",
+    "ar": "ar",
+    "ko": "ko",
+    "zh": "zh",
+  };
+  
+  return langMap[firstSegment || ""] || "en";
 }
+
+export function useLanguage() {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error("useLanguage must be used within LanguageProvider");
+  }
+  return context;
+}
+
+export const supportedLanguages: { code: LanguageCode; hreflang: string; name: string }[] = [
+  { code: "en", hreflang: "en", name: "English" },
+  { code: "it", hreflang: "it", name: "Italiano" },
+  { code: "es", hreflang: "es", name: "Español" },
+  { code: "fr", hreflang: "fr", name: "Français" },
+  { code: "de", hreflang: "de", name: "Deutsch" },
+  { code: "pt", hreflang: "pt", name: "Português" },
+  { code: "ru", hreflang: "ru", name: "Русский" },
+  { code: "tr", hreflang: "tr", name: "Türkçe" },
+  { code: "nl", hreflang: "nl", name: "Nederlands" },
+  { code: "ar", hreflang: "ar", name: "العربية" },
+  { code: "ko", hreflang: "ko", name: "한국어" },
+  { code: "zh", hreflang: "zh", name: "中文" },
+];
+
+const hreflangLinks = supportedLanguages.map(l => ({
+  lang: l.hreflang,
+  path: l.code === "en" ? "/" : `/${l.code}/`
+}));
 
 export function LanguageProvider({ 
   children, 
-  initialLanguage
+  initialLanguage,
+  initialPath = "/"
 }: { 
   children: ReactNode;
   initialLanguage?: LanguageCode;
+  initialPath?: string;
 }) {
   const [language, setLanguageState] = useState<LanguageCode>(
-    initialLanguage || detectInitialLanguage()
+    initialLanguage || getLanguageFromPath(initialPath)
   );
 
   useEffect(() => {
@@ -76,27 +111,8 @@ export function LanguageProvider({
   };
 
   return (
-    <LanguageContext.Provider value={{ language, t, setLanguage, isLoading: false }}>
+    <LanguageContext.Provider value={{ language, t, setLanguage, isLoading: false, hreflangLinks }}>
       {children}
     </LanguageContext.Provider>
   );
 }
-
-export function useLanguage() {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error("useLanguage must be used within LanguageProvider");
-  }
-  return context;
-}
-
-export const supportedLanguages: { code: LanguageCode; name: string }[] = [
-  { code: "en", name: "English" },
-  { code: "it", name: "Italiano" },
-  { code: "es", name: "Español" },
-  { code: "zh", name: "中文" },
-  { code: "ja", name: "日本語" },
-  { code: "de", name: "Deutsch" },
-  { code: "fr", name: "Français" },
-  { code: "ru", name: "Русский" },
-];
