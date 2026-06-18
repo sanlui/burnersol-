@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 import enData from "../locales/en.json";
 import itData from "../locales/it.json";
 
@@ -39,12 +39,11 @@ export function LanguageProvider({
 }) {
   const [language, setLanguageState] = useState<LanguageCode>(initialLanguage);
 
-  const t = translations[initialLanguage] || translations.en;
+  const t = translations[language] || translations.en;
 
   const setLanguage = (lang: LanguageCode) => {
     setLanguageState(lang);
     localStorage.setItem("burner_language", lang);
-    window.location.href = lang === "en" ? "/" : `/${lang}/`;
   };
 
   return (
