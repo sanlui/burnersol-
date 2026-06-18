@@ -67,105 +67,225 @@ const ORIGINAL_CHART_DATA = [
   { name: "Now", Price: 0.0324 },
 ];
 
-export const FOOTER_DETAILS: Record<string, { title: string; subtitle: string; desc: string; points: string[] }> = {
+export const FOOTER_DETAILS: Record<string, {
+  it: { title: string; subtitle: string; desc: string; points: string[] };
+  en: { title: string; subtitle: string; desc: string; points: string[] };
+}> = {
   "sol-burner": {
-    title: "FLAGSHIP SOL BURNER UTILITY",
-    subtitle: "Account Pruning & State Rent Release Engineering",
-    desc: "The primary utility of BurnerSOL scans and flags unused accounts, expired token mints, empty Associated Token Accounts (ATA), and orphaned metadata inside your Solana wallet. Each of these accounts locks storage rent which can be safely unlocked.",
-    points: [
-      "Enables instant State Rent recovery to your primary address.",
-      "Reclaims exactly ~0.00203 SOL for every single pruned Associated Token Account.",
-      "Backed by strict pre-execution safety and dry-run block simulations.",
-      "Earns additional $BURNER token incentives as bonus protocol utility."
-    ]
+    it: {
+      title: "STRUMENTO SOL BURNER APRIPISTA",
+      subtitle: "Ingegneria di Eliminazione Account & Rilascio di State Rent",
+      desc: "La funzionalità principale di BurnerSOL consente di individuare in sicurezza vecchi account, mint di token scaduti, account associati inutilizzati (ATA) e metadati orfani all'interno del proprio wallet Solana. Ciascuno di questi account blocca dello State Rent che può essere sbloccato.",
+      points: [
+        "Innesca il recupero istantaneo dello State Rent su Solana.",
+        "Rilascia circa ~0.00203 SOL per ciascun account obsoleto eliminato.",
+        "Opera mediante controlli di sicurezza rigorosi a livello di codice.",
+        "Genera ricompense d'incentivo in token $BURNER come bonus fedeltà."
+      ]
+    },
+    en: {
+      title: "FLAGSHIP SOL BURNER UTILITY",
+      subtitle: "Account Pruning & State Rent Release Engineering",
+      desc: "The primary utility of BurnerSOL scans and flags unused accounts, expired token mints, empty Associated Token Accounts (ATA), and orphaned metadata inside your Solana wallet. Each of these accounts locks storage rent which can be safely unlocked.",
+      points: [
+        "Enables instant State Rent recovery to your primary address.",
+        "Reclaims exactly ~0.00203 SOL for every single pruned Associated Token Account.",
+        "Backed by strict pre-execution safety and dry-run block simulations.",
+        "Earns additional $BURNER token incentives as bonus protocol utility."
+      ]
+    }
   },
   "recupera-sol": {
-    title: "SOLANA RENT RECOVERY PIPELINE",
-    subtitle: "Unlocking Dormant Cryptographic Capital",
-    desc: "Recovering locked SOL from unused accounts is an optimal way to streamline your wallet. Many users unknowingly leave tens of dollars in SOL trapped in residual account structures created by old swaps.",
-    points: [
-      "Instant recovery with 100% on-chain transparency and zero waiting time.",
-      "Non-custodial design: funds route straight back into your own self-custody wallet.",
-      "Automatic discovery tool querying high-performance Solana RPC nodes.",
-      "Reduces state bloat, contributing directly to network storage health."
-    ]
+    it: {
+      title: "MECCANISMO DI RECOVERY SOLANA",
+      subtitle: "Liberare il Capitale Silente sulla Blockchain",
+      desc: "Il recupero di SOL bloccati negli account inutilizzati rappresenta un modo ideale di ottimizzare il proprio portafoglio. Molti utenti lasciano inconsapevolmente decine di dollari in SOL intrappolati in account creati da vecchi swap DeFi.",
+      points: [
+        "Recupero immediato e transazione trasparente al 100% esposta on-chain.",
+        "Nessun intermediario: i fondi tornano direttamente al tuo indirizzo registrato.",
+        "Strumento automatico con scansione di sicurezza e nodi RPC integrati.",
+        "Ripulendo la blockchain contribuisci direttamente all'efficienza globale."
+      ]
+    },
+    en: {
+      title: "SOLANA RENT RECOVERY PIPELINE",
+      subtitle: "Unlocking Dormant Cryptographic Capital",
+      desc: "Recovering locked SOL from unused accounts is an optimal way to streamline your wallet. Many users unknowingly leave tens of dollars in SOL trapped in residual account structures created by old swaps.",
+      points: [
+        "Instant recovery with 100% on-chain transparency and zero waiting time.",
+        "Non-custodial design: funds route straight back into your own self-custody wallet.",
+        "Automatic discovery tool querying high-performance Solana RPC nodes.",
+        "Reduces state bloat, contributing directly to network storage health."
+      ]
+    }
   },
   "come-funziona": {
-    title: "INSTRUCTION PROGRAM FLOW",
-    subtitle: "Under-the-Hood Dynamics of Blockchain Rent",
-    desc: "Solana requires accounts to lock up a small SOL deposit as collateral to occupy the blockchain's memory (rent exemption). When you sell all corresponding tokens, the structural state shell persists in locking your collateral.",
-    points: [
-      "The dApp queries the blockchain and discovers these empty skeletal units.",
-      "Safe construction of closeAccount instructions prevents transaction conflicts.",
-      "Dormant rent collateral is immediately dissolved and released to you.",
-      "Get two-fold reward: reclaim real SOL and clean your active wallet."
-    ]
+    it: {
+      title: "ARCHITETTURA DI PROGRAMMA E FLOW",
+      subtitle: "Spiegazione Tecnica del Ciclo di Eliminazione",
+      desc: "Solana impone una regola per cui ogni account deve detenere un deposito di SOL per assicurarsi l'allocazione dello storage globale della blockchain (esenzione affitto). Quando vendi tutti i token di una moneta, la struttura del registro rimane attiva consumando SOL.",
+      points: [
+        "La dApp rileva questi scheletri strutturali vuoti nel tuo wallet.",
+        "Instaura un comando di chiusura (closeAccount) in sicurezza tramite smart contract.",
+        "Il deposito dello State Rent viene sciolto e accreditato a te immediatamente.",
+        "Ottieni un duplice vantaggio: recupero di SOL reali e alleggerimento del wallet."
+      ]
+    },
+    en: {
+      title: "INSTRUCTION PROGRAM FLOW",
+      subtitle: "Under-the-Hood Dynamics of Blockchain Rent",
+      desc: "Solana requires accounts to lock up a small SOL deposit as collateral to occupy the blockchain's memory (rent exemption). When you sell all corresponding tokens, the structural state shell persists in locking your collateral.",
+      points: [
+        "The dApp queries the blockchain and discovers these empty skeletal units.",
+        "Safe construction of closeAccount instructions prevents transaction conflicts.",
+        "Dormant rent collateral is immediately dissolved and released to you.",
+        "Get two-fold reward: reclaim real SOL and clean your active wallet."
+      ]
+    }
   },
   "chi-siamo": {
-    title: "BURNERSOL TECHNOLOGICAL EDGE",
-    subtitle: "Pioneers of Modern Decentralized Utilities",
-    desc: "We are an engineering collective focused on building premium smart contract utilities. Our operational vision is to make complex Web3 structures accessible with highly secure, automated systems.",
-    points: [
-      "Dedicated block-storage developers committing to state efficiency.",
-      "Advocates for clean, high-performance decentralized storage layers.",
-      "Specialized in pre-execution transaction simulations and HUD interfaces.",
-      "Over 5 million simulated transactions processed safely globally."
-    ]
+    it: {
+      title: "ECCELLENZA TECNOLOGICA BURNERSOL",
+      subtitle: "Pionieri dell'Efficienza degli Stati Blockchain",
+      desc: "Siamo un collettivo d'eccellenza focalizzato sull'ingegneria dei sistemi distribuiti e contratti intelligenti. Il nostro obiettivo è abbattere le barriere complesse dei protocolli web3 fornendo utilità di livello enterprise per la finanza decentralizzata.",
+      points: [
+        "Sviluppatori dedicati all'ottimizzazione dell'infrastruttura di rete Solana.",
+        "Sostenitori di un ecosistema open-source pulito, sostenibile ed efficiente.",
+        "Specialisti in sicurezza dei contratti e interfacce utente HUD responsive.",
+        "Oltre 5 milioni di transazioni simulate con successo in totale sulla rete."
+      ]
+    },
+    en: {
+      title: "BURNERSOL TECHNOLOGICAL EDGE",
+      subtitle: "Pioneers of Modern Decentralized Utilities",
+      desc: "We are an engineering collective focused on building premium smart contract utilities. Our operational vision is to make complex Web3 structures accessible with highly secure, automated systems.",
+      points: [
+        "Dedicated block-storage developers committing to state efficiency.",
+        "Advocates for clean, high-performance decentralized storage layers.",
+        "Specialized in pre-execution transaction simulations and HUD interfaces.",
+        "Over 5 million simulated transactions processed safely globally."
+      ]
+    }
   },
   "faq": {
-    title: "FREQUENTLY ASKED QUESTIONS (FAQ)",
-    subtitle: "Instant Operational & Safety Information",
-    desc: "Want to learn more about the technical details? Here are the ideal explanations covering safety, wallets, and standard blockchain workflows.",
-    points: [
-      "Is the dApp secure? Yes, it only constructs verified empty account closure transactions.",
-      "Which wallets are supported? Phantom, Solflare, Backpack and all standard web3 providers.",
-      "Are there any major costs? Only the basic Solana gas network fees (~0.000005 SOL).",
-      "How much SOL do I get? ~0.00203 SOL per account is immediately unlocked upon approval."
-    ]
+    it: {
+      title: "DOMANDE FREQUENTI (FAQ)",
+      subtitle: "Chiarimenti Tecnici ed Operativi Immediati",
+      desc: "Vuoi saperne di più sul funzionamento tecnico e sulla sicurezza? Ecco le risposte ideali per rassicurarti e comprendere al meglio ogni singolo passaggio logico.",
+      points: [
+        "La dApp è sicura? Assolutamente sì, opera solo su istruzioni di eliminazione di elementi vuoti.",
+        "Quali wallet sono supportati? Phantom, Solflare, Backpack e tutti i principali provider Solana.",
+        "Quanto costa l'operazione? Solo le normali micro-gas fee della rete Solana (~0.000005 SOL).",
+        "Quanto ritira ciascun account? Circa 0.00203 SOL, accreditato immediatamente ad ogni firma."
+      ]
+    },
+    en: {
+      title: "FREQUENTLY ASKED QUESTIONS (FAQ)",
+      subtitle: "Instant Operational & Safety Information",
+      desc: "Want to learn more about the technical details? Here are the ideal explanations covering safety, wallets, and standard blockchain workflows.",
+      points: [
+        "Is the dApp secure? Yes, it only constructs verified empty account closure transactions.",
+        "Which wallets are supported? Phantom, Solflare, Backpack and all standard web3 providers.",
+        "Are there any major costs? Only the basic Solana gas network fees (~0.000005 SOL).",
+        "How much SOL do I get? ~0.00203 SOL per account is immediately unlocked upon approval."
+      ]
+    }
   },
   "sicurezza": {
-    title: "ENHANCED CRYPTOGRAPHIC SAFETY RIGOR",
-    subtitle: "Standard Integrity with Pre-Execution Sandbox Checks",
-    desc: "Your assets are covered under absolute fail-safe environments. Prior to any wallet signature call, the protocol executes multiple state validations to eliminate user error or data loss.",
-    points: [
-      "Transaction Dry-Run simulations expose the exact changes beforehand.",
-      "Failsafe exclusion blocks closure instructions on anything with positive monetary value.",
-      "Native Program Instructions: Uses official audited Solana System Program constructs only.",
-      "Seed Separation: Absolute zero custody. Your keys remain fully sealed inside your chosen wallet API."
-    ]
+    it: {
+      title: "PROTOCOLLI DI CRITTOGRAFIA E SICUREZZA",
+      subtitle: "Standard Elevati con Analisi Sandbox Pre-Execution",
+      desc: "La sicurezza degli asset è la nostra priorità numero uno. Prima che una firma venga inoltrata al wallet dell'utente, la dApp esegue controlli multipli on-chain per escludere qualsiasi rischio di perdita.",
+      points: [
+        "Simulazione Dry-Run: Controlla l'esatta variazione dei saldi prima dell'approvazione.",
+        "Esclusione di Saldo Positivo: Impossibile cancellare account con token valorizzati al loro interno.",
+        "Uso di Contratti Verificati: Istruzioni standard e aperte del programma di sistema di Solana.",
+        "Zero Accesso a Chiavi Private: Chiavi custodite esclusivamente nel tuo wallet protetto."
+      ]
+    },
+    en: {
+      title: "ENHANCED CRYPTOGRAPHIC SAFETY RIGOR",
+      subtitle: "Standard Integrity with Pre-Execution Sandbox Checks",
+      desc: "Your assets are covered under absolute fail-safe environments. Prior to any wallet signature call, the protocol executes multiple state validations to eliminate user error or data loss.",
+      points: [
+        "Transaction Dry-Run simulations expose the exact changes beforehand.",
+        "Failsafe exclusion blocks closure instructions on anything with positive monetary value.",
+        "Native Program Instructions: Uses official audited Solana System Program constructs only.",
+        "Seed Separation: Absolute zero custody. Your keys remain fully sealed inside your chosen wallet API."
+      ]
+    }
   },
   "contatti": {
-    title: "TECHNICAL COMMUNICATIONS CORE",
-    subtitle: "Active Operations & Community Access Hub",
-    desc: "We are always responsive to user feedback, technical queries, and feature suggestions. Feel free to contact us through any of our operational hubs.",
-    points: [
-      "Official Developer Email Desk: support@burnersol.io",
-      "Live technical updates & community reviews available via Discord servers.",
-      "Daily status posts and optimization stats published on X.com.",
-      "Open GitHub repository discussions for reporting UI glitches or script errors."
-    ]
+    it: {
+      title: "CENTRO DI ASSISTENZA E TELEMETRIA",
+      subtitle: "Canali Operativi di Supporto della Community",
+      desc: "Siamo sempre pronti ad ascoltare feedback, segnalazioni e a supportare gli utenti durante le operazioni di bonifica e ottimizzazione. Connettici subito con i canali attivi.",
+      points: [
+        "Supporto e-mail dedicato: support@burnersol.io",
+        "Canale di sviluppo attivo: Consulta il nostro repository GitHub ufficiale.",
+        "Notizie ed aggiornamenti tempestivi: Seguici su X.com per restare aggiornato.",
+        "Supporto in tempo reale: Unisciti alla vivace community Discord per riscontri immediati."
+      ]
+    },
+    en: {
+      title: "TECHNICAL COMMUNICATIONS CORE",
+      subtitle: "Active Operations & Community Access Hub",
+      desc: "We are always responsive to user feedback, technical queries, and feature suggestions. Feel free to contact us through any of our operational hubs.",
+      points: [
+        "Official Developer Email Desk: support@burnersol.io",
+        "Live technical updates & community reviews available via Discord servers.",
+        "Daily status posts and optimization stats published on X.com.",
+        "Open GitHub repository discussions for reporting UI glitches or script errors."
+      ]
+    }
   },
   "termini": {
-    title: "TERMS & CONDITIONS OF SERVICE",
-    subtitle: "Legal Directives for On-Chain Protocol Use",
-    desc: "Using BurnerSOL constitutes active agreement with the technical standards, user responsibilities, and structural behaviors of Web3 applications.",
-    points: [
-      "Irreversibility: Signed on-chain state clearance procedures are forever permanent by network design.",
-      "Self-Custody Responsibility: You hold complete visual selection and transaction signing control.",
-      "Utility Purpose: The protocol is engineered for state cleanup and rent-exemption recovery.",
-      "RPC Reliability: Transaction estimates reflect live, non-binding Solana block metrics."
-    ]
+    it: {
+      title: "TERMINI E CONDIZIONI DEL SERVIZIO",
+      subtitle: "Parametri Legali per l'Esecuzione On-Chain",
+      desc: "L'utilizzo di BurnerSOL implica l'accettazione consapevole delle regole e delle responsabilità associate alle interazioni Web3 basate su blockchain decentralizzate.",
+      points: [
+        "Invertibilità: Qualsiasi transazione on-chain approvata non può essere annullata.",
+        "No Custodia: L'utente mantiene il controllo sovrano e la responsabilità del proprio wallet.",
+        "Finalità: Lo strumento è fornito 'as is' promuovendo la pulizia degli stati globali.",
+        "Accuratezza: Il simulatore integrato funge da indicazione fedele basata su dati RPC."
+      ]
+    },
+    en: {
+      title: "TERMS & CONDITIONS OF SERVICE",
+      subtitle: "Legal Directives for On-Chain Protocol Use",
+      desc: "Using BurnerSOL constitutes active agreement with the technical standards, user responsibilities, and structural behaviors of Web3 applications.",
+      points: [
+        "Irreversibility: Signed on-chain state clearance procedures are forever permanent by network design.",
+        "Self-Custody Responsibility: You hold complete visual selection and transaction signing control.",
+        "Utility Purpose: The protocol is engineered for state cleanup and rent-exemption recovery.",
+        "RPC Reliability: Transaction estimates reflect live, non-binding Solana block metrics."
+      ]
+    }
   },
   "privacy": {
-    title: "DECENTRALIZED PRIVACY & CORE ALIGNMENT",
-    subtitle: "Absolute Zero-Data Harvesting Manifesto",
-    desc: "We prioritize cryptographically secure anonymity. We do not index personal identifiers, cookies, or telemetry to centralized databases.",
-    points: [
-      "Zero monitoring of user IP logs, cookies, trackers, or system characteristics.",
-      "No email registers or credentials: your standard public key represents your workspace context.",
-      "Only native blockchain queries to verified public node endpoints are executed.",
-      "Strictly free from advertising networks, customer profile sales, and analytical tracking pixels."
-    ]
+    it: {
+      title: "INFORMATIVA SULLA PRIVACY E IDENTITÀ",
+      subtitle: "Filosofia Zero Tracciamento e Raccolta Dati",
+      desc: "Rispettiamo l'anonimato intrinseco delle reti blockchain. Nessun dato personale viene mai raccolto, né inviato a server centralizzati per scopi commerciali.",
+      points: [
+        "Nessun tracciamento di indirizzi IP, cookies analitici o dati geografici.",
+        "Nessun modulo di iscrizione: l'identità è espressa unicamente dalla chiave pubblica.",
+        "Le interrogazioni RPC caricano solo informazioni pubbliche memorizzate sulla blockchain.",
+        "Garanzia di esclusione da ad-trackers, strumenti di telemarketing o pixel pubblicitari."
+      ]
+    },
+    en: {
+      title: "DECENTRALIZED PRIVACY & CORE ALIGNMENT",
+      subtitle: "Absolute Zero-Data Harvesting Manifesto",
+      desc: "We prioritize cryptographically secure anonymity. We do not index personal identifiers, cookies, or telemetry to centralized databases.",
+      points: [
+        "Zero monitoring of user IP logs, cookies, trackers, or system characteristics.",
+        "No email registers or credentials: your standard public key represents your workspace context.",
+        "Only native blockchain queries to verified public node endpoints are executed.",
+        "Strictly free from advertising networks, customer profile sales, and analytical tracking pixels."
+      ]
+    }
   }
 };
 
@@ -674,7 +794,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
                 className="flex border border-flame-orange/40 hover:border-flame-orange px-3.5 py-2 text-[10px] font-mono uppercase tracking-[0.14em] flex items-center gap-2 bg-flame-orange/10 text-flame-orange transition-all shrink-0 cursor-pointer font-bold animate-pulse"
               >
                 <Wallet className="w-3.5 h-3.5 shrink-0" />
-                <span>CONNECT WALLET</span>
+                <span>{language === "it" ? "CONNETTI WALLET" : "CONNECT WALLET"}</span>
               </button>
             )}
           </div>
@@ -768,7 +888,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
         onDisconnected={() => {
           setWalletAddress(null);
           setWalletProvider(null);
-          pushNotification("🔌 Wallet disconnected.");
+          pushNotification(language === 'it' ? "🔌 Wallet disconnesso." : "🔌 Wallet disconnected.");
         }}
         connectedAddress={walletAddress}
       />
@@ -845,14 +965,16 @@ const loadInitialTxs = (): BurnTransaction[] => {
             <div className="border border-white/5 bg-[#050505] p-3.5 space-y-3 text-left">
               <span className="text-[9px] font-mono text-indigo-400 font-bold uppercase tracking-widest flex items-center gap-1">
                 <Share2 className="w-3 h-3 text-indigo-400 shrink-0" />
-                PROPAGATE TO SOCIAL LAYERS
+                {language === 'it' ? "CONDIVIDI RISULTATO OLTRE RETE" : "PROPAGATE TO SOCIAL LAYERS"}
               </span>
 
               {/* Shared Text Preview Frame */}
               <div 
                 className="bg-black border border-white/5 p-2 font-mono text-[9.5px] text-slate-400 rounded-none leading-relaxed select-none relative overflow-hidden group cursor-pointer"
                 onClick={() => {
-                  const shareText = `🔥 SOL reclaimed from the void! Just purged ${reclaimSummary.itemCount} junk accounts on Solana via @BurnerSol, reclaiming a net +${reclaimSummary.netReclaimed.toFixed(5)} SOL and earning +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}! Clear your wallet storage now at https://burner-sol.io 🚀`;
+                  const shareText = language === 'it' 
+                    ? `🔥 SOL recuperato dal vuoto! Ho appena bruciato ${reclaimSummary.itemCount} account spazzatura su Solana tramite @BurnerSol e recuperato un netto di +${reclaimSummary.netReclaimed.toFixed(5)} SOL accumulando +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}! Riscatta il tuo rent su https://burner-sol.io 🚀`
+                    : `🔥 SOL reclaimed from the void! Just purged ${reclaimSummary.itemCount} junk accounts on Solana via @BurnerSol, reclaiming a net +${reclaimSummary.netReclaimed.toFixed(5)} SOL and earning +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}! Clear your wallet storage now at https://burner-sol.io 🚀`;
                   navigator.clipboard.writeText(shareText);
                   setIsCopied(true);
                   sound.playSuccessChime();
@@ -860,15 +982,20 @@ const loadInitialTxs = (): BurnTransaction[] => {
                 }}
               >
                 <div className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 px-1 border border-white/10 text-[8px] text-white">
-                  CLICK TO COPY
+                  {language === 'it' ? "CLICCA PER COPIARE" : "CLICK TO COPY"}
                 </div>
-                "Just purged {reclaimSummary.itemCount} junk accounts on Solana via @BurnerSol, reclaiming +{reclaimSummary.netReclaimed.toFixed(5)} SOL and earning +{reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}!..."
+                "{language === 'it' 
+                  ? `Ho appena bruciato ${reclaimSummary.itemCount} account spazzatura su Solana tramite @BurnerSol e recuperato +${reclaimSummary.netReclaimed.toFixed(5)} SOL e +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}!` 
+                  : `Just purged ${reclaimSummary.itemCount} junk accounts on Solana via @BurnerSol, reclaiming +${reclaimSummary.netReclaimed.toFixed(5)} SOL and earning +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}!`}..."
+              </div>
 
               {/* Share Interaction Buttons */}
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => {
-                    const shareText = `🔥 SOL reclaimed from the void! Just purged ${reclaimSummary.itemCount} junk accounts on Solana via @BurnerSol, reclaiming a net +${reclaimSummary.netReclaimed.toFixed(5)} SOL and earning +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}! Clear your wallet storage now at https://burner-sol.io 🚀`;
+                    const shareText = language === 'it' 
+                      ? `🔥 SOL recuperato dal vuoto! Ho appena bruciato ${reclaimSummary.itemCount} account spazzatura su Solana tramite @BurnerSol e recuperato un netto di +${reclaimSummary.netReclaimed.toFixed(5)} SOL accumulando +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}! Riscatta il tuo rent su https://burner-sol.io 🚀`
+                      : `🔥 SOL reclaimed from the void! Just purged ${reclaimSummary.itemCount} junk accounts on Solana via @BurnerSol, reclaiming a net +${reclaimSummary.netReclaimed.toFixed(5)} SOL and earning +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}! Clear your wallet storage now at https://burner-sol.io 🚀`;
                     navigator.clipboard.writeText(shareText);
                     setIsCopied(true);
                     sound.playSuccessChime();
@@ -884,19 +1011,21 @@ const loadInitialTxs = (): BurnTransaction[] => {
                   {isCopied ? (
                     <>
                       <Check className="w-3 h-3 text-emerald-400 shrink-0" />
-                      COPIED!
+                      {language === 'it' ? "COPIATO!" : "COPIED!"}
                     </>
                   ) : (
                     <>
                       <Copy className="w-3 h-3 text-slate-400 shrink-0" />
-                      COPY TEXT
+                      {language === 'it' ? "COPIA COPIOSO" : "COPY TEXT"}
                     </>
                   )}
                 </button>
 
                 <a
                   href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                    `🔥 SOL reclaimed from the void! Just purged ${reclaimSummary.itemCount} junk accounts on Solana via @BurnerSol, reclaiming a net +${reclaimSummary.netReclaimed.toFixed(5)} SOL and earning +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}! Clear your wallet storage now at https://burner-sol.io 🚀`
+                    language === 'it' 
+                      ? `🔥 SOL recuperato dal vuoto! Ho appena bruciato ${reclaimSummary.itemCount} account spazzatura su Solana tramite @BurnerSol e recuperato un netto di +${reclaimSummary.netReclaimed.toFixed(5)} SOL accumulando +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}! Riscatta il tuo rent su https://burner-sol.io 🚀`
+                      : `🔥 SOL reclaimed from the void! Just purged ${reclaimSummary.itemCount} junk accounts on Solana via @BurnerSol, reclaiming a net +${reclaimSummary.netReclaimed.toFixed(5)} SOL and earning +${reclaimSummary.rewardsMinted.toLocaleString(undefined, { maximumFractionDigits: 0 })} $${coinSymbol}! Clear your wallet storage now at https://burner-sol.io 🚀`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -905,11 +1034,10 @@ const loadInitialTxs = (): BurnTransaction[] => {
                   style={{ cursor: "pointer" }}
                 >
                   <Share2 className="w-3 h-3 text-[#1d9bf0] shrink-0" />
-                  SHARE ON X
+                  {language === 'it' ? "CONDIVIDI SU X" : "SHARE ON X"}
                 </a>
               </div>
             </div>
-          </div>
 
             {/* Primary Action Button */}
             <button
@@ -943,7 +1071,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
 
             {/* Column 2: Protocol links */}
             <div className="md:col-span-3 space-y-3">
-              <h5 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Protocol</h5>
+              <h5 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Protocollo</h5>
               <div className="flex flex-col gap-2 font-mono text-[10px] uppercase tracking-wider">
                 <a 
                   href="#sol-burner" 
@@ -961,7 +1089,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
                   onMouseLeave={handleMouseLeaveSection}
                   onClick={(e) => { e.preventDefault(); handleMouseEnterSection("recupera-sol"); }}
                 >
-                  Rent Recovery
+                  Recupera SOL
                 </a>
                 <a 
                   href="#come-funziona" 
@@ -970,14 +1098,14 @@ const loadInitialTxs = (): BurnTransaction[] => {
                   onMouseLeave={handleMouseLeaveSection}
                   onClick={(e) => { e.preventDefault(); handleMouseEnterSection("come-funziona"); }}
                 >
-                  How It Works
+                  Come funziona
                 </a>
               </div>
             </div>
 
             {/* Column 3: Resources & Info */}
             <div className="md:col-span-3 space-y-3">
-              <h5 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Resources & Info</h5>
+              <h5 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Risorse & Info</h5>
               <div className="flex flex-col gap-2 font-mono text-[10px] uppercase tracking-wider">
                 <a 
                   href="#chi-siamo" 
@@ -986,7 +1114,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
                   onMouseLeave={handleMouseLeaveSection}
                   onClick={(e) => { e.preventDefault(); handleMouseEnterSection("chi-siamo"); }}
                 >
-                  About Us
+                  Chi siamo
                 </a>
                 <a 
                   href="#faq" 
@@ -1004,7 +1132,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
                   onMouseLeave={handleMouseLeaveSection}
                   onClick={(e) => { e.preventDefault(); handleMouseEnterSection("sicurezza"); }}
                 >
-                  Security
+                  Sicurezza
                 </a>
                 <a 
                   href="#contatti" 
@@ -1013,15 +1141,15 @@ const loadInitialTxs = (): BurnTransaction[] => {
                   onMouseLeave={handleMouseLeaveSection}
                   onClick={(e) => { e.preventDefault(); handleMouseEnterSection("contatti"); }}
                 >
-                  Contact
+                  Contatti
                 </a>
               </div>
             </div>
 
-            {/* Column 4: Legal & Social */}
+            {/* Column 4: Legale & Social */}
             <div className="md:col-span-2 space-y-4">
               <div className="space-y-3">
-                <h5 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Legal</h5>
+                <h5 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Legale</h5>
                 <div className="flex flex-col gap-2 font-mono text-[10px] uppercase tracking-wider">
                   <a 
                     href="#termini" 
@@ -1030,7 +1158,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
                     onMouseLeave={handleMouseLeaveSection}
                     onClick={(e) => { e.preventDefault(); handleMouseEnterSection("termini"); }}
                   >
-                    Terms
+                    Termini
                   </a>
                   <a 
                     href="#privacy" 
@@ -1048,7 +1176,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
 
           <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest text-center md:text-left">
-              © 2026 BurnerSOL. All rights reserved.
+              © 2026 BurnerSOL. Tutti i diritti riservati.
             </div>
 
             {/* Social Links Panel */}
@@ -1093,7 +1221,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
 
       {/* FLOATING HUD PREVIEW TERMINAL FOR FOOTER LINKS */}
       {hoveredSection && (() => {
-        const details = FOOTER_DETAILS[hoveredSection];
+        const details = FOOTER_DETAILS[hoveredSection]?.[language === 'it' ? 'it' : 'en'] || FOOTER_DETAILS[hoveredSection]?.['it'];
         if (!details) return null;
         return (
           <div 
@@ -1116,7 +1244,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
               <button 
                 onClick={() => setHoveredSection(null)}
                 className="p-1 hover:bg-white/10 text-slate-500 hover:text-white transition-all cursor-pointer border border-transparent hover:border-white/10"
-                title="Close"
+                title={language === 'it' ? "Chiudi" : "Close"}
               >
                 <X className="w-3.5 h-3.5" />
               </button>
