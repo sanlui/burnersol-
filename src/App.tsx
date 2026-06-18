@@ -292,8 +292,8 @@ export const FOOTER_DETAILS: Record<string, {
 export default function App() {
   // English translations (inline, no external files)
   const t = {
-    statusBanner: "RECLAIM ACTIVE PROTOCOL",
-    heroHeadingBurn: "BURN",
+    statusBanner: "RECLAIM ACTIVE PROTOCOL TEST",
+    heroHeadingBurn: "BURN TEST",
     heroHeadingFast: "FAST",
     heroHeadingReclaim: "RECLAIM",
     heroSubtitle: "The definitive hyper-deflationary protocol built on Solana. Harness institutional-grade memory closure mechanics to secure your wallet by reclaiming locked SOL deposits from toxic coins, unused mint accounts, and spam dust.",
