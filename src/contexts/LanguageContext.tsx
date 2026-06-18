@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import enData from "../locales/en.json";
 import itData from "../locales/it.json";
 
@@ -30,14 +30,43 @@ const translations: Record<LanguageCode, LanguageData> = {
 
 const LanguageContext = createContext<LanguageContextType | null>(null);
 
+function detectInitialLanguage(): LanguageCode {
+  try {
+    const stored = localStorage.getItem("burner_language") as LanguageCode;
+    if (stored && translations[stored]) return stored;
+  } catch {}
+
+  try {
+    const langParam = new URLSearchParams(window.location.search).get("lang") as LanguageCode;
+    if (langParam && translations[langParam]) return langParam;
+  } catch {}
+
+  try {
+    const browserLangs = navigator.languages || [navigator.language];
+    for (const lang of browserLangs) {
+      const prefix = lang.split("-")[0].toLowerCase();
+      const langCode = prefix as LanguageCode;
+      if (translations[langCode]) return langCode;
+    }
+  } catch {}
+
+  return "en";
+}
+
 export function LanguageProvider({ 
   children, 
-  initialLanguage = "en" 
+  initialLanguage
 }: { 
   children: ReactNode;
   initialLanguage?: LanguageCode;
 }) {
-  const [language, setLanguageState] = useState<LanguageCode>(initialLanguage);
+  const [language, setLanguageState] = useState<LanguageCode>(
+    initialLanguage || detectInitialLanguage()
+  );
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   const t = translations[language] || translations.en;
 
@@ -71,14 +100,3 @@ export const supportedLanguages: { code: LanguageCode; name: string }[] = [
   { code: "fr", name: "Français" },
   { code: "ru", name: "Русский" },
 ];
-
-export function getLanguageFromPath(path: string): LanguageCode {
-  if (path.startsWith("/it") || path === "/it") return "it";
-  if (path.startsWith("/es") || path === "/es") return "es";
-  if (path.startsWith("/zh") || path === "/zh") return "zh";
-  if (path.startsWith("/ja") || path === "/ja") return "ja";
-  if (path.startsWith("/de") || path === "/de") return "de";
-  if (path.startsWith("/fr") || path === "/fr") return "fr";
-  if (path.startsWith("/ru") || path === "/ru") return "ru";
-  return "en";
-}

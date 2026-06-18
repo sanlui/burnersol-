@@ -291,7 +291,7 @@ export const FOOTER_DETAILS: Record<string, {
   }
 };
 
-export default function App({ defaultLanguage }: { defaultLanguage?: Language }) {
+export default function App() {
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
