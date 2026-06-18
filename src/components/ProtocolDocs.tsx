@@ -16,15 +16,14 @@ import {
   Bookmark, 
   FileText
 } from "lucide-react";
-import { TranslationSet } from "../utils/translations";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface ProtocolDocsProps {
-  language: string;
   sound: any;
-  t: TranslationSet;
 }
 
-export default function ProtocolDocs({ language, sound, t }: ProtocolDocsProps) {
+export default function ProtocolDocs({ sound }: ProtocolDocsProps) {
+  const { t, language } = useLanguage();
   const [activeSection, setActiveSection] = useState<"intro" | "phases" | "integrity" | "faq" | "cli">("intro");
   const [copiedText, setCopiedText] = useState<string | null>(null);
 

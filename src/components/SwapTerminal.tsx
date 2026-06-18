@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { ArrowDownUp, Info, RefreshCw, Settings2, Sliders, Zap } from "lucide-react";
-import { TranslationSet } from "../utils/translations";
 import { sound } from "../utils/audio";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface SwapTerminalProps {
   walletBalance: number;
   burnerBalance: number;
   onSwapComplete: (sourceType: "sol" | "burner", amount: number, resultAmount: number) => void;
-  t: TranslationSet;
   coinSymbol?: string;
 }
 
@@ -15,9 +14,9 @@ export default function SwapTerminal({
   walletBalance,
   burnerBalance,
   onSwapComplete,
-  t,
   coinSymbol = "BURNER",
 }: SwapTerminalProps) {
+  const { t } = useLanguage();
   const [fromToken, setFromToken] = useState<"SOL" | "BURNER">("SOL");
   const [toToken, setToToken] = useState<"SOL" | "BURNER">("BURNER");
   const [fromAmount, setFromAmount] = useState<string>("1");

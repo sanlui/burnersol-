@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { TranslationSet } from "../utils/translations";
 import {
   Flame,
   CheckCircle,
@@ -15,9 +14,9 @@ import {
   Wallet
 } from "lucide-react";
 import { sound } from "../utils/audio";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface GlobalBurnFeedProps {
-  t: TranslationSet;
   userWalletAddress?: string | null;
   personalBurnHistory: PersonalBurnTx[];
 }
@@ -50,7 +49,8 @@ interface FeedItem {
   walletName?: string;
 }
 
-export default function GlobalBurnFeed({ t, personalBurnHistory = [] }: GlobalBurnFeedProps) {
+export default function GlobalBurnFeed({ personalBurnHistory = [] }: Omit<GlobalBurnFeedProps, "t">) {
+  const { t } = useLanguage();
   const [feed, setFeed] = useState<FeedItem[]>([]);
   const [networkSpeed, setNetworkSpeed] = useState(1.4);
   const [filterType, setFilterType] = useState<"all" | "spam" | "empty">("all");

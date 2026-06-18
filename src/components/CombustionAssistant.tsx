@@ -1,15 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { ChatMessage } from "../types";
 import { Send, MessageSquare, Trash, RefreshCw, Flame, User } from "lucide-react";
-import { TranslationSet } from "../utils/translations";
+import { useLanguage } from "../contexts/LanguageContext";
 
-interface CombustionAssistantProps {
-  t: TranslationSet;
-  language: string;
-}
+interface CombustionAssistantProps {}
 
-export default function CombustionAssistant({ t, language }: CombustionAssistantProps) {
-  // Multilingual dynamic greeting
+export default function CombustionAssistant({}: CombustionAssistantProps) {
+  const { t, language } = useLanguage();
+
   const getWelcomeMessage = (lang: string) => {
     switch (lang) {
       case "it":

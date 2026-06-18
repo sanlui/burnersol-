@@ -28,15 +28,10 @@ import {
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import TokenDistributionChart from "./components/TokenDistributionChart";
-import StakingAnalytics from "./components/StakingAnalytics";
 import ScannerTerminal from "./components/ScannerTerminal";
 import SwapTerminal from "./components/SwapTerminal";
 import GlobalBurnFeed from "./components/GlobalBurnFeed";
 import LanguageSwitcher from "./components/LanguageSwitcher";
-import ArchitectDesk from "./components/ArchitectDesk";
-import ProtocolRepo from "./components/ProtocolRepo";
-import DeflationaryImpactPanel from "./components/DeflationaryImpactPanel";
-import ProtocolDocs from "./components/ProtocolDocs";
 
 import CombustionChamber from "./components/CombustionChamber";
 import { TrashItem, BurnTransaction } from "./types";
@@ -836,7 +831,6 @@ const loadInitialTxs = (): BurnTransaction[] => {
                     onBurnSelect={handleBurnItems}
                     isBurning={isBurning}
                     walletBalance={walletBalance}
-                    t={t}
                     language={language}
                     sessionReclaimedSol={sessionReclaimedSol}
                     analyzedWalletsCount={analyzedAddresses.length}
@@ -846,7 +840,6 @@ const loadInitialTxs = (): BurnTransaction[] => {
                 {/* Global Burn Feed - Real On-Chain Transactions */}
                 <div className="lg:col-span-12 xl:col-span-12">
                   <GlobalBurnFeed
-                    t={t}
                     userWalletAddress={walletAddress}
                     personalBurnHistory={txs}
                   />

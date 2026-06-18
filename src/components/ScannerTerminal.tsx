@@ -19,13 +19,13 @@ import {
   Zap,
   Activity
 } from "lucide-react";
-import { TranslationSet } from "../utils/translations";
 import { sound } from "../utils/audio";
 import { evaluateAssetRisk, getSmartDynamicFeePercent, determineBurnability } from "../utils/riskEngine";
 import { generateBurnPreview, BurnPreviewReport } from "../utils/burnPreview";
 import { fetchJupiterPrices } from "../utils/marketData";
 import { enforceSpamThresholdCapping } from "../utils/solana";
 import ResilientImage from "./ResilientImage";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface ScannerTerminalProps {
   walletAddress?: string | null;
@@ -33,7 +33,6 @@ interface ScannerTerminalProps {
   onBurnSelect: (items: TrashItem[]) => void;
   isBurning: boolean;
   walletBalance: number;
-  t: TranslationSet;
   language?: string;
   sessionReclaimedSol?: number;
   analyzedWalletsCount?: number;
@@ -184,11 +183,11 @@ export default function ScannerTerminal({
   onBurnSelect,
   isBurning,
   walletBalance,
-  t,
   language = "it",
   sessionReclaimedSol = 0.0,
   analyzedWalletsCount = 0,
 }: ScannerTerminalProps) {
+  const { t } = useLanguage();
   const [items, setItems] = useState<TrashItem[]>([]);
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
