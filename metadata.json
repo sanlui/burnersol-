@@ -1,0 +1,6 @@
+{
+  "name": "BurnerSol Protocol",
+  "description": "Decentralized Solana reclaimer utility: scan and purge spam tokens, burn fraudulent NFTs, reclaim locked SOL rent, explore deflationary tokenomics, and execute instant swaps with Zero-Custody security.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

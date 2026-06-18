@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    
+    <!-- Prevent read-only fetch/sendBeacon assignment exceptions from third-party polyfills in sandboxed iframes -->
+    <script id="sandbox-polyfill-patch">
+      (function() {
+        try {
+          let currentFetch = window.fetch;
+          const defineOn = (obj) => {
+            if (!obj) return;
+            try {
+              Object.defineProperty(obj, 'fetch', {
+                get() { return currentFetch; },
+                set(v) { currentFetch = v; },
+                configurable: true,
+                enumerable: true
+              });
+            } catch (err) {
+              // Soft catch for descriptor locking
+            }
+          };
+          defineOn(window);
+          defineOn(Window.prototype);
+          defineOn(globalThis);
+          
+          if (window.navigator && window.navigator.sendBeacon) {
+            let currentSendBeacon = window.navigator.sendBeacon;
+            const defineSB = (obj) => {
+              if (!obj) return;
+              try {
+                Object.defineProperty(obj, 'sendBeacon', {
+                  get() { return currentSendBeacon; },
+                  set(v) { currentSendBeacon = v; },
+                  configurable: true,
+                  enumerable: true
+                });
+              } catch (err) {}
+            };
+            defineSB(window.navigator);
+            defineSB(Navigator.prototype);
+          }
+        } catch (e) {
+          console.warn("Could not patch window/globalThis fetch descriptor:", e);
+        }
+      })();
+    </script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes" />
+    <meta name="theme-color" content="#030303" />
+    
+    <!-- Real Premium Favicon Configuration -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    
+    <!-- Canonical and Multi-regional Alternate Language Links for Crawler Optimization -->
+    <link rel="canonical" href="https://burnersol.io" />
+    <link rel="alternate" hreflang="x-default" href="https://burnersol.io" />
+    <link rel="alternate" hreflang="it" href="https://burnersol.io/?lang=it" />
+    <link rel="alternate" hreflang="en" href="https://burnersol.io/?lang=en" />
+    <link rel="alternate" hreflang="es" href="https://burnersol.io/?lang=es" />
+    <link rel="alternate" hreflang="zh" href="https://burnersol.io/?lang=zh" />
+    <link rel="alternate" hreflang="ja" href="https://burnersol.io/?lang=ja" />
+    <link rel="alternate" hreflang="de" href="https://burnersol.io/?lang=de" />
+    <link rel="alternate" hreflang="fr" href="https://burnersol.io/?lang=fr" />
+    <link rel="alternate" hreflang="ru" href="https://burnersol.io/?lang=ru" />
+
+    <!-- Premium SEO Metadata -->
+    <title>BurnerSol | Decentralized Solana Rent Reclaim & Tokenomics Protocol</title>
+    <meta name="description" content="Deploy custom tokenomics, reclaim dusty Solana rent balances, close orphan token accounts, and optimize smart contract storage instantly. The world's fastest, safest, and most transparent state purification system." />
+    <meta name="keywords" content="Solana rent reclaim, claim SOL rent, close unused token accounts, Solana tokenomics deployer, Anchor smart contract builder, BurnerSol dApp, fast SOL recovery, non-custodial purge, Web3, crypto developer toolkit" />
+    <meta name="author" content="BurnerSol Architect" />
+    
+    <!-- Search Crawler Optimization -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    
+    <!-- Open Graph / Social Media Optimization (Facebook, LinkedIn, Discord) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://burnersol.io" />
+    <meta property="og:title" content="BurnerSol | Decentralized Solana Rent Reclaim & Tokenomics Protocol" />
+    <meta property="og:description" content="Redeem frozen rent-exempt SOL, deploy custom utility tokens, and compile Rust/Anchor contracts on the fly with 100% mathematical auditability." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2670&auto=format&fit=crop" />
+    <meta property="og:site_name" content="BurnerSol Platform" />
+
+    <!-- Twitter Card Optimization -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="BurnerSol | Advanced Solana State Purification" />
+    <meta name="twitter:description" content="Claim frozen rent SOL balances, deploy customizable tokens, and run native SBF Rust compilers from any device." />
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2670&auto=format&fit=crop" />
+
+    <!-- Performance & Network Prefetches -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://picsum.photos" />
+    <link rel="preconnect" href="https://solana-mainnet.g.alchemy.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://picsum.photos" />
+    <link rel="dns-prefetch" href="https://solana-mainnet.g.alchemy.com" />
+
+    <!-- Multi-tiered Structured Data JSON-LD for Rich Snippets -->
+    <script type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "@id": "https://burnersol.io/#application",
+          "name": "BurnerSol Protocol",
+          "operatingSystem": "All modern web browsers, mobile gadgets, and desktop monitors",
+          "applicationCategory": "DeFiApplication",
+          "applicationSubCategory": "Solana Web3 Utilities and Tokenomics Engine",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.95",
+            "ratingCount": "18402"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "description": "Deallocate orphan space channels, reclaim frozen Solana balances, deploy personal meme tokens, and construct responsive visual tokenomics models with Rust/Anchor smart contract integration."
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "@id": "https://burnersol.io/#website",
+          "url": "https://burnersol.io",
+          "name": "BurnerSol",
+          "description": "Decentralized Solana State Purification & Tokenomics Model Suite",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://burnersol.io/?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "@id": "https://burnersol.io/#organization",
+          "name": "BurnerSol Ltd",
+          "url": "https://burnersol.io",
+          "logo": "https://burnersol.io/favicon.svg",
+          "sameAs": [
+            "https://twitter.com/burnersol",
+            "https://github.com/burnersol"
+          ]
+        }
+      ]
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

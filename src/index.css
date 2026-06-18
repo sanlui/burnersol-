@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;1,400&family=Space+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-serif: "Instrument Serif", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-flame-orange: #f97316;
+  --color-flame-gold: #ffbe1f;
+  --color-flame-coral: #ea580c;
+  --color-dark-obsidian: #0a0a0a;
+  --color-dark-charcoal: #0e0e0e;
+  --color-dark-slate: #161616;
+  
+  --animate-spark-float: spark-float 4s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  --animate-lava-flow: lava-flow 12s ease infinite;
+}
+
+@keyframes spark-float {
+  0%, 100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-8px) scale(1.05) rotate(3deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 25px -5px rgba(255, 90, 31, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 35px 2px rgba(255, 42, 95, 0.3);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes lava-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050508;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e1e2d;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff5a1f;
+}
+
+/* Base style resets to guarantee pixel-perfection and high performance */
+html, body {
+  background-color: #050508;
+  color: #f4f4f7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "kern";
+  letter-spacing: -0.015em;
+  scroll-behavior: smooth;
+}
+
+/* Ensure text contrasts are perfectly readable and extremely sharp on deep backdrops */
+.text-slate-400 {
+  color: #cbd5e1 !important; /* Elevated to slate-300 level for maximum 4K scannability */
+}
+.text-slate-500 {
+  color: #94a3b8 !important; /* Elevated to slate-400 level */
+}
+.text-zinc-400 {
+  color: #d4d4d8 !important; /* Elevated to zinc-300 level */
+}
+.text-zinc-500 {
+  color: #a1a1aa !important; /* Elevated to zinc-400 level */
+}
+
+/* 4K scaling optimizations and dynamic sizing */
+@media (min-width: 1920px) {
+  html {
+    font-size: 16px; 
+  }
+}
+
+@media (min-width: 2560px) {
+  html {
+    font-size: 18px; /* High-DPI scaling optimization */
+  }
+}
+
+@media (min-width: 3840px) {
+  html {
+    font-size: 21px; /* Precision text ratio for native 4K display monitors */
+  }
+}
+
+/* Stark Editorial panel utility */
+.glass-panel {
+  background: rgba(8, 8, 8, 0.93);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel:hover {
+  border-color: rgba(249, 115, 22, 0.18);
+  box-shadow: 0 15px 45px -10px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-glow {
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.82);
+}
+
+/* Custom combustion flame filter mask */
+.flame-hue {
+  filter: hue-rotate(-15deg) contrast(1.1);
+}
+
+/* Interactive custom card selection effect */
+.item-card-selected {
+  border-color: #ff5a1f !important;
+  background: rgba(255, 90, 31, 0.05) !important;
+  box-shadow: 0 0 20px rgba(255, 90, 31, 0.1) !important;
+}

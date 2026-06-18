@@ -1,0 +1,34 @@
+{
+  "name": "BurnerSOL",
+  "symbol": "BURN",
+  "description": "BurnerSOL is a Solana wallet hygiene and rent-recovery protocol. BURN is a planned fixed-supply utility token for rewards, access, governance, and protocol incentives. No yield, price, or profit is guaranteed.",
+  "image": "https://burnersol.com/token-logo.png",
+  "external_url": "https://burnersol.com",
+  "attributes": [
+    {
+      "trait_type": "Network",
+      "value": "Solana"
+    },
+    {
+      "trait_type": "Supply Policy",
+      "value": "Fixed supply"
+    },
+    {
+      "trait_type": "Launch Status",
+      "value": "Pre-launch"
+    },
+    {
+      "trait_type": "Utility",
+      "value": "Wallet hygiene, rewards, access, governance"
+    }
+  ],
+  "properties": {
+    "category": "utility",
+    "files": [
+      {
+        "uri": "https://burnersol.com/token-logo.png",
+        "type": "image/png"
+      }
+    ]
+  }
+}
