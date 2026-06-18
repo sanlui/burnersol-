@@ -63,10 +63,10 @@ export default function WalletConnector({
 
     try {
       const provider = wallet.provider as {
-        connect: () => Promise<{ publicKey: { toString: () => string } }>;
+        connect: (opts?: { chain?: string }) => Promise<{ publicKey: { toString: () => string } }>;
       };
 
-      const response = await provider.connect();
+      const response = await provider.connect({ chain: "solana:mainnet" });
       const address = response.publicKey.toString();
 
       localStorage.setItem("burner_solana_wallet_address", address);
