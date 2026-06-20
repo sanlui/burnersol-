@@ -13,10 +13,13 @@ export default async function handler(req, res) {
 
   try {
     let body;
-    if (typeof req.body === "object" && req.body !== null && !Buffer.isBuffer(req.body)) {
+    if (req.body && typeof req.body === "object") {
       body = req.body;
+    } else if (req.body) {
+      const text = req.body instanceof Buffer ? req.body.toString() : String(req.body);
+      body = JSON.parse(text);
     } else {
-      body = await req.json();
+      body = {};
     }
 
     const { items, burnIntensity } = body;
