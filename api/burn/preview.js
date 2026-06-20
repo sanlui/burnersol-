@@ -12,7 +12,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { items, burnIntensity } = req.body;
+    const body = typeof req.body === "object" ? req.body : JSON.parse(req.body || "{}");
+    const { items, burnIntensity } = body;
+
     if (!items || !Array.isArray(items)) {
       return res.status(400).json({ error: "Items array is required." });
     }
