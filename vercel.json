@@ -3,10 +3,7 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
-    { "source": "/api/proxy-image", "destination": "/api/proxy-image.js" },
-    { "source": "/api/jupiter/price", "destination": "/api/jupiter/price.js" },
-    { "source": "/api/jupiter/token/:mint", "destination": "/api/jupiter/[mint].js" },
-    { "source": "/((?!api/|assets/|fire\\.gif).*)", "destination": "/index.html" }
+    { "source": "/((?!api/|assets/|fire\\.gif|.*\\..*).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

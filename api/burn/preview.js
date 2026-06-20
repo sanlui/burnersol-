@@ -24,10 +24,11 @@ export default async function handler(req, res) {
     const rawIntensity = parseInt(String(burnIntensity), 10);
     const cleanIntensity = isNaN(rawIntensity) ? 1 : Math.min(3, Math.max(1, rawIntensity));
 
+    const FEE_PERCENT = 1.5;
+
     const previewItems = items.map(item => {
       const riskScore = item.riskReport?.score ?? (item.isScam ? 90 : 10);
-      const feePct = riskScore > 80 ? 5 : riskScore > 60 ? 8 : riskScore > 40 ? 10 : 15;
-      const protocolFee = (item.reclaimableSol * feePct) / 100;
+      const protocolFee = (item.reclaimableSol * FEE_PERCENT) / 100;
 
       return {
         id: String(item.id || "").slice(0, 50),
@@ -47,7 +48,6 @@ export default async function handler(req, res) {
     const burnIntensityBonusPct = Math.min(0.15, cleanIntensity * 0.03);
     const totalProtocolFeeSol = Math.max(0, baseProtocolFeeSol * (1 - burnIntensityBonusPct));
     const totalNetReclaimSol = rawReclaimSol - totalProtocolFeeSol;
-    const reclaimedBurnerTokens = items.length * 500 * (1 + cleanIntensity * 0.2);
 
     return res.json({
       items: previewItems,
@@ -57,7 +57,6 @@ export default async function handler(req, res) {
       totalNetReclaimSol,
       estimatedSolanaTxFee: 0.000005 * items.length,
       burnIntensityBonusPct,
-      reclaimedBurnerTokens,
     });
 
   } catch (error) {
