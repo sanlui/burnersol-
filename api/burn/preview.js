@@ -11,29 +11,27 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  let parsedBody = null;
+  let parsedBody = {};
 
   try {
     if (req.body) {
-      if (typeof req.body === "object") {
+      if (typeof req.body === "object" && !Array.isArray(req.body) && req.body !== null) {
         parsedBody = req.body;
-      } else if (typeof req.body === "string") {
+      } else if (typeof req.body === "string" && req.body.trim()) {
         parsedBody = JSON.parse(req.body);
       } else if (Buffer.isBuffer(req.body)) {
         parsedBody = JSON.parse(req.body.toString());
       }
     }
 
-    if (!parsedBody) {
+    if (Object.keys(parsedBody).length === 0 && req.body) {
       try {
-        const text = await new Response(req.body).text();
-        parsedBody = JSON.parse(text);
-      } catch {
-        parsedBody = {};
-      }
+        const text = typeof req.body.text === "function" ? await req.body.text() : String(req.body);
+        if (text.trim()) parsedBody = JSON.parse(text);
+      } catch {}
     }
   } catch (e) {
-    return res.status(400).json({ error: "Invalid JSON body: " + e.message });
+    return res.status(400).json({ error: "Invalid request body" });
   }
 
   const { items, burnIntensity } = parsedBody;
@@ -52,25 +50,21 @@ export default async function handler(req, res) {
   const FEE_PERCENT = 1.5;
 
   const previewItems = items.map((item, idx) => {
-    try {
-      const riskScore = item.riskReport?.score ?? (item.isScam ? 90 : 10);
-      const reclaimSol = parseFloat(String(item.reclaimableSol)) || 0.00204;
-      const protocolFee = reclaimSol * FEE_PERCENT / 100;
+    const riskScore = item.riskReport?.score ?? (item.isScam ? 90 : 10);
+    const reclaimSol = parseFloat(String(item.reclaimableSol)) || 0.00204;
+    const protocolFee = reclaimSol * FEE_PERCENT / 100;
 
-      return {
-        id: String(item.id || `item-${idx}`).slice(0, 50),
-        name: String(item.name || "Unknown").slice(0, 100),
-        symbol: String(item.symbol || "TOKEN").slice(0, 20),
-        type: ["nft", "lp", "account"].includes(item.type) ? item.type : "token",
-        reclaimableSol: Math.max(0, reclaimSol),
-        protocolFeeSol: protocolFee,
-        netReclaimSol: reclaimSol - protocolFee,
-        riskScore,
-        riskLevel: item.riskReport?.level || (item.isScam ? "SCAM" : "SAFE"),
-      };
-    } catch (itemErr) {
-      throw new Error(`Item ${idx} processing failed: ${itemErr.message}`);
-    }
+    return {
+      id: String(item.id || `item-${idx}`).slice(0, 50),
+      name: String(item.name || "Unknown").slice(0, 100),
+      symbol: String(item.symbol || "TOKEN").slice(0, 20),
+      type: ["nft", "lp", "account"].includes(item.type) ? item.type : "token",
+      reclaimableSol: Math.max(0, reclaimSol),
+      protocolFeeSol: protocolFee,
+      netReclaimSol: reclaimSol - protocolFee,
+      riskScore,
+      riskLevel: item.riskReport?.level || (item.isScam ? "SCAM" : "SAFE"),
+    };
   });
 
   const rawReclaimSol = previewItems.reduce((acc, curr) => acc + curr.reclaimableSol, 0);
@@ -88,5 +82,4 @@ export default async function handler(req, res) {
     estimatedSolanaTxFee: 0.000005 * items.length,
     burnIntensityBonusPct,
   });
-
 }
