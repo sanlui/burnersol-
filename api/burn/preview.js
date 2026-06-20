@@ -12,7 +12,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = typeof req.body === "object" ? req.body : JSON.parse(req.body || "{}");
+    let body;
+    if (typeof req.body === "object" && req.body !== null && !Buffer.isBuffer(req.body)) {
+      body = req.body;
+    } else {
+      body = await req.json();
+    }
+
     const { items, burnIntensity } = body;
 
     if (!items || !Array.isArray(items)) {
