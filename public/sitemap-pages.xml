@@ -2,163 +2,75 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://burnersol.com/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://burnersol.io/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://burnersol.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://burnersol.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://burnersol.com/it/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://burnersol.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://burnersol.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://burnersol.com/zh/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://burnersol.com/ja/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://burnersol.com/de/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://burnersol.com/ru/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://burnersol.com/ar/"/>
   </url>
   <url>
-    <loc>https://burnersol.com/en/</loc>
-    <lastmod>2026-06-14</lastmod>
+    <loc>https://burnersol.io/protocol/</loc>
+    <lastmod>2026-06-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://burnersol.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://burnersol.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://burnersol.com/it/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://burnersol.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://burnersol.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://burnersol.com/zh/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://burnersol.com/ja/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://burnersol.com/de/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://burnersol.com/ru/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://burnersol.com/ar/"/>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://burnersol.com/it/</loc>
-    <lastmod>2026-06-14</lastmod>
+    <loc>https://burnersol.io/reclaim-sol/</loc>
+    <lastmod>2026-06-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://burnersol.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://burnersol.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://burnersol.com/it/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://burnersol.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://burnersol.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://burnersol.com/zh/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://burnersol.com/ja/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://burnersol.com/de/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://burnersol.com/ru/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://burnersol.com/ar/"/>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://burnersol.com/es/</loc>
-    <lastmod>2026-06-14</lastmod>
+    <loc>https://burnersol.io/how-it-works/</loc>
+    <lastmod>2026-06-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://burnersol.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://burnersol.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://burnersol.com/it/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://burnersol.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://burnersol.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://burnersol.com/zh/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://burnersol.com/ja/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://burnersol.com/de/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://burnersol.com/ru/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://burnersol.com/ar/"/>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://burnersol.com/fr/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://burnersol.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://burnersol.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://burnersol.com/it/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://burnersol.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://burnersol.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://burnersol.com/zh/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://burnersol.com/ja/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://burnersol.com/de/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://burnersol.com/ru/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://burnersol.com/ar/"/>
+    <loc>https://burnersol.io/about/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://burnersol.com/zh/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://burnersol.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://burnersol.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://burnersol.com/it/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://burnersol.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://burnersol.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://burnersol.com/zh/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://burnersol.com/ja/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://burnersol.com/de/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://burnersol.com/ru/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://burnersol.com/ar/"/>
+    <loc>https://burnersol.io/faq/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://burnersol.com/ja/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://burnersol.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://burnersol.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://burnersol.com/it/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://burnersol.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://burnersol.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://burnersol.com/zh/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://burnersol.com/ja/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://burnersol.com/de/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://burnersol.com/ru/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://burnersol.com/ar/"/>
+    <loc>https://burnersol.io/security/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://burnersol.com/de/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://burnersol.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://burnersol.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://burnersol.com/it/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://burnersol.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://burnersol.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://burnersol.com/zh/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://burnersol.com/ja/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://burnersol.com/de/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://burnersol.com/ru/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://burnersol.com/ar/"/>
+    <loc>https://burnersol.io/contact/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://burnersol.com/ru/</loc>
-    <lastmod>2026-06-14</lastmod>
+    <loc>https://burnersol.io/resources/</loc>
+    <lastmod>2026-06-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://burnersol.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://burnersol.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://burnersol.com/it/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://burnersol.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://burnersol.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://burnersol.com/zh/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://burnersol.com/ja/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://burnersol.com/de/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://burnersol.com/ru/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://burnersol.com/ar/"/>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://burnersol.com/ar/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://burnersol.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://burnersol.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://burnersol.com/it/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://burnersol.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://burnersol.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://burnersol.com/zh/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://burnersol.com/ja/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://burnersol.com/de/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://burnersol.com/ru/"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://burnersol.com/ar/"/>
+    <loc>https://burnersol.io/terms/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/privacy/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/legal/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>

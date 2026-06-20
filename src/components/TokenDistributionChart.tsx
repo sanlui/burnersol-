@@ -12,14 +12,12 @@ interface TokenDistributionChartProps {
   coinName: string;
   coinSymbol: string;
   protocolFeePercent: number;
-  language?: string;
 }
 
 export default function TokenDistributionChart({
   coinName,
   coinSymbol,
   protocolFeePercent,
-  language = "it"
 }: TokenDistributionChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -28,35 +26,7 @@ export default function TokenDistributionChart({
     const fPercent = protocolFeePercent;
     const uPercent = 100 - fPercent;
 
-    if (language === "it") {
-      return [
-        { 
-          name: "Quota Riscatto Utenti", 
-          value: uPercent, 
-          color: "#ff623d", 
-          description: "Quota di SOL recuperata che viene accreditata direttamente sul portafoglio dell'utente." 
-        },
-        { 
-          name: `Buyback e Combustione $${coinSymbol}`, 
-          value: Math.round(fPercent * 0.4), 
-          color: "#ff4757", 
-          description: `SOL allocati a contratti automatizzati per il riacquisto e l'eliminazione permanente di $${coinSymbol}.` 
-        },
-        { 
-          name: `Rendita Staking $${coinSymbol}`, 
-          value: Math.round(fPercent * 0.4), 
-          color: "#ffa502", 
-          description: `SOL accumulati e ridistribuiti come incentivo di rendita agli holder che mettono in staking $${coinSymbol}.` 
-        },
-        { 
-          name: "Sviluppo e Sicurezza Founders", 
-          value: Math.round(fPercent * 0.2), 
-          color: "#2ed573", 
-          description: "Utilizzato per coprire i costi dei nodi RPC, commissioni di validazione e continui aggiornamenti." 
-        }
-      ].filter(item => item.value > 0);
-    } else {
-      return [
+    return [
         { 
           name: "User Net Reclaim Share", 
           value: uPercent, 
@@ -82,8 +52,7 @@ export default function TokenDistributionChart({
           description: "Routed to the multi-sig founder ledger for RPC nodes, development, and system security operations." 
         }
       ].filter(item => item.value > 0);
-    }
-  }, [coinSymbol, protocolFeePercent, language]);
+  }, [coinSymbol, protocolFeePercent]);
 
   const handleMouseEnter = (_: any, index: number) => {
     setActiveIndex(index);
@@ -111,7 +80,7 @@ export default function TokenDistributionChart({
                   return (
                     <div className="bg-[#0c0c0c] border border-white/10 p-2.5 font-mono text-[10px] space-y-1">
                       <p className="font-bold text-white uppercase tracking-wider">{payloadData.name}</p>
-                      <p className="text-flame-orange font-bold text-xs">{payloadData.value}% {language === "it" ? "RIPARTIZIONE" : "ALLOCATION"}</p>
+                      <p className="text-flame-orange font-bold text-xs">{payloadData.value}% ALLOCATION</p>
                       <p className="text-slate-400 font-light max-w-[180px] leading-tight select-none">
                         {payloadData.description}
                       </p>
@@ -164,7 +133,7 @@ export default function TokenDistributionChart({
                 {totalPercentage}%
               </span>
               <span className="text-[8px] font-mono text-slate-500 uppercase tracking-widest mt-0.5">
-                {language === "it" ? "TOTALE FLUSSO" : "TOTAL FLOW"}
+                TOTAL FLOW
               </span>
             </>
           )}

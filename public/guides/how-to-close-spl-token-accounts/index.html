@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B0E14" />
+    <title>How to Close SPL Token Accounts on Solana | Recover Locked SOL</title>
+    <meta name="description" content="Learn how to close SPL token accounts on Solana to recover locked rent. Complete guide with step-by-step instructions." />
+    <meta name="keywords" content="close SPL token accounts, SPL token account Solana, recover rent Solana, close token account, BurnerSOL, Solana wallet cleanup" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <link rel="canonical" href="https://burnersol.io/guides/how-to-close-spl-token-accounts" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://burnersol.io/guides/how-to-close-spl-token-accounts" />
+    <meta property="og:title" content="How to Close SPL Token Accounts on Solana | Recover Locked SOL" />
+    <meta property="og:description" content="Learn how to close SPL token accounts on Solana to recover locked rent." />
+    <meta property="og:image" content="https://burnersol.io/token-logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="How to Close SPL Token Accounts on Solana | Recover Locked SOL" />
+    <meta name="twitter:description" content="Learn how to close SPL token accounts on Solana to recover locked rent." />
+    <meta name="twitter:image" content="https://burnersol.io/token-logo.png" />
+    <link rel="alternate" hreflang="en" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=en" />
+    <link rel="alternate" hreflang="es" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=es" />
+    <link rel="alternate" hreflang="fr" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=fr" />
+    <link rel="alternate" hreflang="de" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=de" />
+    <link rel="alternate" hreflang="pt" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=pt" />
+    <link rel="alternate" hreflang="ja" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=ja" />
+    <link rel="alternate" hreflang="ko" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=ko" />
+    <link rel="alternate" hreflang="zh" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=zh" />
+    <link rel="alternate" hreflang="tr" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=tr" />
+    <link rel="alternate" hreflang="ar" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=ar" />
+    <link rel="alternate" hreflang="ru" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=ru" />
+    <link rel="alternate" hreflang="hi" href="https://burnersol.io/guides/how-to-close-spl-token-accounts?lang=hi" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to Close SPL Token Accounts on Solana","description":"Learn how to close SPL token accounts on Solana to recover locked rent. Complete guide with step-by-step instructions.","dateModified":"2026-06-19","author":{"@type":"Organization","name":"BurnerSOL"},"publisher":{"@type":"Organization","name":"BurnerSOL","logo":{"@type":"ImageObject","url":"https://burnersol.io/token-logo.png"}},"mainEntityOfPage":"https://burnersol.io/guides/how-to-close-spl-token-accounts"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is an SPL token account?","acceptedAnswer":{"@type":"Answer","text":"An SPL token account is a data account on Solana that stores your balance for a specific SPL token. Each token type you hold requires its own token account, which locks rent exemption SOL."}},{"@type":"Question","name":"Can I close a token account that still has tokens?","acceptedAnswer":{"@type":"Answer","text":"No. You must transfer all tokens out of an account before it can be closed. The Solana runtime requires a zero balance before the close_account instruction succeeds."}},{"@type":"Question","name":"What happens to the tokens if I close the account?","acceptedAnswer":{"@type":"Answer","text":"If the account has a zero balance, nothing happens to tokens because there are none. You must transfer tokens to another account first. Closing an empty account only returns the rent."}},{"@type":"Question","name":"Is there a limit to how many accounts I can close at once?","acceptedAnswer":{"@type":"Answer","text":"No hard limit, but Solana transactions have a compute unit limit. BurnerSOL batches closures efficiently to fit within transaction limits. For very large numbers of accounts, multiple transactions may be needed."}},{"@type":"Question","name":"How much does it cost to close a token account?","acceptedAnswer":{"@type":"Answer","text":"The transaction fee is approximately 0.000005 SOL (5000 lamports). You receive approximately 0.00203928 SOL back per account closed, making this a net gain of roughly 0.002 SOL per account."}}]}</script>
+    <style>
+      :root { color-scheme: dark; font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0a0a0a; color: #f8fafc; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: #0a0a0a; color: #cbd5e1; }
+      body::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(249,115,22,0.08), transparent 340px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(180deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: auto, 72px 72px, 72px 72px; opacity: .55; }
+      main { position: relative; width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 72px; }
+      a { color: #fb923c; }
+      .brand { display: inline-flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase; }
+      .brand img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid rgba(255,255,255,0.12); }
+      .hero, article { max-width: 900px; padding: 52px 0 22px; }
+      article { margin-top: 0; padding: 54px 0 0; }
+      h1 { margin: 0; color: #fff; font-size: clamp(42px, 7vw, 86px); line-height: .92; letter-spacing: -0.06em; text-transform: uppercase; }
+      h2 { margin: 28px 0 10px; color: #fff; font-size: 22px; letter-spacing: -0.025em; }
+      h3 { margin: 20px 0 8px; color: #fff; font-size: 18px; }
+      .lead, article p { margin: 22px 0 0; max-width: 760px; color: #cbd5e1; font-size: clamp(17px, 2.1vw, 21px); line-height: 1.62; }
+      article p { font-size: 18px; }
+      .eyebrow { margin: 0 0 14px; color: #f97316; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border-radius: 0; background: #f97316; color: #050505; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; border: 1px solid #f97316; }
+      .button.secondary { color: #f8fafc; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 48px; }
+      .card { min-height: 170px; padding: 22px; border-radius: 0; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.10); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+      p { color: #cbd5e1; line-height: 1.65; }
+      ul, ol { color: #cbd5e1; line-height: 1.65; padding-left: 24px; }
+      li { margin: 8px 0; }
+      .faq { margin-top: 58px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.10); }
+      .faq h2 { max-width: 820px; font-size: clamp(30px, 4vw, 46px); line-height: 1.02; }
+      details { border-top: 1px solid rgba(255,255,255,0.12); padding: 18px 0; }
+      summary { cursor: pointer; font-weight: 800; color: #fff; }
+      footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.10); color: #94a3b8; font-size: 13px; line-height: 1.7; }
+      @media (max-width: 760px) { main { width: min(100% - 28px, 1120px); padding-top: 16px; } .grid { grid-template-columns: 1fr; } .actions a, .button { width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="brand" href="/"><img src="/token-logo.png" alt="BurnerSOL logo" /><span>BurnerSOL</span></a>
+      <article>
+        <p class="eyebrow">Token Account Management</p>
+        <h1>How to Close SPL Token Accounts on Solana</h1>
+        <p>Every SPL token account on Solana locks a small amount of SOL as rent exemption. Over time, you accumulate empty accounts that are no longer needed. This guide explains how to close these accounts and recover your locked SOL.</p>
+
+        <h2>Understanding SPL Token Accounts</h2>
+        <p>SPL (Solana Program Library) tokens are the standard fungible tokens on Solana — think USDC, BONK, JUP, and any other token you have traded or received. Each SPL token you hold is stored in a dedicated token account, which is a separate on-chain data account.</p>
+        <p>When you receive a token for the first time, the Solana runtime creates this account and deposits approximately <strong>0.00203928 SOL</strong> as rent exemption. This SOL is locked as long as the account exists.</p>
+        <p>The token account stores your balance for that specific token. If you transfer all of that token elsewhere, the account becomes empty — but the rent remains locked until you explicitly close it.</p>
+
+        <h2>When Should You Close Token Accounts?</h2>
+        <p>You should consider closing token accounts when:</p>
+        <ul>
+          <li>The account has a <strong>zero balance</strong> and you no longer plan to hold that token.</li>
+          <li>You have accumulated many empty accounts from past airdrops or token interactions.</li>
+          <li>You want to recover the locked SOL for use elsewhere (staking, trading, or simply reducing wallet bloat).</li>
+        </ul>
+        <p>Do <strong>not</strong> close token accounts that still hold tokens. Transferring the tokens to another account (or another wallet) should be done first.</p>
+
+        <h2>How to Close SPL Token Accounts: Step-by-Step</h2>
+        <h3>Step 1: Connect Your Wallet to BurnerSOL</h3>
+        <p>Visit <a href="/">burnersol.io</a> and connect your Solana wallet. The tool supports Phantom, Solflare, Backpack, and other popular wallets. BurnerSOL is non-custodial — your private keys never leave your browser.</p>
+
+        <h3>Step 2: Review Your Token Accounts</h3>
+        <p>BurnerSOL displays all SPL token accounts in your wallet. For each account, you will see the token name, your balance, and whether the account is eligible for closure (zero balance). The tool clearly marks accounts that can be closed.</p>
+
+        <h3>Step 3: Select Accounts to Close</h3>
+        <p>Select the empty token accounts you want to close. You can use the "Select All Empty" option to quickly mark every zero-balance account. Review the selection to make sure you are not accidentally closing accounts with tokens you still hold.</p>
+
+        <h3>Step 4: Execute the Close Transaction</h3>
+        <p>Click the close button. Your wallet will display a transaction prompt showing:</p>
+        <ul>
+          <li>The number of accounts being closed.</li>
+          <li>The total SOL that will be returned to your wallet.</li>
+          <li>The transaction fee (typically 0.000005 SOL).</li>
+        </ul>
+        <p>Review the details and sign the transaction. The accounts are closed and the rent is deposited into your wallet.</p>
+
+        <h3>Step 5: Verify Recovery</h3>
+        <p>Check your wallet balance. The recovered SOL should appear within seconds. The closed accounts no longer exist on-chain.</p>
+
+        <h2>What Happens Behind the Scenes</h2>
+        <p>When you close an SPL token account, the following occurs on-chain:</p>
+        <ol>
+          <li>The Token Program verifies the account has a zero balance.</li>
+          <li>The account data is deallocated from the blockchain.</li>
+          <li>The rent exemption balance is transferred to your specified destination (your wallet).</li>
+          <li>The account address is freed and no longer occupies state.</li>
+        </ol>
+        <p>This operation is atomic — either all steps succeed or none do. There is no risk of partial execution.</p>
+
+        <h2>Benefits of Closing Token Accounts</h2>
+        <ul>
+          <li><strong>Recover SOL:</strong> Get back approximately 0.002 SOL per account closed.</li>
+          <li><strong>Clean wallet:</strong> Fewer accounts means a cleaner, faster-loading wallet interface.</li>
+          <li><strong>Reduce attack surface:</strong> Fewer open accounts means less complexity and fewer potential vulnerabilities.</li>
+          <li><strong>Support network health:</strong> Closing unused accounts helps reduce Solana's state size.</li>
+        </ul>
+
+        <div class="actions">
+          <a class="button" href="/">Close Empty Accounts Now</a>
+          <a class="button secondary" href="/guides/how-to-recover-sol-from-token-accounts">Recover SOL Guide</a>
+        </div>
+      </article>
+
+      <div class="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>What is an SPL token account?</summary>
+          <p>An SPL token account is a data account on Solana that stores your balance for a specific SPL token. Each token type you hold requires its own token account, which locks rent exemption SOL.</p>
+        </details>
+        <details>
+          <summary>Can I close a token account that still has tokens?</summary>
+          <p>No. You must transfer all tokens out of an account before it can be closed. The Solana runtime requires a zero balance before the close_account instruction succeeds.</p>
+        </details>
+        <details>
+          <summary>What happens to the tokens if I close the account?</summary>
+          <p>If the account has a zero balance, nothing happens to tokens because there are none. You must transfer tokens to another account first. Closing an empty account only returns the rent.</p>
+        </details>
+        <details>
+          <summary>Is there a limit to how many accounts I can close at once?</summary>
+          <p>No hard limit, but Solana transactions have a compute unit limit. BurnerSOL batches closures efficiently to fit within transaction limits. For very large numbers of accounts, multiple transactions may be needed.</p>
+        </details>
+        <details>
+          <summary>How much does it cost to close a token account?</summary>
+          <p>The transaction fee is approximately 0.000005 SOL (5000 lamports). You receive approximately 0.00203928 SOL back per account closed, making this a net gain of roughly 0.002 SOL per account.</p>
+        </details>
+      </div>
+
+      <footer>
+        <p>BurnerSOL is a non-custodial tool. Your keys never leave your wallet. <a href="/">Open BurnerSOL</a></p>
+        <p>Related guides: <a href="/guides/how-to-recover-sol-from-token-accounts">Recover SOL</a> | <a href="/guides/how-to-close-token-2022-accounts">Close Token-2022 Accounts</a> | <a href="/guides/solana-wallet-cleaner">Wallet Cleaner</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

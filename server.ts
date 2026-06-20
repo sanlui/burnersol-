@@ -501,6 +501,10 @@ async function startServer() {
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
+    // Serve static files from public/ BEFORE Vite's SPA fallback
+    const publicPath = path.join(process.cwd(), "public");
+    app.use(express.static(publicPath));
+
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",

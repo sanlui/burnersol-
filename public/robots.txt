@@ -1,5 +1,14 @@
 User-agent: *
 Allow: /
+
+# Block API and internal paths
 Disallow: /api/
+Disallow: /_/
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: /scripts/
+Disallow: /dist/
 
 Sitemap: https://burnersol.io/sitemap.xml
+Sitemap: https://burnersol.io/sitemap-pages.xml
+Sitemap: https://burnersol.io/sitemap-guides.xml

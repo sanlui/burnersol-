@@ -28,7 +28,7 @@ export async function fetchJupiterPrices(mintAddresses: string[]): Promise<Recor
 
   try {
     const idsString = cleanMints.join(",");
-    const response = await fetch(`https://api.jup.ag/price/v2?ids=${idsString}`, {
+    const response = await fetch(`/api/jupiter/price?ids=${idsString}`, {
       signal: controller.signal
     });
     

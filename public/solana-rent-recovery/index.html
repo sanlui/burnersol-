@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B0E14" />
+    <title>Solana Rent Recovery — Reclaim Locked SOL Deposits | BurnerSOL</title>
+    <meta name="description" content="Solana rent recovery made simple. BurnerSOL scans your wallet, finds empty accounts with locked rent, and lets you recover your SOL deposits instantly." />
+    <meta name="keywords" content="Solana rent recovery, reclaim SOL deposits, locked SOL rent, close empty token accounts, recover rent Solana, BurnerSOL, wallet cleaner, SOL refund" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href="https://burnersol.io/solana-rent-recovery" />
+    <link rel="alternate" hreflang="x-default" href="https://burnersol.io/solana-rent-recovery?lang=x-default" />
+    <link rel="alternate" hreflang="en" href="https://burnersol.io/solana-rent-recovery?lang=en" />
+    <link rel="alternate" hreflang="es" href="https://burnersol.io/solana-rent-recovery?lang=es" />
+    <link rel="alternate" hreflang="pt" href="https://burnersol.io/solana-rent-recovery?lang=pt" />
+    <link rel="alternate" hreflang="fr" href="https://burnersol.io/solana-rent-recovery?lang=fr" />
+    <link rel="alternate" hreflang="de" href="https://burnersol.io/solana-rent-recovery?lang=de" />
+    <link rel="alternate" hreflang="it" href="https://burnersol.io/solana-rent-recovery?lang=it" />
+    <link rel="alternate" hreflang="tr" href="https://burnersol.io/solana-rent-recovery?lang=tr" />
+    <link rel="alternate" hreflang="ru" href="https://burnersol.io/solana-rent-recovery?lang=ru" />
+    <link rel="alternate" hreflang="ja" href="https://burnersol.io/solana-rent-recovery?lang=ja" />
+    <link rel="alternate" hreflang="ko" href="https://burnersol.io/solana-rent-recovery?lang=ko" />
+    <link rel="alternate" hreflang="zh" href="https://burnersol.io/solana-rent-recovery?lang=zh" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://burnersol.io/solana-rent-recovery" />
+    <meta property="og:title" content="Solana Rent Recovery — Reclaim Locked SOL Deposits | BurnerSOL" />
+    <meta property="og:description" content="Solana rent recovery made simple. BurnerSOL scans your wallet, finds empty accounts with locked rent, and lets you recover your SOL deposits instantly." />
+    <meta property="og:image" content="https://burnersol.io/token-logo.png" />
+    <meta property="og:site_name" content="BurnerSOL" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Solana Rent Recovery — Reclaim Locked SOL Deposits | BurnerSOL" />
+    <meta name="twitter:description" content="Solana rent recovery made simple. BurnerSOL scans your wallet, finds empty accounts with locked rent, and lets you recover your SOL deposits instantly." />
+    <meta name="twitter:image" content="https://burnersol.io/token-logo.png" />
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": "https://burnersol.io/solana-rent-recovery#webpage",
+        "url": "https://burnersol.io/solana-rent-recovery",
+        "name": "Solana Rent Recovery — Reclaim Locked SOL Deposits | BurnerSOL",
+        "description": "Solana rent recovery made simple. BurnerSOL scans your wallet, finds empty accounts with locked rent, and lets you recover your SOL deposits instantly.",
+        "isPartOf": { "@type": "WebSite", "url": "https://burnersol.io", "name": "BurnerSOL" },
+        "about": { "@type": "Thing", "name": "Solana rent recovery" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Solana rent and why is it locked?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Solana requires a minimum SOL deposit (rent) to keep an account alive on-chain. When a token account becomes empty, the rent remains locked until the account is closed. BurnerSOL helps you close these accounts and recover the rent."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does Solana rent recovery work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "BurnerSOL scans your wallet for empty token accounts, shows you how much rent is locked in each, and lets you close them in a batched transaction. The rent is returned to your wallet immediately upon closing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much rent can I recover?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Each empty token account holds approximately 0.00203 SOL. Active wallets with many accounts from trading or DeFi can recover several SOL through rent recovery."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Solana rent recovery safe?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. BurnerSOL is non-custodial and only closes empty accounts. Your tokens and assets are never touched. You review every action before signing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I recover rent from all types of Solana accounts?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "BurnerSOL focuses on SPL token accounts with a zero balance. Other account types like token metadata or program-owned accounts may have different recovery rules."
+            }
+          }
+        ]
+      }
+    ]
+    </script>
+    <style>
+      :root { color-scheme: dark; font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0a0a0a; color: #f8fafc; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: #0a0a0a; color: #cbd5e1; }
+      body::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(249,115,22,0.08), transparent 340px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(180deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: auto, 72px 72px, 72px 72px; opacity: .55; }
+      main { position: relative; width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 72px; }
+      header { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 18px 0 52px; border-bottom: 1px solid rgba(255,255,255,0.10); }
+      a { color: #fb923c; }
+      .brand { display: inline-flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase; }
+      .brand img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid rgba(255,255,255,0.12); }
+      .status { color: #fb923c; border: 1px solid rgba(249,115,22,0.28); background: rgba(249,115,22,0.09); padding: 9px 12px; font-size: 12px; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; }
+      .hero, article { max-width: 900px; padding: 52px 0 22px; }
+      article { margin-top: 0; padding: 54px 0 0; }
+      h1 { margin: 0; color: #fff; font-size: clamp(42px, 7vw, 86px); line-height: .92; letter-spacing: -0.06em; text-transform: uppercase; }
+      h2 { margin: 0 0 10px; color: #fff; font-size: 22px; letter-spacing: -0.025em; }
+      h3 { margin: 0 0 6px; color: #fff; font-size: 17px; }
+      .lead, article p { margin: 22px 0 0; max-width: 760px; color: #cbd5e1; font-size: clamp(17px, 2.1vw, 21px); line-height: 1.62; }
+      article p { font-size: 18px; }
+      .eyebrow { margin: 0 0 14px; color: #f97316; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border-radius: 0; background: #f97316; color: #050505; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; border: 1px solid #f97316; }
+      .button.secondary { color: #f8fafc; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 48px; }
+      .card { min-height: 170px; padding: 22px; border-radius: 0; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.10); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+      .card p { font-size: 15px; }
+      p { color: #cbd5e1; line-height: 1.65; }
+      .faq { margin-top: 58px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.10); }
+      .faq h2 { max-width: 820px; font-size: clamp(30px, 4vw, 46px); line-height: 1.02; }
+      details { border-top: 1px solid rgba(255,255,255,0.12); padding: 18px 0; }
+      summary { cursor: pointer; font-weight: 800; color: #fff; }
+      footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.10); color: #94a3b8; font-size: 13px; line-height: 1.7; }
+      footer a { margin-right: 16px; }
+      @media (max-width: 760px) { main { width: min(100% - 28px, 1120px); padding-top: 16px; } header { align-items: flex-start; flex-direction: column; padding-bottom: 28px; } .grid { grid-template-columns: 1fr; } .actions a, .button { width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <a class="brand" href="/"><img src="/token-logo.png" alt="BurnerSOL logo" /><span>BurnerSOL</span></a>
+        <span class="status">Rent recovery</span>
+      </header>
+      <section class="hero">
+        <p class="eyebrow">Solana Blockchain Rent Recovery</p>
+        <h1>Solana rent recovery for locked SOL deposits</h1>
+        <p class="lead">Solana's rent system requires SOL deposits to maintain accounts on-chain. When those accounts become empty, the rent stays locked. BurnerSOL provides a transparent way to identify, preview, and recover all SOL rent deposits from your wallet.</p>
+        <div class="actions">
+          <a class="button" href="/">Recover rent now</a>
+          <a class="button secondary" href="/recover-sol">Recover SOL</a>
+        </div>
+      </section>
+      <section class="grid" aria-label="Solana rent recovery features">
+        <article class="card">
+          <p class="eyebrow">Rent analysis</p>
+          <h2>Understand your rent exposure</h2>
+          <p>BurnerSOL calculates the total SOL locked as rent across all empty token accounts in your wallet. It provides a per-account breakdown and a combined total, giving you a clear picture of your rent exposure and recovery potential.</p>
+        </article>
+        <article class="card">
+          <p class="eyebrow">Account detection</p>
+          <h2>Find all rent-bearing accounts</h2>
+          <p>Not all empty accounts are obvious. BurnerSOL scans your full account list, identifies every zero-balance token account, and flags those eligible for rent recovery, including accounts from past DeFi interactions and airdrops.</p>
+        </article>
+        <article class="card">
+          <p class="eyebrow">Batch recovery</p>
+          <h2>Recover rent efficiently</h2>
+          <p>BurnerSOL combines multiple account closures into a single transaction. This approach minimizes the Solana network fee and lets you recover rent from many accounts in one step, rather than signing individual transactions.</p>
+        </article>
+        <article class="card">
+          <p class="eyebrow">Safe process</p>
+          <h2>Your assets remain untouched</h2>
+          <p>Rent recovery only targets accounts with a zero balance. Any account holding tokens, NFTs, or other assets is excluded from the recovery process. Your portfolio stays intact while you reclaim locked SOL.</p>
+        </article>
+        <article class="card">
+          <p class="eyebrow">Immediate return</p>
+          <h2>SOL is returned instantly</h2>
+          <p>Once you sign the recovery transaction, the Solana network processes it and the recovered rent is deposited directly into your wallet. There is no waiting period, escrow, or delayed settlement.</p>
+        </article>
+        <article class="card">
+          <p class="eyebrow">Non-custodial</p>
+          <h2>Full self-custody</h2>
+          <p>BurnerSOL is a browser-based tool that connects to your wallet without storing keys or seeds. You review every account, approve the transaction, and sign it yourself. Your assets remain under your control.</p>
+        </article>
+      </section>
+      <section class="faq">
+        <p class="eyebrow">Solana Rent Recovery — Frequently Asked Questions</p>
+        <h2>Understanding rent on the Solana blockchain</h2>
+        <details>
+          <summary>What is Solana rent and why is it locked?</summary>
+          <p>Solana requires a minimum SOL deposit (rent) to keep an account alive on-chain. When a token account becomes empty, the rent remains locked until the account is closed. BurnerSOL helps you close these accounts and recover the rent that is sitting idle.</p>
+        </details>
+        <details>
+          <summary>How does Solana rent recovery work?</summary>
+          <p>BurnerSOL scans your wallet for empty token accounts, shows you how much rent is locked in each, and lets you close them in a batched transaction. The rent is returned to your wallet immediately upon confirmation by the Solana network.</p>
+        </details>
+        <details>
+          <summary>How much rent can I recover?</summary>
+          <p>Each empty token account holds approximately 0.00203 SOL. Active wallets with many accounts from trading or DeFi activity can recover several SOL total through systematic rent recovery.</p>
+        </details>
+        <details>
+          <summary>Is Solana rent recovery safe?</summary>
+          <p>Yes. BurnerSOL is non-custodial and only closes empty accounts with a zero balance. Your tokens, NFTs, and other assets are never touched. You review every action before signing the transaction.</p>
+        </details>
+        <details>
+          <summary>Can I recover rent from all types of Solana accounts?</summary>
+          <p>BurnerSOL focuses on SPL token accounts with a zero balance. Other account types like token metadata or program-owned accounts may have different rules. BurnerSOL identifies and handles the most common rent recovery scenarios.</p>
+        </details>
+      </section>
+      <footer>
+        <p>
+          <a href="/">Main app</a>
+          <a href="/recover-sol">Recover SOL</a>
+          <a href="/wallet-cleaner">Wallet cleaner</a>
+          <a href="/close-token-accounts">Close token accounts</a>
+          <a href="/remove-spam-nfts">Remove spam NFTs</a>
+          <a href="/recover-rent">Recover rent</a>
+        </p>
+        <p>BurnerSOL is a non-custodial wallet tool. It does not hold private keys and does not guarantee asset prices, token value, trading liquidity, or profit. Cryptographic assets involve ongoing risk.</p>
+      </footer>
+    </main>
+  </body>
+</html>

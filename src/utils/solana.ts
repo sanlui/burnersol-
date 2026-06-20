@@ -5,9 +5,9 @@
  */
 
 // Global constant fallback endpoints
-const PRIMARY_SOLANA_RPC = "https://solana-mainnet.g.alchemy.com/v2/XhvbwzXZcW2UhCcCj5cC1";
+const PRIMARY_SOLANA_RPC = import.meta.env.VITE_SOLANA_RPC_URL || "https://solana-mainnet.g.alchemy.com/v2/XhvbwzXZcW2UhCcCj5cC1";
 const FALLBACK_SOLANA_RPC = "https://solana-api.projectserum.com";
-const HELIUS_RPC = "https://mainnet.helius-rpc.com/?api-key=228a6dca-c288-4f6a-b85c-23561fb9e946";
+const HELIUS_RPC = `https://mainnet.helius-rpc.com/?api-key=${import.meta.env.VITE_HELIUS_API_KEY || ""}`;
 
 // Cache for active requests to allow immediate deduplication
 const activePromises = new Map<string, Promise<any>>();
@@ -230,48 +230,237 @@ export interface HeliusNFT {
 }
 
 /**
- * Fetch all SPL token accounts for a wallet using Helius RPC (fast).
+ * Fetch ALL digital assets owned by a wallet using Helius DAS (getAssetsByOwner).
+ * Returns full metadata: name, symbol, description, image, collection, attributes, token info.
  */
-export async function fetchHeliusTokenAccounts(walletAddress: string): Promise<HeliusTokenAccount[]> {
+export interface HeliusDASAsset {
+  id: string;
+  name: string;
+  symbol: string;
+  description: string;
+  image: string;
+  collection: string;
+  collectionName: string;
+  attributes: Array<{ trait_type: string; value: string }>;
+  interface: string;
+  type: string;
+  decimals: number;
+  supply: number;
+  creators: Array<{ address: string; verified: boolean; share: number }>;
+  owner: string;
+  royalty: number;
+  compressed: boolean;
+  froze: boolean;
+  tokenInfo?: {
+    balance: number;
+    supply: number;
+    decimals: number;
+    tokenProgram: string;
+  };
+  accountInfo?: {
+    lamports: number;
+  };
+}
+
+export async function fetchHeliusAllAssetsDAS(walletAddress: string): Promise<HeliusDASAsset[]> {
   if (!walletAddress || walletAddress.length < 32) return [];
 
+  const allAssets: HeliusDASAsset[] = [];
+  let page = 1;
+  const PAGE_SIZE = 50;
+  const MAX_PAGES = 10;
+
   try {
-    const payload = {
-      jsonrpc: "2.0",
-      id: 1,
-      method: "getTokenAccountsByOwner",
-      params: [
-        walletAddress,
-        { programId: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" },
-        { encoding: "jsonParsed" }
-      ]
-    };
+    while (page <= MAX_PAGES) {
+      const response = await executeResilientFetch<any>(
+        HELIUS_RPC,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            jsonrpc: "2.0",
+            id: 1,
+            method: "getAssetsByOwner",
+            params: {
+              ownerAddress: walletAddress,
+              page,
+              limit: PAGE_SIZE,
+              sortBy: { sortBy: "created", sortDirection: "desc" },
+            }
+          }),
+        },
+        12000,
+        2
+      );
 
-    const data = await executeResilientFetch<any>(
-      HELIUS_RPC,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      },
-      5000,
-      2
-    );
+      if (!response?.result?.items || response.result.items.length === 0) break;
 
-    if (data?.result?.value) {
-      return data.result.value.map((item: any) => ({
-        mint: item.pubkey,
-        amount: item.account.data.parsed.info.tokenAmount.amount,
-        decimals: item.account.data.parsed.info.tokenAmount.decimals,
-        tokenAmount: item.account.data.parsed.info.tokenAmount,
-        owner: item.account.data.parsed.info.owner,
-      }));
+      // === FULL HELIUS DAS LOG ===
+      console.log("[DAS] getAssetsByOwner PAGE", page, "- Total items in response:", response.result.items.length);
+      if (page === 1 && response.result.items.length > 0) {
+        console.log("[DAS] === FULL RAW ITEM #0 (complete object) ===");
+        console.log(JSON.stringify(response.result.items[0], null, 2));
+        console.log("[DAS] === FIELD-BY-FIELD EXTRACTION for item #0 ===");
+        const sample = response.result.items[0];
+        console.log({
+          "item.id": sample.id,
+          "item.interface": sample.interface,
+          "item.content": sample.content,
+          "item.content.links": sample.content?.links,
+          "item.content.metadata": sample.content?.metadata,
+          "item.content.metadata.name": sample.content?.metadata?.name,
+          "item.content.metadata.symbol": sample.content?.metadata?.symbol,
+          "item.content.metadata.description": sample.content?.metadata?.description,
+          "item.content.metadata.attributes": sample.content?.metadata?.attributes,
+          "item.content.links.image": sample.content?.links?.image,
+          "item.token_info": sample.token_info,
+          "item.token_info.decimals": sample.token_info?.decimals,
+          "item.token_info.balance": sample.token_info?.balance,
+          "item.token_info.supply": sample.token_info?.supply,
+          "item.token_info.token_program": sample.token_info?.token_program,
+          "item.account_info": sample.account_info,
+          "item.account_info.lamports": sample.account_info?.lamports,
+          "item.grouping": sample.grouping,
+          "item.compression": sample.compression,
+          "item.creators": sample.creators,
+          "item.seller_fee_basis_points": sample.seller_fee_basis_points,
+          "item.supply": sample.supply,
+          "item.frozen": sample.frozen,
+        });
+        // Log ALL top-level keys
+        console.log("[DAS] All top-level keys of item:", Object.keys(sample));
+        if (sample.content) console.log("[DAS] All keys of content:", Object.keys(sample.content));
+        if (sample.content?.metadata) console.log("[DAS] All keys of metadata:", Object.keys(sample.content.metadata));
+        if (sample.content?.links) console.log("[DAS] All keys of links:", Object.keys(sample.content.links));
+      }
+      // === END LOG ===
+
+      for (const item of response.result.items) {
+        const content = item.content || {};
+        const metadata = content.metadata || {};
+        const links = content.links || {};
+        const tokenInfo = item.token_info || {};
+        const accountInfo = item.account_info || {};
+        const grouping = item.grouping || [];
+
+        let collectionName = "";
+        let collectionAddress = "";
+        for (const group of grouping) {
+          if (group.group_key === "collection") {
+            collectionAddress = group.group_value || "";
+            collectionName = group.collection_metadata?.name || "";
+          }
+        }
+
+        const attrs: Array<{ trait_type: string; value: string }> = [];
+        if (metadata.attributes && Array.isArray(metadata.attributes)) {
+          for (const attr of metadata.attributes) {
+            attrs.push({ trait_type: attr.trait_type || "", value: String(attr.value || "") });
+          }
+        }
+
+        const decimals = tokenInfo.decimals ?? 0;
+        const balance = tokenInfo.balance ? Number(tokenInfo.balance) : 0;
+        const supply = tokenInfo.supply ? Number(tokenInfo.supply) : (item.supply ? Number(item.supply) : 0);
+        const lamports = accountInfo.lamports || 0;
+
+        allAssets.push({
+          id: item.id,
+          name: metadata.name || `Asset (${item.id.slice(0, 4)}...${item.id.slice(-4)})`,
+          symbol: metadata.symbol || "",
+          description: metadata.description || "",
+          image: links.image || "",
+          collection: collectionAddress,
+          collectionName,
+          attributes: attrs,
+          interface: item.interface || "Unknown",
+          type: item.compression?.compressed ? "compressed" : (item.interface || "unknown"),
+          decimals,
+          supply,
+          creators: item.creators || [],
+          owner: walletAddress,
+          royalty: item.seller_fee_basis_points || 0,
+          compressed: item.compression?.compressed || false,
+          froze: item.frozen || false,
+          tokenInfo: tokenInfo.balance !== undefined ? {
+            balance,
+            supply,
+            decimals,
+            tokenProgram: tokenInfo.token_program || "",
+          } : undefined,
+          accountInfo: lamports > 0 ? { lamports } : undefined,
+        });
+      }
+
+      if (response.result.items.length < PAGE_SIZE) break;
+      page++;
     }
   } catch (error) {
-    console.error("Helius token accounts fetch failed:", error);
+    console.error("Helius DAS fetchAssetsByOwner failed:", error);
   }
 
-  return [];
+  return allAssets;
+}
+
+export interface FungibleTokenAccount {
+  mint: string;
+  amount: string;
+  decimals: number;
+  uiAmount: number;
+  owner: string;
+}
+
+export async function fetchHeliusFungibleTokens(walletAddress: string): Promise<FungibleTokenAccount[]> {
+  if (!walletAddress || walletAddress.length < 32) return [];
+
+  const allTokens: FungibleTokenAccount[] = [];
+
+  const PROGRAMS = [
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+  ];
+
+  for (const programId of PROGRAMS) {
+    try {
+      const data = await executeResilientFetch<any>(
+        HELIUS_RPC,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            jsonrpc: "2.0",
+            id: 1,
+            method: "getTokenAccountsByOwner",
+            params: [
+              walletAddress,
+              { programId },
+              { encoding: "jsonParsed" }
+            ]
+          }),
+        },
+        8000,
+        2
+      );
+
+      if (data?.result?.value) {
+        for (const item of data.result.value) {
+          const info = item.account.data.parsed.info;
+          const ta = info.tokenAmount;
+          allTokens.push({
+            mint: info.mint,
+            amount: ta.amount,
+            decimals: ta.decimals,
+            uiAmount: ta.uiAmount || 0,
+            owner: info.owner,
+          });
+        }
+      }
+    } catch (err) {
+      console.error(`Fungible tokens fetch failed for program ${programId}:`, err);
+    }
+  }
+
+  return allTokens;
 }
 
 /**
@@ -282,7 +471,7 @@ export async function fetchHeliusNFTs(walletAddress: string): Promise<HeliusNFT[
 
   try {
     const response = await executeResilientFetch<any>(
-      `https://mainnet.helius-rpc.com/?api-key=228a6dca-c288-4f6a-b85c-23561fb9e946`,
+      HELIUS_RPC,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

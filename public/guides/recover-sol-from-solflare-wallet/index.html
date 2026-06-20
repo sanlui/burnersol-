@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B0E14" />
+    <title>Recover SOL from Solflare Wallet | Close Accounts &amp; Reclaim Rent</title>
+    <meta name="description" content="Recover SOL locked in your Solflare wallet. Close empty token accounts and reclaim rent with BurnerSOL's step-by-step guide." />
+    <meta name="keywords" content="recover SOL Solflare, Solflare wallet cleanup, close accounts Solflare, Solflare rent recovery, BurnerSOL Solflare, reclaim SOL Solflare" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <link rel="canonical" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://burnersol.io/guides/recover-sol-from-solflare-wallet" />
+    <meta property="og:title" content="Recover SOL from Solflare Wallet | Close Accounts &amp; Reclaim Rent" />
+    <meta property="og:description" content="Recover SOL locked in your Solflare wallet. Close empty token accounts and reclaim rent with BurnerSOL." />
+    <meta property="og:image" content="https://burnersol.io/token-logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Recover SOL from Solflare Wallet | Close Accounts &amp; Reclaim Rent" />
+    <meta name="twitter:description" content="Recover SOL locked in your Solflare wallet. Close empty token accounts and reclaim rent with BurnerSOL." />
+    <meta name="twitter:image" content="https://burnersol.io/token-logo.png" />
+    <link rel="alternate" hreflang="en" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=en" />
+    <link rel="alternate" hreflang="es" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=es" />
+    <link rel="alternate" hreflang="fr" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=fr" />
+    <link rel="alternate" hreflang="de" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=de" />
+    <link rel="alternate" hreflang="pt" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=pt" />
+    <link rel="alternate" hreflang="ja" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=ja" />
+    <link rel="alternate" hreflang="ko" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=ko" />
+    <link rel="alternate" hreflang="zh" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=zh" />
+    <link rel="alternate" hreflang="tr" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=tr" />
+    <link rel="alternate" hreflang="ar" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=ar" />
+    <link rel="alternate" hreflang="ru" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=ru" />
+    <link rel="alternate" hreflang="hi" href="https://burnersol.io/guides/recover-sol-from-solflare-wallet?lang=hi" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Recover SOL from Solflare Wallet","description":"Recover SOL locked in your Solflare wallet. Close empty token accounts and reclaim rent with BurnerSOL's step-by-step guide.","dateModified":"2026-06-19","author":{"@type":"Organization","name":"BurnerSOL"},"publisher":{"@type":"Organization","name":"BurnerSOL","logo":{"@type":"ImageObject","url":"https://burnersol.io/token-logo.png"}},"mainEntityOfPage":"https://burnersol.io/guides/recover-sol-from-solflare-wallet"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much SOL can I recover from Solflare wallet?","acceptedAnswer":{"@type":"Answer","text":"The amount depends on how many empty token accounts you have. Each SPL token account returns approximately 0.002 SOL when closed. A wallet with 100 empty accounts can recover about 0.2 SOL."}},{"@type":"Question","name":"Does Solflare have a built-in account cleanup feature?","acceptedAnswer":{"@type":"Answer","text":"Solflare does not have a built-in feature to close multiple empty token accounts at once. BurnerSOL provides this functionality with a batch close feature that handles many accounts in one or a few transactions."}},{"@type":"Question","name":"Is BurnerSOL safe to use with Solflare?","acceptedAnswer":{"@type":"Answer","text":"Yes. BurnerSOL is non-custodial and works with Solflare through the standard Solana wallet adapter. Your private keys remain in Solflare and are never exposed to BurnerSOL."}},{"@type":"Question","name":"Can I close Token-2022 accounts from Solflare?","acceptedAnswer":{"@type":"Answer","text":"Yes. BurnerSOL supports both SPL Token and Token-2022 accounts regardless of which wallet you use. Solflare connects to BurnerSOL and the tool handles both account types."}},{"@type":"Question","name":"Do I need to update Solflare to use BurnerSOL?","acceptedAnswer":{"@type":"Answer","text":"It is recommended to use the latest version of Solflare for the best compatibility and security. BurnerSOL uses the standard Solana wallet adapter, which is supported by current Solflare versions."}}]}</script>
+    <style>
+      :root { color-scheme: dark; font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0a0a0a; color: #f8fafc; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: #0a0a0a; color: #cbd5e1; }
+      body::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(249,115,22,0.08), transparent 340px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(180deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: auto, 72px 72px, 72px 72px; opacity: .55; }
+      main { position: relative; width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 72px; }
+      a { color: #fb923c; }
+      .brand { display: inline-flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase; }
+      .brand img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid rgba(255,255,255,0.12); }
+      .hero, article { max-width: 900px; padding: 52px 0 22px; }
+      article { margin-top: 0; padding: 54px 0 0; }
+      h1 { margin: 0; color: #fff; font-size: clamp(42px, 7vw, 86px); line-height: .92; letter-spacing: -0.06em; text-transform: uppercase; }
+      h2 { margin: 28px 0 10px; color: #fff; font-size: 22px; letter-spacing: -0.025em; }
+      h3 { margin: 20px 0 8px; color: #fff; font-size: 18px; }
+      .lead, article p { margin: 22px 0 0; max-width: 760px; color: #cbd5e1; font-size: clamp(17px, 2.1vw, 21px); line-height: 1.62; }
+      article p { font-size: 18px; }
+      .eyebrow { margin: 0 0 14px; color: #f97316; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border-radius: 0; background: #f97316; color: #050505; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; border: 1px solid #f97316; }
+      .button.secondary { color: #f8fafc; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 48px; }
+      .card { min-height: 170px; padding: 22px; border-radius: 0; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.10); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+      p { color: #cbd5e1; line-height: 1.65; }
+      ul, ol { color: #cbd5e1; line-height: 1.65; padding-left: 24px; }
+      li { margin: 8px 0; }
+      .faq { margin-top: 58px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.10); }
+      .faq h2 { max-width: 820px; font-size: clamp(30px, 4vw, 46px); line-height: 1.02; }
+      details { border-top: 1px solid rgba(255,255,255,0.12); padding: 18px 0; }
+      summary { cursor: pointer; font-weight: 800; color: #fff; }
+      footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.10); color: #94a3b8; font-size: 13px; line-height: 1.7; }
+      @media (max-width: 760px) { main { width: min(100% - 28px, 1120px); padding-top: 16px; } .grid { grid-template-columns: 1fr; } .actions a, .button { width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="brand" href="/"><img src="/token-logo.png" alt="BurnerSOL logo" /><span>BurnerSOL</span></a>
+      <article>
+        <p class="eyebrow">Solflare Wallet Guide</p>
+        <h1>Recover SOL from Solflare Wallet</h1>
+        <p>Solflare is a popular Solana wallet known for its staking features and mobile support. Like all Solana wallets, it accumulates empty token accounts that lock SOL in rent. This guide shows you how to recover that SOL using BurnerSOL.</p>
+
+        <h2>Why Solflare Users Have Locked SOL</h2>
+        <p>Solflare, like Phantom and other Solana wallets, creates a new token account every time you receive a token you have not held before. This includes:</p>
+        <ul>
+          <li>Tokens received from DeFi swaps on Jupiter or Raydium.</li>
+          <li>Airdrops from projects you interacted with.</li>
+          <li>NFTs you received or minted.</li>
+          <li>Test tokens that ended up in your mainnet wallet.</li>
+        </ul>
+        <p>Each of these accounts locks approximately <strong>0.00203928 SOL</strong> as rent exemption. When you sell or transfer the token, the account becomes empty but the SOL remains locked until you explicitly close the account.</p>
+        <p>Solflare does not currently offer a built-in batch close feature, which is where BurnerSOL provides significant value for Solflare users.</p>
+
+        <h2>Step-by-Step: Recover SOL with Solflare + BurnerSOL</h2>
+        <h3>Step 1: Open BurnerSOL on Desktop</h3>
+        <p>Go to <a href="/">burnersol.io</a> in your desktop browser. For the best experience, use Chrome, Brave, or Firefox with the Solflare browser extension installed.</p>
+
+        <h3>Step 2: Connect Solflare</h3>
+        <p>Click the connect button on BurnerSOL. Solflare will display a connection request. Review the permissions — BurnerSOL requests read access to your accounts, which is standard for any dApp. Approve the connection.</p>
+
+        <h3>Step 3: Scan for Empty Accounts</h3>
+        <p>BurnerSOL scans all token accounts in your Solflare wallet. It identifies which accounts have a zero balance and are eligible for closure. The interface shows:</p>
+        <ul>
+          <li>Each empty account and its associated token.</li>
+          <li>The rent amount locked in each account.</li>
+          <li>The total SOL that can be recovered.</li>
+        </ul>
+
+        <h3>Step 4: Select and Close</h3>
+        <p>Select the empty accounts you want to close. Use "Select All Empty" for a quick selection of all eligible accounts. Click the close button and Solflare will display the transaction for your review.</p>
+        <p>The transaction shows the accounts being closed, the total SOL returned, and the network fee. Review everything and approve.</p>
+
+        <h3>Step 5: Confirm Recovery</h3>
+        <p>After the transaction confirms (typically 1-2 seconds), check your Solflare wallet balance. The recovered SOL should be visible. The empty accounts are removed from your wallet.</p>
+
+        <h2>Solflare-Specific Considerations</h2>
+        <h3>Staking Accounts</h3>
+        <p>If you have SOL staked through Solflare, those staking accounts are separate from token accounts and should NOT be closed. BurnerSOL only targets SPL token accounts and will not affect your staking.</p>
+
+        <h3>Multi-Account Support</h3>
+        <p>Solflare supports multiple accounts within one wallet. If you use multiple accounts, connect each one separately to BurnerSOL to clean them all.</p>
+
+        <h3>Mobile vs. Desktop</h3>
+        <p>BurnerSOL works best with the Solflare browser extension on desktop. The Solflare mobile app has limited support for third-party dApps. For cleanup, use a desktop browser.</p>
+
+        <h2>How Much Can You Recover?</h2>
+        <p>The recovery amount depends on your wallet's history. Here are some examples:</p>
+        <ul>
+          <li><strong>25 empty accounts:</strong> ~0.05 SOL recovered.</li>
+          <li><strong>50 empty accounts:</strong> ~0.1 SOL recovered.</li>
+          <li><strong>100 empty accounts:</strong> ~0.2 SOL recovered.</li>
+          <li><strong>200 empty accounts:</strong> ~0.4 SOL recovered.</li>
+        </ul>
+        <p>These amounts may seem small individually, but they add up to meaningful value — especially when SOL price increases.</p>
+
+        <h2>Security Tips for Solflare Users</h2>
+        <ul>
+          <li><strong>Verify the URL:</strong> Always ensure you are on <a href="/">burnersol.io</a> before connecting.</li>
+          <li><strong>Review transactions:</strong> Check the transaction details in Solflare before approving.</li>
+          <li><strong>Never share your seed phrase:</strong> BurnerSOL will never ask for your seed phrase. If any site does, it is a scam.</li>
+          <li><strong>Keep Solflare updated:</strong> Use the latest version for the best security.</li>
+        </ul>
+
+        <div class="actions">
+          <a class="button" href="/recover-sol">Recover SOL from Solflare</a>
+          <a class="button secondary" href="/guides/recover-sol-from-phantom-wallet">Phantom Recovery Guide</a>
+        </div>
+      </article>
+
+      <div class="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>How much SOL can I recover from Solflare wallet?</summary>
+          <p>The amount depends on how many empty token accounts you have. Each SPL token account returns approximately 0.002 SOL when closed. A wallet with 100 empty accounts can recover about 0.2 SOL.</p>
+        </details>
+        <details>
+          <summary>Does Solflare have a built-in account cleanup feature?</summary>
+          <p>Solflare does not have a built-in feature to close multiple empty token accounts at once. BurnerSOL provides this functionality with a batch close feature that handles many accounts in one or a few transactions.</p>
+        </details>
+        <details>
+          <summary>Is BurnerSOL safe to use with Solflare?</summary>
+          <p>Yes. BurnerSOL is non-custodial and works with Solflare through the standard Solana wallet adapter. Your private keys remain in Solflare and are never exposed to BurnerSOL.</p>
+        </details>
+        <details>
+          <summary>Can I close Token-2022 accounts from Solflare?</summary>
+          <p>Yes. BurnerSOL supports both SPL Token and Token-2022 accounts regardless of which wallet you use. Solflare connects to BurnerSOL and the tool handles both account types.</p>
+        </details>
+        <details>
+          <summary>Do I need to update Solflare to use BurnerSOL?</summary>
+          <p>It is recommended to use the latest version of Solflare for the best compatibility and security. BurnerSOL uses the standard Solana wallet adapter, which is supported by current Solflare versions.</p>
+        </details>
+      </div>
+
+      <footer>
+        <p>BurnerSOL is a non-custodial tool. Your keys never leave your wallet. <a href="/">Open BurnerSOL</a></p>
+        <p>More guides: <a href="/guides/recover-sol-from-phantom-wallet">Recover from Phantom</a> | <a href="/guides/how-to-recover-sol-from-token-accounts">Token Account Recovery</a> | <a href="/guides/solana-wallet-cleanup-guide">Full Cleanup Guide</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

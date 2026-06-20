@@ -172,6 +172,7 @@ export default async function handler(req, res) {
       const mint = asset.id;
       const name = asset.content?.metadata?.name || `Asset (${mint.slice(0, 4)}...${mint.slice(-4)})`;
       const symbol = asset.content?.metadata?.symbol || "";
+      const description = asset.content?.metadata?.description || "";
       const image = asset.content?.links?.image || "";
       const interface_ = asset.interface;
       const tokenInfo = asset.token_info;
@@ -182,29 +183,30 @@ export default async function handler(req, res) {
       let reclaimableSol = 0.002039;
       let lamports = 0;
 
-      if (interface_ === "NFT" || interface_ === "FungibleAsset") {
-        if (tokenInfo) {
-          uiAmount = Number(tokenInfo.balance || 0);
-          decimals = tokenInfo.decimals || 0;
-          lamports = asset.account_data?.lamports || 0;
-          reclaimableSol = lamports / 1e9;
-
-          if (decimals === 0 && uiAmount === 1) {
-            type = "nft";
-          } else if (uiAmount === 0) {
-            type = "account";
-          } else {
-            type = "token";
-          }
-        } else {
-          type = "nft";
-          lamports = asset.account_data?.lamports || 2039280;
-          reclaimableSol = lamports / 1e9;
-        }
+      if (tokenInfo) {
+        uiAmount = Number(tokenInfo.balance || 0);
+        decimals = tokenInfo.decimals || 0;
+        lamports = tokenInfo.amount ? Number(tokenInfo.amount) : (asset.account_data?.lamports || 0);
+        reclaimableSol = lamports / 1e9;
       } else {
-        type = "token";
         lamports = asset.account_data?.lamports || 2039280;
         reclaimableSol = lamports / 1e9;
+      }
+
+      if (interface_ === "NFT" || interface_ === "FungibleAsset" || interface_ === "ProgrammableNFT") {
+        if (decimals === 0 && (uiAmount === 1 || interface_ === "NFT" || interface_ === "ProgrammableNFT")) {
+          type = "nft";
+        } else if (uiAmount === 0) {
+          type = "account";
+        } else {
+          type = "token";
+        }
+      } else {
+        if (uiAmount === 0) {
+          type = "account";
+        } else {
+          type = "token";
+        }
       }
 
       const isSpam = SPAM_KEYWORDS.some(kw =>
@@ -215,7 +217,9 @@ export default async function handler(req, res) {
         ? `Defunct empty account. Safe to close to reclaim ${reclaimableSol.toFixed(5)} SOL rent.`
         : isSpam
           ? `Malicious spam/airdrop asset detected.`
-          : `${symbol || name} - Token balance active.`;
+          : description
+            ? `${description.slice(0, 120)}`
+            : `${symbol || name} - Token balance active.`;
 
       return {
         id: mint,
@@ -223,6 +227,7 @@ export default async function handler(req, res) {
         symbol: KNOWN_TOKENS[mint]?.symbol || symbol || `T-${mint.slice(0, 3).toUpperCase()}`,
         type,
         amount: uiAmount,
+        decimals,
         valueUsd: 0,
         reclaimableSol,
         mintAddress: mint,

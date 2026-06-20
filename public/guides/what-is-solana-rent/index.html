@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B0E14" />
+    <title>What Is Solana Rent? | Complete Guide to Solana Rent Exemption</title>
+    <meta name="description" content="Understand what Solana rent is, how rent exemption works, and why it matters for your wallet. Clear explanation with examples." />
+    <meta name="keywords" content="Solana rent, Solana rent exemption, what is Solana rent, Solana account rent, rent lamports, Solana blockchain costs, BurnerSOL" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <link rel="canonical" href="https://burnersol.io/guides/what-is-solana-rent" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://burnersol.io/guides/what-is-solana-rent" />
+    <meta property="og:title" content="What Is Solana Rent? | Complete Guide to Solana Rent Exemption" />
+    <meta property="og:description" content="Understand what Solana rent is, how rent exemption works, and why it matters for your wallet." />
+    <meta property="og:image" content="https://burnersol.io/token-logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="What Is Solana Rent? | Complete Guide to Solana Rent Exemption" />
+    <meta name="twitter:description" content="Understand what Solana rent is, how rent exemption works, and why it matters for your wallet." />
+    <meta name="twitter:image" content="https://burnersol.io/token-logo.png" />
+    <link rel="alternate" hreflang="en" href="https://burnersol.io/guides/what-is-solana-rent?lang=en" />
+    <link rel="alternate" hreflang="es" href="https://burnersol.io/guides/what-is-solana-rent?lang=es" />
+    <link rel="alternate" hreflang="fr" href="https://burnersol.io/guides/what-is-solana-rent?lang=fr" />
+    <link rel="alternate" hreflang="de" href="https://burnersol.io/guides/what-is-solana-rent?lang=de" />
+    <link rel="alternate" hreflang="pt" href="https://burnersol.io/guides/what-is-solana-rent?lang=pt" />
+    <link rel="alternate" hreflang="ja" href="https://burnersol.io/guides/what-is-solana-rent?lang=ja" />
+    <link rel="alternate" hreflang="ko" href="https://burnersol.io/guides/what-is-solana-rent?lang=ko" />
+    <link rel="alternate" hreflang="zh" href="https://burnersol.io/guides/what-is-solana-rent?lang=zh" />
+    <link rel="alternate" hreflang="tr" href="https://burnersol.io/guides/what-is-solana-rent?lang=tr" />
+    <link rel="alternate" hreflang="ar" href="https://burnersol.io/guides/what-is-solana-rent?lang=ar" />
+    <link rel="alternate" hreflang="ru" href="https://burnersol.io/guides/what-is-solana-rent?lang=ru" />
+    <link rel="alternate" hreflang="hi" href="https://burnersol.io/guides/what-is-solana-rent?lang=hi" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What Is Solana Rent? Complete Guide to Solana Rent Exemption","description":"Understand what Solana rent is, how rent exemption works, and why it matters for your wallet.","dateModified":"2026-06-19","author":{"@type":"Organization","name":"BurnerSOL"},"publisher":{"@type":"Organization","name":"BurnerSOL","logo":{"@type":"ImageObject","url":"https://burnersol.io/token-logo.png"}},"mainEntityOfPage":"https://burnersol.io/guides/what-is-solana-rent"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is Solana rent?","acceptedAnswer":{"@type":"Answer","text":"Solana rent is a minimum balance requirement that accounts on the Solana blockchain must maintain to stay alive. It prevents spam by requiring SOL deposits for every account created on-chain."}},{"@type":"Question","name":"How much is Solana rent exemption?","acceptedAnswer":{"@type":"Answer","text":"Rent exemption is currently approximately 0.00203928 SOL (2,039,280 lamports) per token account. The exact amount depends on the account data size."}},{"@type":"Question","name":"Is Solana rent refundable?","acceptedAnswer":{"@type":"Answer","text":"Yes. The rent exemption deposit is fully refundable. When you close an account on Solana, the entire rent balance is returned to your wallet."}},{"@type":"Question","name":"What happens if my account goes below rent exemption?","acceptedAnswer":{"@type":"Answer","text":"If an account drops below the rent exemption threshold, it becomes subject to rent collection. The account may eventually be reclaimed by the network if rent is not paid."}},{"@type":"Question","name":"How do I avoid paying unnecessary rent?","acceptedAnswer":{"@type":"Answer","text":"You can close empty token accounts to recover the rent. Tools like BurnerSOL make this easy by scanning your wallet for eligible accounts and closing them in one transaction."}}]}</script>
+    <style>
+      :root { color-scheme: dark; font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0a0a0a; color: #f8fafc; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: #0a0a0a; color: #cbd5e1; }
+      body::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(249,115,22,0.08), transparent 340px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(180deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: auto, 72px 72px, 72px 72px; opacity: .55; }
+      main { position: relative; width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 72px; }
+      header { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 18px 0 52px; border-bottom: 1px solid rgba(255,255,255,0.10); }
+      a { color: #fb923c; }
+      .brand { display: inline-flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase; }
+      .brand img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid rgba(255,255,255,0.12); }
+      .hero, article { max-width: 900px; padding: 52px 0 22px; }
+      article { margin-top: 0; padding: 54px 0 0; }
+      h1 { margin: 0; color: #fff; font-size: clamp(42px, 7vw, 86px); line-height: .92; letter-spacing: -0.06em; text-transform: uppercase; }
+      h2 { margin: 28px 0 10px; color: #fff; font-size: 22px; letter-spacing: -0.025em; }
+      h3 { margin: 20px 0 8px; color: #fff; font-size: 18px; }
+      .lead, article p { margin: 22px 0 0; max-width: 760px; color: #cbd5e1; font-size: clamp(17px, 2.1vw, 21px); line-height: 1.62; }
+      article p { font-size: 18px; }
+      .eyebrow { margin: 0 0 14px; color: #f97316; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border-radius: 0; background: #f97316; color: #050505; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; border: 1px solid #f97316; }
+      .button.secondary { color: #f8fafc; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 48px; }
+      .card { min-height: 170px; padding: 22px; border-radius: 0; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.10); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+      p { color: #cbd5e1; line-height: 1.65; }
+      ul, ol { color: #cbd5e1; line-height: 1.65; padding-left: 24px; }
+      li { margin: 8px 0; }
+      .faq { margin-top: 58px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.10); }
+      .faq h2 { max-width: 820px; font-size: clamp(30px, 4vw, 46px); line-height: 1.02; }
+      details { border-top: 1px solid rgba(255,255,255,0.12); padding: 18px 0; }
+      summary { cursor: pointer; font-weight: 800; color: #fff; }
+      footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.10); color: #94a3b8; font-size: 13px; line-height: 1.7; }
+      @media (max-width: 760px) { main { width: min(100% - 28px, 1120px); padding-top: 16px; } header { align-items: flex-start; flex-direction: column; padding-bottom: 28px; } .grid { grid-template-columns: 1fr; } .actions a, .button { width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="brand" href="/"><img src="/token-logo.png" alt="BurnerSOL logo" /><span>BurnerSOL</span></a>
+      <article>
+        <p class="eyebrow">Solana Fundamentals</p>
+        <h1>What Is Solana Rent?</h1>
+        <p>Solana rent is a fundamental concept that every Solana user should understand. It is the mechanism the network uses to prevent state bloat and ensure that accounts on the blockchain remain economically viable. In this guide, we break down exactly what rent is, how rent exemption works, and why it affects your wallet balance.</p>
+
+        <h2>How Solana Accounts Work</h2>
+        <p>On Solana, every piece of data is stored in an <strong>account</strong>. Your wallet is an account. Every token balance you hold is an account. Smart contracts (called programs) also use accounts to store their data. These accounts occupy space on the blockchain, and that space has a cost.</p>
+        <p>Solana charges rent to ensure that accounts do not bloat the network indefinitely. Without rent, anyone could create millions of empty accounts and never pay for the storage, degrading network performance for everyone.</p>
+
+        <h2>Rent vs. Rent Exemption</h2>
+        <p>Solana actually has two modes for accounts:</p>
+        <h3>Rent-Collecting Accounts</h3>
+        <p>Accounts that hold a balance below the rent exemption threshold are subject to periodic rent collection. The network deducts rent from the account balance at regular intervals. If the balance reaches zero, the account may be reclaimed and its data deleted.</p>
+        <h3>Rent-Exempt Accounts</h3>
+        <p>Most accounts on Solana are rent-exempt. To achieve rent exemption, an account must maintain a minimum balance based on its data size. For a standard SPL token account, this minimum is approximately <strong>0.00203928 SOL</strong> (2,039,280 lamports). As long as the account holds at least this amount, no rent is ever collected.</p>
+        <p>In practice, nearly all accounts you interact with on Solana today are rent-exempt. The rent exemption system is the reason each token account locks a small amount of SOL.</p>
+
+        <h2>Why Rent Exemption Matters</h2>
+        <p>When you create or receive a new SPL token, the Solana runtime creates a token account and deposits the rent exemption amount. This SOL is locked as long as the account exists. While 0.002 SOL per account is small, the aggregate effect matters:</p>
+        <ul>
+          <li>A user with 50 token accounts has approximately 0.1 SOL locked in rent.</li>
+          <li>A user with 200 token accounts has approximately 0.4 SOL locked.</li>
+          <li>Active dApp users who interact with many protocols can accumulate hundreds of accounts.</li>
+        </ul>
+        <p>This SOL is not lost — it is reclaimable by closing the accounts. But many users do not realize the SOL is there or how to get it back.</p>
+
+        <h2>How Rent Is Calculated</h2>
+        <p>The rent exemption threshold is calculated based on the size of the account data in bytes. The formula uses the network's rent rate, which is set by governance. The Solana documentation specifies that rent is approximately 2 years' worth of rent at the minimum rate when paid upfront as exemption.</p>
+        <p>For reference, a standard token account stores about 165 bytes of data. At the current rate, this translates to roughly 0.00203928 SOL for full rent exemption.</p>
+
+        <h2>What Happens If You Do Not Pay Rent?</h2>
+        <p>If an account falls below the rent exemption threshold — for example, if you send all tokens out of a token account — the account becomes rent-collectible. The network will periodically deduct rent. If the account balance reaches zero, the account is garbage-collected and removed from the chain. The data is permanently lost.</p>
+        <p>This is why closing empty accounts yourself is preferable: you get the full rent back instead of watching it slowly drain to zero.</p>
+
+        <h2>How to Avoid Unnecessary Rent Lockup</h2>
+        <p>The best way to manage rent is to close token accounts you no longer need. If you have empty token accounts from past airdrops or token interactions, you can close them and recover the full rent exemption deposit.</p>
+        <p>Tools like <a href="/">BurnerSOL</a> make this process simple. BurnerSOL scans your wallet, identifies empty accounts, and lets you close them in a single transaction with minimal fees.</p>
+
+        <div class="actions">
+          <a class="button" href="/">Recover Your SOL</a>
+          <a class="button secondary" href="/guides/how-to-recover-sol-from-token-accounts">Token Account Recovery Guide</a>
+        </div>
+      </article>
+
+      <div class="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>What is Solana rent?</summary>
+          <p>Solana rent is a minimum balance requirement that accounts on the Solana blockchain must maintain to stay alive. It prevents spam by requiring SOL deposits for every account created on-chain.</p>
+        </details>
+        <details>
+          <summary>How much is Solana rent exemption?</summary>
+          <p>Rent exemption is currently approximately 0.00203928 SOL (2,039,280 lamports) per token account. The exact amount depends on the account data size.</p>
+        </details>
+        <details>
+          <summary>Is Solana rent refundable?</summary>
+          <p>Yes. The rent exemption deposit is fully refundable. When you close an account on Solana, the entire rent balance is returned to your wallet.</p>
+        </details>
+        <details>
+          <summary>What happens if my account goes below rent exemption?</summary>
+          <p>If an account drops below the rent exemption threshold, it becomes subject to rent collection. The account may eventually be reclaimed by the network if rent is not paid.</p>
+        </details>
+        <details>
+          <summary>How do I avoid paying unnecessary rent?</summary>
+          <p>You can close empty token accounts to recover the rent. Tools like BurnerSOL make this easy by scanning your wallet for eligible accounts and closing them in one transaction.</p>
+        </details>
+      </div>
+
+      <footer>
+        <p>BurnerSOL is a non-custodial tool. Your keys never leave your wallet. <a href="/">Open BurnerSOL</a></p>
+        <p>Related guides: <a href="/guides/how-solana-rent-exemption-works">How Solana Rent Exemption Works</a> | <a href="/guides/how-to-recover-sol-from-token-accounts">Recover SOL from Token Accounts</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

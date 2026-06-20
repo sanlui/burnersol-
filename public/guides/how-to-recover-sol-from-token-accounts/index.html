@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B0E14" />
+    <title>How to Recover SOL from Token Accounts | BurnerSOL Guide</title>
+    <meta name="description" content="Learn how to recover SOL locked in unused SPL token accounts on Solana. Step-by-step guide to reclaim rent and clean your wallet." />
+    <meta name="keywords" content="recover SOL from token accounts, reclaim SOL rent, close token accounts Solana, SPL token accounts SOL, Solana rent recovery, BurnerSOL, wallet cleanup Solana" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <link rel="canonical" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts" />
+    <meta property="og:title" content="How to Recover SOL from Token Accounts | BurnerSOL Guide" />
+    <meta property="og:description" content="Learn how to recover SOL locked in unused SPL token accounts on Solana. Step-by-step guide to reclaim rent and clean your wallet." />
+    <meta property="og:image" content="https://burnersol.io/token-logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="How to Recover SOL from Token Accounts | BurnerSOL Guide" />
+    <meta name="twitter:description" content="Learn how to recover SOL locked in unused SPL token accounts on Solana. Step-by-step guide to reclaim rent and clean your wallet." />
+    <meta name="twitter:image" content="https://burnersol.io/token-logo.png" />
+    <link rel="alternate" hreflang="en" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=en" />
+    <link rel="alternate" hreflang="es" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=es" />
+    <link rel="alternate" hreflang="fr" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=fr" />
+    <link rel="alternate" hreflang="de" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=de" />
+    <link rel="alternate" hreflang="pt" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=pt" />
+    <link rel="alternate" hreflang="ja" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=ja" />
+    <link rel="alternate" hreflang="ko" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=ko" />
+    <link rel="alternate" hreflang="zh" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=zh" />
+    <link rel="alternate" hreflang="tr" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=tr" />
+    <link rel="alternate" hreflang="ar" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=ar" />
+    <link rel="alternate" hreflang="ru" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=ru" />
+    <link rel="alternate" hreflang="hi" href="https://burnersol.io/guides/how-to-recover-sol-from-token-accounts?lang=hi" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to Recover SOL from Token Accounts","description":"Learn how to recover SOL locked in unused SPL token accounts on Solana. Step-by-step guide to reclaim rent and clean your wallet.","dateModified":"2026-06-19","author":{"@type":"Organization","name":"BurnerSOL"},"publisher":{"@type":"Organization","name":"BurnerSOL","logo":{"@type":"ImageObject","url":"https://burnersol.io/token-logo.png"}},"mainEntityOfPage":"https://burnersol.io/guides/how-to-recover-sol-from-token-accounts"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much SOL is locked in each token account?","acceptedAnswer":{"@type":"Answer","text":"Each SPL token account on Solana requires approximately 0.00203928 SOL (2,039,280 lamports) as rent exemption. This deposit is returned when the account is closed."}},{"@type":"Question","Can I recover SOL from token accounts that have a zero balance?","acceptedAnswer":{"@type":"Answer","text":"Yes. Token accounts with a zero balance are prime candidates for closure. When you close them, the full rent exemption of approximately 0.00203928 SOL is returned to your wallet."}},{"@type":"Question","name":"Is it safe to close token accounts?","acceptedAnswer":{"@type":"Answer","text":"Closing a token account with a zero balance is completely safe. You will not lose any assets. If the token is sent to you again later, a new account will be created automatically."}},{"@type":"Question","name":"How do I check how many token accounts I have?","acceptedAnswer":{"@type":"Answer","text":"You can view all your token accounts by connecting your wallet to BurnerSOL or by checking your account on Solscan or Solana Explorer. BurnerSOL shows which accounts have zero balances and are eligible for closure."}},{"@type":"Question","name":"How often should I recover SOL from token accounts?","acceptedAnswer":{"@type":"Answer","text":"It depends on your activity. If you frequently interact with new tokens or dApps, checking monthly is a good practice. Each new token interaction may create a new account that locks rent."}}]}</script>
+    <style>
+      :root { color-scheme: dark; font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0a0a0a; color: #f8fafc; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: #0a0a0a; color: #cbd5e1; }
+      body::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(249,115,22,0.08), transparent 340px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(180deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: auto, 72px 72px, 72px 72px; opacity: .55; }
+      main { position: relative; width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 72px; }
+      header { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 18px 0 52px; border-bottom: 1px solid rgba(255,255,255,0.10); }
+      a { color: #fb923c; }
+      .brand { display: inline-flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase; }
+      .brand img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid rgba(255,255,255,0.12); }
+      .status { color: #fb923c; border: 1px solid rgba(249,115,22,0.28); background: rgba(249,115,22,0.09); padding: 9px 12px; font-size: 12px; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; }
+      .hero, article { max-width: 900px; padding: 52px 0 22px; }
+      article { margin-top: 0; padding: 54px 0 0; }
+      h1 { margin: 0; color: #fff; font-size: clamp(42px, 7vw, 86px); line-height: .92; letter-spacing: -0.06em; text-transform: uppercase; }
+      h2 { margin: 28px 0 10px; color: #fff; font-size: 22px; letter-spacing: -0.025em; }
+      h3 { margin: 20px 0 8px; color: #fff; font-size: 18px; }
+      .lead, article p { margin: 22px 0 0; max-width: 760px; color: #cbd5e1; font-size: clamp(17px, 2.1vw, 21px); line-height: 1.62; }
+      article p { font-size: 18px; }
+      .eyebrow { margin: 0 0 14px; color: #f97316; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border-radius: 0; background: #f97316; color: #050505; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; border: 1px solid #f97316; }
+      .button.secondary { color: #f8fafc; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 48px; }
+      .card { min-height: 170px; padding: 22px; border-radius: 0; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.10); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+      p { color: #cbd5e1; line-height: 1.65; }
+      ul, ol { color: #cbd5e1; line-height: 1.65; padding-left: 24px; }
+      li { margin: 8px 0; }
+      .faq { margin-top: 58px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.10); }
+      .faq h2 { max-width: 820px; font-size: clamp(30px, 4vw, 46px); line-height: 1.02; }
+      details { border-top: 1px solid rgba(255,255,255,0.12); padding: 18px 0; }
+      summary { cursor: pointer; font-weight: 800; color: #fff; }
+      footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.10); color: #94a3b8; font-size: 13px; line-height: 1.7; }
+      @media (max-width: 760px) { main { width: min(100% - 28px, 1120px); padding-top: 16px; } header { align-items: flex-start; flex-direction: column; padding-bottom: 28px; } .grid { grid-template-columns: 1fr; } .actions a, .button { width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="brand" href="/"><img src="/token-logo.png" alt="BurnerSOL logo" /><span>BurnerSOL</span></a>
+      <article>
+        <p class="eyebrow">Solana Wallet Recovery</p>
+        <h1>How to Recover SOL from Token Accounts</h1>
+        <p>Every time you receive a new SPL token on Solana, the network creates a token account that holds a small rent deposit. Over time, these accounts accumulate and lock SOL that you could be using elsewhere. This guide explains exactly how to recover that SOL.</p>
+
+        <h2>What Are Token Accounts on Solana?</h2>
+        <p>On Solana, SPL tokens are not stored directly in your wallet. Instead, each token type you hold lives in a separate token account — a data account on-chain that tracks your balance for that specific token. When you first receive a token, the Solana runtime creates this account and requires a minimum balance called <strong>rent exemption</strong> to be deposited.</p>
+        <p>This rent exemption is currently around <strong>0.00203928 SOL</strong> (approximately 2,039,280 lamports) per token account. The rent is not a fee — it is a refundable deposit that keeps the account alive on the blockchain. When the account is closed, the full deposit is returned to you.</p>
+
+        <h2>Why You Have Locked SOL</h2>
+        <p>Most Solana users do not realize how many token accounts they have. Every airdrop, every new token interaction, every NFT mint — each one creates a separate token account. If you have interacted with dozens of tokens over the past year, you may have 30, 50, or even 100+ token accounts, each locking roughly 0.002 SOL.</p>
+        <p>While 0.002 SOL per account sounds small, it adds up quickly. At 100 accounts, that is 0.2 SOL — and at higher SOL prices, this can represent meaningful value sitting idle in empty accounts.</p>
+
+        <h2>How to Recover SOL: Step-by-Step</h2>
+        <h3>Step 1: Connect Your Wallet</h3>
+        <p>Go to <a href="/">burnersol.io</a> and connect your Solana wallet (Phantom, Solflare, or any other supported wallet). The tool is non-custodial, meaning your private keys never leave your device.</p>
+
+        <h3>Step 2: Scan for Empty Token Accounts</h3>
+        <p>BurnerSOL automatically scans your wallet for all token accounts. It identifies which accounts have a zero balance and are eligible for closure. You will see a list showing each account, the token it was associated with, and the rent amount locked.</p>
+
+        <h3>Step 3: Select Accounts to Close</h3>
+        <p>Review the list and select the token accounts you want to close. You can select all empty accounts at once or choose specific ones. Only accounts with a zero balance should be closed — accounts with tokens should not be closed unless you are certain you want to remove that token.</p>
+
+        <h3>Step 4: Sign the Transaction</h3>
+        <p>Click the close button and your wallet will prompt you to sign the transaction. The transaction bundles all the account closures into a single instruction, minimizing the network fee. After signing, the rent is returned to your wallet and the accounts are permanently removed.</p>
+
+        <h3>Step 5: Verify Your Balance</h3>
+        <p>Check your wallet balance after the transaction confirms. You should see the recovered SOL deposited back into your main account. The entire process typically takes a few seconds on Solana.</p>
+
+        <h2>Benefits of Recovering Locked SOL</h2>
+        <ul>
+          <li><strong>Reclaim idle funds:</strong> Get back SOL that is sitting in empty accounts doing nothing.</li>
+          <li><strong>Reduce wallet clutter:</strong> Fewer token accounts means a cleaner wallet interface and faster loading times.</li>
+          <li><strong>Lower future risk:</strong> Fewer open accounts means fewer potential attack surfaces and less complexity in your wallet.</li>
+          <li><strong>Free up SOL for staking or trading:</strong> Use the recovered SOL for productive activities instead of rent deposits.</li>
+        </ul>
+
+        <h2>Security Considerations</h2>
+        <p>Closing token accounts is a standard on-chain operation supported by the Solana Token Program. When you use a non-custodial tool like <a href="/">BurnerSOL</a>, your private keys are never transmitted. The transaction is signed locally in your wallet extension before being broadcast to the network.</p>
+        <p>Always verify the transaction details in your wallet popup before signing. Ensure the transaction shows account closures and rent returns — not unexpected transfers. If anything looks suspicious, reject the transaction.</p>
+        <p>Never share your seed phrase or private key with anyone. Legitimate tools like BurnerSOL will never ask for your seed phrase.</p>
+
+        <div class="actions">
+          <a class="button" href="/">Recover SOL Now</a>
+          <a class="button secondary" href="/guides/solana-wallet-cleaner">Wallet Cleaner Guide</a>
+        </div>
+      </article>
+
+      <div class="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>How much SOL is locked in each token account?</summary>
+          <p>Each SPL token account on Solana requires approximately 0.00203928 SOL (2,039,280 lamports) as rent exemption. This deposit is returned when the account is closed.</p>
+        </details>
+        <details>
+          <summary>Can I recover SOL from token accounts that have a zero balance?</summary>
+          <p>Yes. Token accounts with a zero balance are prime candidates for closure. When you close them, the full rent exemption of approximately 0.00203928 SOL is returned to your wallet.</p>
+        </details>
+        <details>
+          <summary>Is it safe to close token accounts?</summary>
+          <p>Closing a token account with a zero balance is completely safe. You will not lose any assets. If the token is sent to you again later, a new account will be created automatically.</p>
+        </details>
+        <details>
+          <summary>How do I check how many token accounts I have?</summary>
+          <p>You can view all your token accounts by connecting your wallet to BurnerSOL or by checking your account on Solscan or Solana Explorer. BurnerSOL shows which accounts have zero balances and are eligible for closure.</p>
+        </details>
+        <details>
+          <summary>How often should I recover SOL from token accounts?</summary>
+          <p>It depends on your activity. If you frequently interact with new tokens or dApps, checking monthly is a good practice. Each new token interaction may create a new account that locks rent.</p>
+        </details>
+      </div>
+
+      <footer>
+        <p>BurnerSOL is a non-custodial tool. Your keys never leave your wallet. <a href="/">Open BurnerSOL</a></p>
+        <p>Learn more in our <a href="/guides/what-is-solana-rent">Solana Rent Guide</a>, <a href="/guides/how-to-close-spl-token-accounts">Close SPL Token Accounts</a>, and <a href="/guides/solana-wallet-cleanup-guide">Wallet Cleanup Guide</a>.</p>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B0E14" />
+    <title>How Solana Rent Exemption Works | Technical Deep Dive</title>
+    <meta name="description" content="Technical deep dive into Solana rent exemption: how the mechanism works, account data sizes, lamport calculations, and how to reclaim your SOL." />
+    <meta name="keywords" content="Solana rent exemption, rent exempt accounts, lamports rent, account data size Solana, Solana account costs, reclaim SOL rent, BurnerSOL" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <link rel="canonical" href="https://burnersol.io/guides/how-solana-rent-exemption-works" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://burnersol.io/guides/how-solana-rent-exemption-works" />
+    <meta property="og:title" content="How Solana Rent Exemption Works | Technical Deep Dive" />
+    <meta property="og:description" content="Technical deep dive into Solana rent exemption: how the mechanism works, account data sizes, lamport calculations, and how to reclaim your SOL." />
+    <meta property="og:image" content="https://burnersol.io/token-logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="How Solana Rent Exemption Works | Technical Deep Dive" />
+    <meta name="twitter:description" content="Technical deep dive into Solana rent exemption: how the mechanism works, account data sizes, lamport calculations, and how to reclaim your SOL." />
+    <meta name="twitter:image" content="https://burnersol.io/token-logo.png" />
+    <link rel="alternate" hreflang="en" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=en" />
+    <link rel="alternate" hreflang="es" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=es" />
+    <link rel="alternate" hreflang="fr" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=fr" />
+    <link rel="alternate" hreflang="de" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=de" />
+    <link rel="alternate" hreflang="pt" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=pt" />
+    <link rel="alternate" hreflang="ja" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=ja" />
+    <link rel="alternate" hreflang="ko" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=ko" />
+    <link rel="alternate" hreflang="zh" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=zh" />
+    <link rel="alternate" hreflang="tr" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=tr" />
+    <link rel="alternate" hreflang="ar" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=ar" />
+    <link rel="alternate" hreflang="ru" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=ru" />
+    <link rel="alternate" hreflang="hi" href="https://burnersol.io/guides/how-solana-rent-exemption-works?lang=hi" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How Solana Rent Exemption Works","description":"Technical deep dive into Solana rent exemption: how the mechanism works, account data sizes, lamport calculations, and how to reclaim your SOL.","dateModified":"2026-06-19","author":{"@type":"Organization","name":"BurnerSOL"},"publisher":{"@type":"Organization","name":"BurnerSOL","logo":{"@type":"ImageObject","url":"https://burnersol.io/token-logo.png"}},"mainEntityOfPage":"https://burnersol.io/guides/how-solana-rent-exemption-works"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the rent exemption formula on Solana?","acceptedAnswer":{"@type":"Answer","text":"The rent exemption minimum is calculated as: (account_data_size * 2 * 3480) / 1000000000 lamports, where 3480 is the annual rent rate in micro-lamports per byte. The factor of 2 represents the 2-year rent prepayment."}},{"@type":"Question","name":"Why is rent exemption 2 years of rent?","acceptedAnswer":{"@type":"Answer","text":"Solana chose a 2-year rent prepayment model to balance network sustainability with user costs. Accounts that maintain the exemption balance never pay ongoing rent, while the network retains the ability to reclaim abandoned accounts."}},{"@type":"Question","name":"How does Token-2022 affect rent?","acceptedAnswer":{"@type":"Answer","text":"Token-2022 accounts are larger than standard SPL token accounts because they support additional features like transfer fees and permanent delegate. This means Token-2022 accounts require a higher rent exemption deposit."}},{"@type":"Question","name":"Can I rent a Solana account without full exemption?","acceptedAnswer":{"@type":"Answer","text":"Technically yes, but it is not recommended. Accounts below the rent exemption threshold are subject to periodic rent deductions, and the account will eventually be reclaimed if the balance reaches zero."}},{"@type":"Question","name":"How do I check the rent exemption for my accounts?","acceptedAnswer":{"@type":"Answer","text":"You can use the Solana CLI command 'sol rent <ACCOUNT_ADDRESS>' to check the rent for any account. BurnerSOL also displays the rent locked in each of your token accounts when you connect your wallet."}}]}</script>
+    <style>
+      :root { color-scheme: dark; font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0a0a0a; color: #f8fafc; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: #0a0a0a; color: #cbd5e1; }
+      body::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(249,115,22,0.08), transparent 340px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(180deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: auto, 72px 72px, 72px 72px; opacity: .55; }
+      main { position: relative; width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 72px; }
+      a { color: #fb923c; }
+      .brand { display: inline-flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase; }
+      .brand img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid rgba(255,255,255,0.12); }
+      .hero, article { max-width: 900px; padding: 52px 0 22px; }
+      article { margin-top: 0; padding: 54px 0 0; }
+      h1 { margin: 0; color: #fff; font-size: clamp(42px, 7vw, 86px); line-height: .92; letter-spacing: -0.06em; text-transform: uppercase; }
+      h2 { margin: 28px 0 10px; color: #fff; font-size: 22px; letter-spacing: -0.025em; }
+      h3 { margin: 20px 0 8px; color: #fff; font-size: 18px; }
+      .lead, article p { margin: 22px 0 0; max-width: 760px; color: #cbd5e1; font-size: clamp(17px, 2.1vw, 21px); line-height: 1.62; }
+      article p { font-size: 18px; }
+      .eyebrow { margin: 0 0 14px; color: #f97316; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border-radius: 0; background: #f97316; color: #050505; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; border: 1px solid #f97316; }
+      .button.secondary { color: #f8fafc; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 48px; }
+      .card { min-height: 170px; padding: 22px; border-radius: 0; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.10); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+      p { color: #cbd5e1; line-height: 1.65; }
+      ul, ol { color: #cbd5e1; line-height: 1.65; padding-left: 24px; }
+      li { margin: 8px 0; }
+      code { background: rgba(255,255,255,0.08); padding: 2px 6px; font-size: 14px; border-radius: 2px; }
+      .faq { margin-top: 58px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.10); }
+      .faq h2 { max-width: 820px; font-size: clamp(30px, 4vw, 46px); line-height: 1.02; }
+      details { border-top: 1px solid rgba(255,255,255,0.12); padding: 18px 0; }
+      summary { cursor: pointer; font-weight: 800; color: #fff; }
+      footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.10); color: #94a3b8; font-size: 13px; line-height: 1.7; }
+      @media (max-width: 760px) { main { width: min(100% - 28px, 1120px); padding-top: 16px; } .grid { grid-template-columns: 1fr; } .actions a, .button { width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="brand" href="/"><img src="/token-logo.png" alt="BurnerSOL logo" /><span>BurnerSOL</span></a>
+      <article>
+        <p class="eyebrow">Technical Deep Dive</p>
+        <h1>How Solana Rent Exemption Works</h1>
+        <p>Solana rent exemption is the mechanism that keeps the blockchain's state size in check while allowing users to store data permanently without ongoing fees. This technical guide explains the math, the lifecycle of accounts, and how to recover your locked SOL.</p>
+
+        <h2>The Rent Exemption Model</h2>
+        <p>Solana uses a <strong>rent-exempt by default</strong> model. When you create an account, you must deposit a minimum balance that covers the account's storage costs. This minimum is calculated to cover approximately two years of rent at the network's current rate. Once deposited, the account never pays ongoing rent as long as the balance stays above the threshold.</p>
+        <p>The calculation formula is:</p>
+        <p><code>rent_minimum = (account_data_size_bytes * 3480 * 2) / 1_000_000_000</code></p>
+        <p>Where <strong>3480</strong> is the annual rent rate in micro-lamports per byte, and the factor of <strong>2</strong> represents the two-year prepayment period. The result is in lamports.</p>
+
+        <h2>Account Data Sizes and Rent Costs</h2>
+        <p>Different account types on Solana have different data sizes, which directly affects their rent exemption cost:</p>
+        <h3>SPL Token Account</h3>
+        <p>A standard SPL token account stores 165 bytes of data. At the current rate, this translates to approximately <strong>0.00203928 SOL</strong> (2,039,280 lamports). This is the most common type of account that regular users encounter.</p>
+        <h3>Token-2022 Account</h3>
+        <p>Token-2022 accounts are larger because they support additional features such as transfer fees, permanent delegates, and non-transferable tokens. These accounts can require <strong>0.003 to 0.005+ SOL</strong> depending on the extensions enabled.</p>
+        <h3>Associated Token Account (ATA)</h3>
+        <p>An ATA is a deterministic address derived from your wallet and the mint. It is itself a token account (165 bytes) plus the ATA derivation overhead. The rent cost is the same as a standard token account: <strong>0.00203928 SOL</strong>.</p>
+        <h3>Program Data Accounts</h3>
+        <p>Smart contracts use larger data accounts. The rent cost varies widely depending on the program's data requirements.</p>
+
+        <h2>The Lifecycle of a Token Account</h2>
+        <h3>Creation</h3>
+        <p>When you first receive an SPL token, the Solana runtime creates a token account at a derived address. The rent exemption amount is deposited from the sender's transaction or from your wallet if you are creating the account explicitly.</p>
+        <h3>Active Use</h3>
+        <p>As long as the account holds tokens or maintains the rent exemption balance, it remains fully active on-chain. No rent is deducted. The account data is available to programs and to the network.</p>
+        <h3>Emptying the Account</h3>
+        <p>When you transfer all tokens out of a token account, the account still exists on-chain. It holds the rent exemption balance but no tokens. At this point, the account is a candidate for closure.</p>
+        <h3>Closure</h3>
+        <p>When you close a token account, the on-chain program verifies the account has a zero balance, then transfers the full rent exemption balance back to your wallet and deallocates the account data. The account ceases to exist on-chain.</p>
+
+        <h2>Why Solana Uses This Model</h2>
+        <p>The rent exemption model solves a critical problem in blockchain design: preventing <strong>state bloat</strong>. Without economic consequences for creating accounts, the Solana ledger would grow indefinitely as users create accounts for every new token, NFT, or dApp interaction. The rent model ensures that:</p>
+        <ul>
+          <li>Accounts that are no longer used can be garbage-collected, freeing network resources.</li>
+          <li>Active accounts pay a small upfront cost that sustains the network's storage needs.</li>
+          <li>The economic model is sustainable without relying on inflation or block rewards alone.</li>
+        </ul>
+        <p>For a deeper understanding, refer to the <a href="https://docs.solanalabs.com/advanced/rent" target="_blank" rel="noopener">official Solana documentation on rent</a>.</p>
+
+        <h2>How to Reclaim Your Rent</h2>
+        <p>If you have accumulated empty token accounts, you can close them and recover the locked SOL. <a href="/">BurnerSOL</a> provides a simple interface to:</p>
+        <ol>
+          <li>Connect your wallet (Phantom, Solflare, or any Solana wallet).</li>
+          <li>Scan all token accounts for zero-balance accounts.</li>
+          <li>Select which accounts to close.</li>
+          <li>Sign a single transaction that closes all selected accounts and returns the rent.</li>
+        </ol>
+        <p>The transaction fee is a fraction of a cent, making this a no-brainer for anyone with multiple empty accounts.</p>
+
+        <div class="actions">
+          <a class="button" href="/">Recover Rent Now</a>
+          <a class="button secondary" href="/guides/what-is-solana-rent">What Is Solana Rent?</a>
+        </div>
+      </article>
+
+      <div class="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>What is the rent exemption formula on Solana?</summary>
+          <p>The rent exemption minimum is calculated as: (account_data_size * 2 * 3480) / 1000000000 lamports, where 3480 is the annual rent rate in micro-lamports per byte. The factor of 2 represents the 2-year rent prepayment.</p>
+        </details>
+        <details>
+          <summary>Why is rent exemption 2 years of rent?</summary>
+          <p>Solana chose a 2-year rent prepayment model to balance network sustainability with user costs. Accounts that maintain the exemption balance never pay ongoing rent, while the network retains the ability to reclaim abandoned accounts.</p>
+        </details>
+        <details>
+          <summary>How does Token-2022 affect rent?</summary>
+          <p>Token-2022 accounts are larger than standard SPL token accounts because they support additional features like transfer fees and permanent delegate. This means Token-2022 accounts require a higher rent exemption deposit.</p>
+        </details>
+        <details>
+          <summary>Can I rent a Solana account without full exemption?</summary>
+          <p>Technically yes, but it is not recommended. Accounts below the rent exemption threshold are subject to periodic rent deductions, and the account will eventually be reclaimed if the balance reaches zero.</p>
+        </details>
+        <details>
+          <summary>How do I check the rent exemption for my accounts?</summary>
+          <p>You can use the Solana CLI command <code>sol rent &lt;ACCOUNT_ADDRESS&gt;</code> to check the rent for any account. BurnerSOL also displays the rent locked in each of your token accounts when you connect your wallet.</p>
+        </details>
+      </div>
+
+      <footer>
+        <p>BurnerSOL is a non-custodial tool. Your keys never leave your wallet. <a href="/">Open BurnerSOL</a></p>
+        <p>Related guides: <a href="/guides/what-is-solana-rent">What Is Solana Rent?</a> | <a href="/guides/how-to-recover-sol-from-token-accounts">Recover SOL from Token Accounts</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

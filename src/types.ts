@@ -1,7 +1,9 @@
-export interface AdvancedRiskDetails {
+export type RiskLevel = "SAFE" | "SUSPICIOUS" | "HIGH_RISK" | "SCAM";
+
+export interface RiskReport {
   score: number;
   confidence: number;
-  level: "SAFE" | "SUSPICIOUS" | "HIGH_RISK" | "SCAM";
+  level: RiskLevel;
   reasons: string[];
 }
 
@@ -21,41 +23,36 @@ export interface TrashItem {
   selected?: boolean;
   mintAddress?: string;
   programId?: string;
-  riskReport?: AdvancedRiskDetails;
+  riskReport?: RiskReport;
   metadataSource?: "helius" | "rpc" | "local";
-  inputs?: {
-    metadataQuality?: {
-      hasVerifiedLogo?: boolean;
-      hasProperDescription?: boolean;
-      hasWebsiteLink?: boolean;
-      isClonedOfficialName?: boolean;
-    };
-    liquidity?: {
-      poolBalanceUsd?: number;
-      hasActiveAmmPool?: boolean;
-      hasSellLiquidityLocked?: boolean;
-    };
-    holderDistribution?: {
-      top10HoldersSharePct?: number;
-      isCreatorHoldingAllTokens?: boolean;
-      numberOfActiveHolders?: number;
-    };
-    tokenAge?: {
-      daysSinceCreation?: number;
-    };
-    behavioralSignals?: {
-      hasInjectedAirdropMemo?: boolean;
-      hasWalletDrainingHistory?: boolean;
-      isTransferDisabled?: boolean;
-    };
-  };
+  inputs?: RiskCategoryInputs;
 }
 
-export interface ChatMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  timestamp: string;
+export interface RiskCategoryInputs {
+  metadataQuality: {
+    hasVerifiedLogo: boolean;
+    hasProperDescription: boolean;
+    hasWebsiteLink: boolean;
+    isClonedOfficialName: boolean;
+  };
+  liquidity: {
+    poolBalanceUsd: number;
+    hasActiveAmmPool: boolean;
+    hasSellLiquidityLocked: boolean;
+  };
+  holderDistribution: {
+    top10HoldersSharePct: number;
+    isCreatorHoldingAllTokens: boolean;
+    numberOfActiveHolders: number;
+  };
+  tokenAge: {
+    daysSinceCreation: number;
+  };
+  behavioralSignals: {
+    hasInjectedAirdropMemo: boolean;
+    hasWalletDrainingHistory: boolean;
+    isTransferDisabled: boolean;
+  };
 }
 
 export interface BurnTransaction {
@@ -73,28 +70,19 @@ export interface BurnTransaction {
   rewardsMinted?: number;
   signature?: string;
   source?: "on-chain" | "local-session";
-  itemDetails?: {
-    id: string;
-    name: string;
-    symbol: string;
-    type: TrashItem["type"];
-    amount: number;
-    reclaimableSol: number;
-    mintAddress?: string;
-    programId?: string;
-    isScam?: boolean;
-    riskLevel?: AdvancedRiskDetails["level"];
-    riskScore?: number;
-  }[];
+  itemDetails?: BurnTransactionItem[];
 }
 
-export interface TokenStats {
-  priceUsd: number;
-  priceSol: number;
-  priceChange24h: number;
-  marketCapUsd: number;
-  volume24hUsd: number;
-  totalBurned: number;
-  circulatingSupply: number;
-  totalSupply: number;
+export interface BurnTransactionItem {
+  id: string;
+  name: string;
+  symbol: string;
+  type: TrashItem["type"];
+  amount: number;
+  reclaimableSol: number;
+  mintAddress?: string;
+  programId?: string;
+  isScam?: boolean;
+  riskLevel?: RiskLevel;
+  riskScore?: number;
 }

@@ -24,19 +24,15 @@ export interface BurnPreviewReport {
   totalNetReclaimSol: number;
   estimatedSolanaTxFee: number;
   burnIntensityBonusPct: number;
-  reclaimedBurnerTokens: number;
 }
 
-/**
- * Generates an itemized burn simulation summary based on live state inputs.
- */
 export function generateBurnPreview(
   selectedItems: TrashItem[],
   burnIntensity: number = 0
 ): BurnPreviewReport {
   const previewItems = selectedItems.map(item => {
     const riskScore = item.riskReport?.score ?? (item.isScam ? 90 : 10);
-    const feePct = getSmartDynamicFeePercent(riskScore);
+    const feePct = getSmartDynamicFeePercent();
     const protocolFee = (item.reclaimableSol * feePct) / 100;
     
     return {
@@ -60,9 +56,6 @@ export function generateBurnPreview(
   const totalProtocolFeeSol = Math.max(0, baseProtocolFeeSol * (1 - burnIntensityBonusPct));
   const totalNetReclaimSol = rawReclaimSol - totalProtocolFeeSol;
 
-  // Simulated reward of $BURNER tokens based on scrap recycled: 500 $BURNER per item burned
-  const reclaimedBurnerTokens = selectedItems.length * 500 * (1 + burnIntensity * 0.2);
-
   return {
     items: previewItems,
     totalItems: selectedItems.length,
@@ -71,6 +64,5 @@ export function generateBurnPreview(
     totalNetReclaimSol,
     estimatedSolanaTxFee: 0.000005 * selectedItems.length, // standard rent-closing txn size
     burnIntensityBonusPct,
-    reclaimedBurnerTokens,
   };
 }

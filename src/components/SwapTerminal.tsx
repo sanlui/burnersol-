@@ -15,6 +15,19 @@ export default function SwapTerminal({
   onSwapComplete,
   coinSymbol = "BURNER",
 }: SwapTerminalProps) {
+  const t = {
+    swapTitle: "SWAP",
+    swapSellLabel: "YOU PAY",
+    swapReceiveLabel: "YOU RECEIVE",
+    swapRateLabel: "RATE",
+    swapRouteLabel: "ROUTE PATHING",
+    swapFeeLabel: "NETWORK FEE",
+    swapImpactLabel: "SLIPPAGE IMPACT",
+    swapButtonActive: "SWAPPING...",
+    swapButtonLabel: "SWAP NOW",
+    swapSecuredBy: "SECURED BY JUPITER AGGREGATOR",
+  };
+
   const [fromToken, setFromToken] = useState<"SOL" | "BURNER">("SOL");
   const [toToken, setToToken] = useState<"SOL" | "BURNER">("BURNER");
   const [fromAmount, setFromAmount] = useState<string>("1");

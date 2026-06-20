@@ -128,7 +128,7 @@ export async function fetchJupiterTokenImage(mint: string): Promise<string | nul
   const timeoutId = setTimeout(() => controller.abort(), 1800); // Strict 1.8s response timeout
 
   try {
-    const res = await fetch(`https://tokens.jup.ag/token/${mint}`, {
+    const res = await fetch(`/api/jupiter/token/${mint}`, {
       signal: controller.signal,
     });
     
@@ -136,12 +136,14 @@ export async function fetchJupiterTokenImage(mint: string): Promise<string | nul
       const data = await res.json();
       if (data && typeof data.logoURI === "string" && data.logoURI.trim().length > 0) {
         const logo = data.logoURI.trim();
+        // Route through proxy to bypass CORP/CORS
+        const proxiedLogo = logo.startsWith("http") ? `/api/proxy-image?url=${encodeURIComponent(logo)}` : logo;
         // Set into our secure bounded LRU cache
-        secureImageCache.set(mint, logo);
+        secureImageCache.set(mint, proxiedLogo);
         try {
-          localStorage.setItem(`burner_img_cache_${mint}`, logo);
+          localStorage.setItem(`burner_img_cache_${mint}`, proxiedLogo);
         } catch (e) {}
-        return logo;
+        return proxiedLogo;
       }
     }
   } catch (err) {
@@ -163,9 +165,9 @@ export async function resolveTokenImage(
 ): Promise<string> {
   const normSymbol = (symbol || "").toUpperCase().trim();
   
-  // Case A: Provided image URL is verified
+  // Case A: Provided image URL is verified — route through proxy to bypass CORP/CORS
   if (providedImageUrl && typeof providedImageUrl === "string" && providedImageUrl.startsWith("https://")) {
-    return providedImageUrl;
+    return `/api/proxy-image?url=${encodeURIComponent(providedImageUrl)}`;
   }
 
   // Case B: Well-known native ecosystems matches

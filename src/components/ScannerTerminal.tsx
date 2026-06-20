@@ -20,15 +20,14 @@ import {
   Activity
 } from "lucide-react";
 import { sound } from "../utils/audio";
-import { evaluateAssetRisk, getSmartDynamicFeePercent, determineBurnability } from "../utils/riskEngine";
+import { evaluateAssetRisk, getSmartDynamicFeePercent, determineBurnability, getSimulatedInfo } from "../utils/riskEngine";
 import { generateBurnPreview, BurnPreviewReport } from "../utils/burnPreview";
 import { fetchJupiterPrices } from "../utils/marketData";
-import { enforceSpamThresholdCapping } from "../utils/solana";
+import { enforceSpamThresholdCapping, fetchHeliusAllAssetsDAS, fetchHeliusFungibleTokens, executeResilientRpc } from "../utils/solana";
 import ResilientImage from "./ResilientImage";
 
 interface ScannerTerminalProps {
   walletAddress?: string | null;
-  onWalletAddressChange?: (address: string | null) => void;
   onBurnSelect: (items: TrashItem[]) => void;
   isBurning: boolean;
   walletBalance: number;
@@ -43,7 +42,7 @@ const t = {
   step2Badge: "ISOLATION", 
   step3Badge: "COMBUSTION",
   p_diagnostics: "Run Diagnostics",
-  heroHeadingBurn: "BURN & RECLAIM",
+  heroHeadingBurn: "BURN",
 };
 
 // Concrete inputs to drive the Advanced Risk Scoring Engine for the default dataset
@@ -187,11 +186,10 @@ const ENRICHED_DEFAULT_TRASH_ITEMS: TrashItem[] = RAW_TRASH_ITEMS.map((item) => 
 
 export default function ScannerTerminal({
   walletAddress,
-  onWalletAddressChange,
   onBurnSelect,
   isBurning,
   walletBalance,
-  language = "it",
+  language = "en",
   sessionReclaimedSol = 0.0,
   analyzedWalletsCount = 0,
 }: ScannerTerminalProps) {
@@ -199,7 +197,7 @@ export default function ScannerTerminal({
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [scanSource, setScanSource] = useState<"simulator" | "alchemy-mainnet">("simulator");
-  const [filterType, setFilterType] = useState<"all" | "scam" | "empty" | "burnable" | "nonburnable">("all");
+  const [filterType, setFilterType] = useState<"all" | "burnable" | "nonburnable">("all");
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
   const [terminalAddressInput, setTerminalAddressInput] = useState("");
   const [inputError, setInputError] = useState("");
@@ -233,6 +231,7 @@ export default function ScannerTerminal({
       setScanProgress(progressVal);
     }, 75);
 
+    // Attempt 1: Try serverless API first (works on Vercel)
     try {
       const resp = await fetch("/api/solana/scan", {
         method: "POST",
@@ -240,13 +239,11 @@ export default function ScannerTerminal({
         body: JSON.stringify({ walletAddress: address }),
       });
 
-      clearInterval(progressTimer);
-
       if (resp.ok) {
         const data = await resp.json();
-        if (data && data.success) {
+        if (data && data.success && data.items && data.items.length > 0) {
+          clearInterval(progressTimer);
           const scannedItems = enforceSpamThresholdCapping(data.items || []);
-          // Apply burnability to all scanned items
           const computedItems = scannedItems.map((item: TrashItem) => ({
             ...item,
             isBurnable: determineBurnability(item),
@@ -256,12 +253,192 @@ export default function ScannerTerminal({
           setScanProgress(100);
           setIsScanning(false);
           return;
-        } else {
-          console.warn("Scan returned empty or error:", data?.error);
         }
       }
     } catch (err) {
-      console.error("Failed to query live scan API:", err);
+      console.warn("Serverless API unavailable, falling back to client-side RPC:", err);
+    }
+
+    // Attempt 2: Client-side Helius DAS — fetches all assets with full metadata
+    try {
+      setScanProgress(25);
+
+      const [dasAssets, fungibleTokens] = await Promise.all([
+        fetchHeliusAllAssetsDAS(address),
+        fetchHeliusFungibleTokens(address),
+      ]);
+
+      setScanProgress(70);
+
+      const KNOWN_TOKENS: Record<string, { name: string; symbol: string }> = {
+        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": { name: "USD Coin", symbol: "USDC" },
+        "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB": { name: "USDT", symbol: "USDT" },
+        "So11111111111111111111111111111111111111112": { name: "Wrapped SOL", symbol: "WSOL" },
+        "JUPyiwrYJF2ip9vdJjN2BLm9S85FmP9X9bJ65h6Nzo6": { name: "Jupiter", symbol: "JUP" },
+        "DezXAZ8z7PnrnRJjz3wX4mP97EGAtfA6AtC8Zq1A2Uq": { name: "Bonk", symbol: "BONK" },
+        "mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So": { name: "Marinade staked SOL", symbol: "mSOL" },
+        "7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj": { name: "Lido staked SOL", symbol: "stSOL" },
+      };
+
+      const SPAM_KEYWORDS = ["CLAIM", "FREE", "GIFT", "REWARD", "AIRDROP", "TICKET", "VOUCHER", "WINNER", ".NET", ".COM", ".ORG", ".XYZ", ".CC", ".LINK", "CLICK", "VISIT"];
+
+      const dasMints = new Set(dasAssets.map(a => a.id));
+
+      const rpcItems: TrashItem[] = [];
+
+      // Map DAS assets (NFTs, compressed, etc.)
+      for (const asset of dasAssets) {
+        const mint = asset.id;
+        const known = KNOWN_TOKENS[mint];
+        const tokenBalance = asset.tokenInfo?.balance ?? 0;
+        const decimals = asset.decimals ?? 0;
+        const lamports = asset.accountInfo?.lamports || 0;
+        const reclaimableSol = lamports > 0 ? lamports / 1e9 : 0.002039;
+
+        let type: TrashItem["type"] = "token";
+        if (asset.interface === "NFT" || asset.interface === "ProgrammableNFT") {
+          type = "nft";
+        } else if (tokenBalance === 0 && lamports === 0) {
+          type = "account";
+        } else if (tokenBalance === 0) {
+          type = "account";
+        } else if (decimals === 0 && tokenBalance === 1) {
+          type = "nft";
+        }
+
+        let name = known?.name || asset.name || `SPL Asset (${mint.slice(0, 4)}...${mint.slice(-4)})`;
+        let symbol = known?.symbol || asset.symbol || `SPL-${mint.slice(0, 3).toUpperCase()}`;
+        const image = asset.image;
+        const description = asset.description;
+        const collection = asset.collectionName || "";
+        const attrs = asset.attributes || [];
+
+        const isSpam = SPAM_KEYWORDS.some(kw => name.toUpperCase().includes(kw) || symbol.toUpperCase().includes(kw));
+
+        if (type === "account") {
+          name = `Defunct SPL Account (${mint.slice(0, 4)}...${mint.slice(-4)})`;
+          symbol = "EMPTY";
+        }
+
+        let descriptor = type === "account"
+          ? `Defunct empty SPL Token account. Safe to close to reclaim ${reclaimableSol.toFixed(5)} SOL rent.`
+          : isSpam
+            ? `Malicious spam/airdrop asset detected.`
+            : description
+              ? description.slice(0, 150)
+              : collection
+                ? `${symbol} — Collection: ${collection}`
+                : `${symbol || name} — Token balance active.`;
+
+        const riskInputs = getSimulatedInfo(name, symbol, isSpam);
+        const report = evaluateAssetRisk(name, symbol, riskInputs);
+
+        rpcItems.push({
+          id: mint,
+          name,
+          symbol,
+          type,
+          amount: tokenBalance,
+          valueUsd: 0,
+          reclaimableSol,
+          decimals,
+          mintAddress: mint,
+          imageUrl: image || (type === "nft" ? `https://picsum.photos/seed/${mint.slice(0, 6)}/300/300` : undefined),
+          isScam: isSpam || report.level === "SCAM",
+          descriptor,
+          riskReport: report,
+          selected: isSpam || type === "account",
+          metadataSource: "helius" as const,
+          inputs: riskInputs,
+        });
+      }
+
+      // Map fungible tokens not already in DAS results
+      for (const ft of fungibleTokens) {
+        if (dasMints.has(ft.mint)) continue;
+        if (ft.uiAmount === 0) continue;
+
+        const known = KNOWN_TOKENS[ft.mint];
+        const name = known?.name || `Token (${ft.mint.slice(0, 4)}...${ft.mint.slice(-4)})`;
+        const symbol = known?.symbol || `SPL-${ft.mint.slice(0, 3).toUpperCase()}`;
+
+        const isSpam = SPAM_KEYWORDS.some(kw => name.toUpperCase().includes(kw) || symbol.toUpperCase().includes(kw));
+
+        const riskInputs = getSimulatedInfo(name, symbol, isSpam);
+        const report = evaluateAssetRisk(name, symbol, riskInputs);
+
+        rpcItems.push({
+          id: ft.mint,
+          name,
+          symbol,
+          type: "token",
+          amount: ft.uiAmount,
+          valueUsd: 0,
+          reclaimableSol: 0.002039,
+          decimals: ft.decimals,
+          mintAddress: ft.mint,
+          imageUrl: undefined,
+          isScam: isSpam || report.level === "SCAM",
+          descriptor: `${symbol} — Fungible token, ${ft.uiAmount.toLocaleString()} units.`,
+          riskReport: report,
+          selected: isSpam,
+          metadataSource: "helius" as const,
+          inputs: riskInputs,
+        });
+      }
+
+      const allItems = enforceSpamThresholdCapping(rpcItems);
+
+      const computedItems = allItems.map(item => ({
+        ...item,
+        isBurnable: determineBurnability(item),
+      }));
+
+      // === FRONTEND MAPPING LOG ===
+      if (computedItems.length > 0) {
+        console.log("[DAS->Frontend] Total items mapped:", computedItems.length);
+        console.log("[DAS->Frontend] === FIRST MAPPED TrashItem (raw) ===");
+        console.log(JSON.stringify(computedItems[0], null, 2));
+        console.log("[DAS->Frontend] === Field check for first item ===");
+        const fi = computedItems[0];
+        console.log({
+          id: fi.id,
+          name: fi.name,
+          name_undefined: fi.name === undefined,
+          symbol: fi.symbol,
+          symbol_undefined: fi.symbol === undefined,
+          type: fi.type,
+          amount: fi.amount,
+          amount_undefined: fi.amount === undefined,
+          valueUsd: fi.valueUsd,
+          reclaimableSol: fi.reclaimableSol,
+          decimals: fi.decimals,
+          decimals_undefined: fi.decimals === undefined,
+          mintAddress: fi.mintAddress,
+          imageUrl: fi.imageUrl,
+          imageUrl_undefined: fi.imageUrl === undefined,
+          isScam: fi.isScam,
+          descriptor: fi.descriptor,
+          descriptor_undefined: fi.descriptor === undefined,
+          riskReport: fi.riskReport,
+          riskReport_undefined: fi.riskReport === undefined,
+          selected: fi.selected,
+          metadataSource: fi.metadataSource,
+          inputs: fi.inputs,
+          isBurnable: fi.isBurnable,
+        });
+      }
+      // === END LOG ===
+
+      clearInterval(progressTimer);
+      setItems(computedItems);
+      setScanSource("alchemy-mainnet");
+      setScanProgress(100);
+      setIsScanning(false);
+      return;
+
+    } catch (rpcErr) {
+      console.error("Client-side RPC fallback also failed:", rpcErr);
     }
 
     clearInterval(progressTimer);
@@ -393,10 +570,8 @@ export default function ScannerTerminal({
       prev.map((item) => {
         const matchesFilter = 
           filterType === "all" ||
-          (filterType === "scam" && item.isScam) ||
-          (filterType === "empty" && !item.isScam) ||
-          (filterType === "burnable" && item.isBurnable === true) ||
-          (filterType === "nonburnable" && item.isBurnable === false);
+          (filterType === "burnable" && item.type === "nft") ||
+          (filterType === "nonburnable" && item.type === "token");
         
         // Never auto-select non-burnable assets
         if (matchesFilter && !allSelected && !item.isBurnable) {
@@ -412,10 +587,8 @@ export default function ScannerTerminal({
   };
 
   const filteredItems = items.filter((item) => {
-    if (filterType === "scam") return item.isScam;
-    if (filterType === "empty") return !item.isScam;
-    if (filterType === "burnable") return item.isBurnable === true;
-    if (filterType === "nonburnable") return item.isBurnable === false;
+    if (filterType === "burnable") return item.type === "nft";
+    if (filterType === "nonburnable") return item.type === "token";
     return true;
   });
 
@@ -424,7 +597,7 @@ export default function ScannerTerminal({
 
   const totalProtocolFeeSol = selectedItems.reduce((acc, item) => {
     const score = item.riskReport?.score ?? (item.isScam ? 90 : 10);
-    const feePct = getSmartDynamicFeePercent(score);
+    const feePct = getSmartDynamicFeePercent();
     return acc + (item.reclaimableSol * feePct) / 100;
   }, 0);
 
@@ -475,13 +648,13 @@ export default function ScannerTerminal({
               {t.step1Badge}
             </h3>
             <div className="flex flex-wrap items-center gap-1.5 font-mono text-[9px] text-slate-500 tracking-wider">
-              <span>PROTOCOLO STRUTTURA SICUREZZA</span>
+              <span>NETWORK STATE INTEGRITY</span>
               <span>|</span>
               <span className={`inline-flex items-center gap-1 font-black ${
                 scanSource === "alchemy-mainnet" ? "text-emerald-400" : "text-amber-500"
               }`}>
                 <span className={`w-1.5 h-1.5 rounded-full bg-current ${scanSource === "alchemy-mainnet" ? "animate-pulse" : ""}`} />
-                {scanSource === "alchemy-mainnet" ? "VERIFICA STATO IN CORSO" : "CONNESSIONE DI SICUREZZA SOLANA"}
+                {scanSource === "alchemy-mainnet" ? "ON-CHAIN VERIFICATION" : "SECURE SOLANA CONNECTION"}
               </span>
             </div>
           </div>
@@ -498,13 +671,13 @@ export default function ScannerTerminal({
         </button>
       </div>
 
-      {/* NEW: Hardcore real-time session stats from image (SOL RENT RECUPERATI & WALLET ANALIZZATI) */}
+      {/* Real-time session stats: SOL RENT RECLAIMED & WALLETS ANALYZED */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-6 mt-6">
         {/* Card 1: SOL Rent Reclaimed */}
         <div className="p-5 border border-white/5 bg-[#080808] text-left rounded-none relative overflow-hidden" id="sol-rent-reclaimed-card-widget">
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-white/[0.015] to-transparent pointer-events-none" />
           <span className="text-[10px] text-slate-500 font-mono uppercase tracking-widest block mb-1">
-            {language === "it" ? "SOL RENT RECUPERATI" : "SOL RENT RECLAIMED"}
+            {language === "en" ? "SOL RENT RECLAIMED" : "SOL RENT RECLAIMED"}
           </span>
           <div className="flex items-baseline gap-1.5 mt-2">
             <span className="text-3xl sm:text-4xl font-display font-black tracking-tighter text-white italic">
@@ -520,7 +693,7 @@ export default function ScannerTerminal({
         <div className="p-5 border border-white/5 bg-[#080808] text-left rounded-none relative overflow-hidden" id="wallets-analyzed-card-widget">
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-white/[0.015] to-transparent pointer-events-none" />
           <span className="text-[10px] text-slate-500 font-mono uppercase tracking-widest block mb-1">
-            {language === "it" ? "WALLET ANALIZZATI" : "WALLETS ANALYZED"}
+            {language === "en" ? "WALLETS ANALYZED" : "WALLETS ANALYZED"}
           </span>
           <div className="flex items-baseline gap-1.5 mt-2">
             <span className="text-3xl sm:text-4xl font-display font-black tracking-tighter text-white italic">
@@ -545,29 +718,7 @@ export default function ScannerTerminal({
                 : "border-transparent text-slate-400 hover:text-white"
             }`}
           >
-            All Items ({items.length})
-          </button>
-          <button
-            onClick={() => { setFilterType("scam"); setExpandedItemId(null); }}
-            onMouseEnter={() => sound.playHoverPluck()}
-            className={`px-3 py-2 rounded-none font-mono text-[9px] tracking-widest uppercase flex items-center gap-1 transition-all border-b-2 ${
-              filterType === "scam"
-                ? "border-flame-orange text-red-400 bg-red-950/25 font-bold"
-                : "border-transparent text-slate-400 hover:text-white"
-            }`}
-          >
-            Spam & Scams ({items.filter((i) => i.isScam).length})
-          </button>
-          <button
-            onClick={() => { setFilterType("empty"); setExpandedItemId(null); }}
-            onMouseEnter={() => sound.playHoverPluck()}
-            className={`px-3 py-2 rounded-none font-mono text-[9px] tracking-widest uppercase flex items-center gap-1 transition-all border-b-2 ${
-              filterType === "empty"
-                ? "border-flame-orange text-white bg-white/5 font-bold"
-                : "border-transparent text-slate-400 hover:text-white"
-            }`}
-          >
-            Samo & LPs ({items.filter((i) => !i.isScam).length})
+            All ({items.length})
           </button>
           <button
             onClick={() => { setFilterType("burnable"); setExpandedItemId(null); }}
@@ -578,7 +729,7 @@ export default function ScannerTerminal({
                 : "border-transparent text-slate-400 hover:text-white"
             }`}
           >
-            Bruciabili ({items.filter((i) => i.isBurnable === true).length})
+            NFT ({items.filter((i) => i.type === "nft").length})
           </button>
           <button
             onClick={() => { setFilterType("nonburnable"); setExpandedItemId(null); }}
@@ -589,7 +740,7 @@ export default function ScannerTerminal({
                 : "border-transparent text-slate-400 hover:text-white"
             }`}
           >
-            Non Bruciabili ({items.filter((i) => i.isBurnable === false).length})
+            SPL ({items.filter((i) => i.type === "token").length})
           </button>
         </div>
 
@@ -618,63 +769,51 @@ export default function ScannerTerminal({
               <p className="text-xs text-white uppercase tracking-widest">Running Risk Telemetry heuristics...</p>
               <p className="text-[10px] text-flame-orange">{scanProgress}% AUDITING WALLET INTEGRITY</p>
             </div>
-            {/* progress line */}
             <div className="w-48 h-1 bg-white/5 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-linear-to-r from-flame-orange to-flame-coral transition-all duration-100" 
+              <div
+                className="h-full bg-linear-to-r from-flame-orange to-flame-coral transition-all duration-100"
                 style={{ width: `${scanProgress}%` }}
               />
             </div>
           </div>
-        ) : !walletAddress ? (
+        ) : !walletAddress && items.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center py-6 gap-5 text-center">
-            <div className="p-3 bg-linear-to-b from-orange-500/10 to-transparent rounded-full border border-orange-500/20 text-flame-orange">
-              <Coins className="w-8 h-8" />
-            </div>
+            <img src="/fire.gif" alt="Coins" className="w-8 h-8 object-cover rounded-full" />
             <div className="space-y-1 max-w-md">
               <h4 className="font-display font-medium text-white text-xs uppercase tracking-widest">
-                {language === 'it' ? "DIAGNOSTICA IN TEMPO REALE" : "REAL-TIME DIAGNOSTICS"}
+                REAL-TIME DIAGNOSTICS
               </h4>
               <p className="text-[11px] text-slate-400 leading-normal font-sans">
-                {language === 'it' 
-                  ? "Nessun wallet connesso. Inserisci un indirizzo Solana pubblico per esaminare in tempo reale i token in circolazione, oppure seleziona uno dei profili di test reali di seguito."
-                  : "No wallet is currently connected. Enter a public Solana address to scan live mainnet assets, or click a verified sample wallet address below to test diagnostics instantly."}
+                Scan any Solana wallet to identify burnable accounts. Connect your wallet to execute burns.
               </p>
             </div>
 
             <form onSubmit={(e) => {
               e.preventDefault();
               const sanitizedAddress = terminalAddressInput.replace(/[^1-9A-HJ-NP-Za-km-z]/g, "").trim();
-              
+
               if (sanitizedAddress.length < 32 || sanitizedAddress.length > 44) {
                 setInputError(
-                  language === "it" 
-                    ? "Indirizzo non valido: deve essere tra 32 e 44 caratteri Base58."
-                    : "Invalid address: must be between 32 and 44 characters in standard Base58 format."
+                  "Invalid address: must be between 32 and 44 characters in standard Base58 format."
                 );
                 return;
               }
-              
+
               setInputError("");
-              if (onWalletAddressChange) {
-                onWalletAddressChange(sanitizedAddress);
-              }
+              runWalletScan(sanitizedAddress);
             }} className="w-full max-w-sm flex flex-col gap-2">
               <div className="flex gap-2 w-full">
-                <input 
+                <input
                   type="text"
-                  placeholder={language === 'it' ? "Inserisci Indirizzo Solana..." : "Enter Solana Address..."}
+                  placeholder="Enter Solana Address..."
                   value={terminalAddressInput}
                   onChange={(e) => {
                     const val = e.target.value;
-                    // Proactively sanitize inputs against form injection or shell exploits
                     const sanitizedVal = val.replace(/[^1-9A-HJ-NP-Za-km-z]/g, "");
                     setTerminalAddressInput(sanitizedVal);
                     if (sanitizedVal && (sanitizedVal.length < 32 || sanitizedVal.length > 44)) {
                       setInputError(
-                        language === "it" 
-                          ? "Indirizzo incompleto: la lunghezza deve essere tra 32 e 44 caratteri."
-                          : "Incomplete address: typical length must be between 32 and 44 characters."
+                        "Incomplete address: typical length must be between 32 and 44 characters."
                       );
                     } else {
                       setInputError("");
@@ -685,9 +824,9 @@ export default function ScannerTerminal({
                 <button
                   type="submit"
                   disabled={terminalAddressInput.length < 32 || !!inputError}
-                  className="px-4 py-1.5 bg-flame-orange hover:bg-orange-600 text-black font-display font-bold text-xs tracking-wider uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed rounded-none"
+                  className="px-4 py-1.5 bg-flame-orange hover:bg-orange-600 text-black font-display font-bold text-xs tracking-wider uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed rounded-none cursor-pointer"
                 >
-                  {language === 'it' ? "SCANSIONA" : "SCAN"}
+                  SCAN
                 </button>
               </div>
               {inputError && (
@@ -697,33 +836,9 @@ export default function ScannerTerminal({
               )}
             </form>
 
-            <div className="space-y-2">
-              <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest animate-pulse">
-                {language === 'it' ? "⚡ SELEZIONA INDIRIZZO REALE DI PROVA" : "⚡ CHOOSE REAL MAINNET DUST PORTFOLIO"}
-              </p>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {[
-                  { label: "Dust Accumulator", address: "9ey6Z7isvS7YidAdmG6Uq3tKofvpxN2XqCDoZgnw1f77" },
-                  { label: "Serum Ledger", address: "SRMuDbMMFB7C4B9gCH63W7ge7N8sPYvKb36F49rmZ8w" },
-                  { label: "High Volume Portfolio", address: "F6Kbyv8VbcoXsk2r9Zp3N6zM46U74C5KofX32WfC8bY7" }
-                ].map((sample) => (
-                  <button
-                    key={sample.address}
-                    type="button"
-                    onClick={() => {
-                      sound.playSuccessChime();
-                      if (onWalletAddressChange) {
-                        onWalletAddressChange(sample.address);
-                      }
-                    }}
-                    className="px-2.5 py-1.5 bg-[#0a0a0a] border border-white/5 hover:border-flame-orange hover:bg-flame-orange/5 text-[10px] text-slate-400 hover:text-white font-mono transition-all duration-300 rounded-none cursor-pointer text-left"
-                  >
-                    <span className="font-semibold block">{sample.label}</span>
-                    <span className="opacity-40 text-[9px] font-light">{sample.address.slice(0, 6)}...{sample.address.slice(-6)}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
+            <p className="text-[9px] text-slate-600 font-mono uppercase tracking-wider">
+              Scan works without connecting — burns require wallet via header
+            </p>
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center py-16 gap-3">
@@ -742,7 +857,7 @@ export default function ScannerTerminal({
             const isExpanded = expandedItemId === item.id;
             const score = item.riskReport?.score ?? 0;
             const level = item.riskReport?.level ?? "SAFE";
-            const feePercent = getSmartDynamicFeePercent(score);
+            const feePercent = getSmartDynamicFeePercent();
 
             return (
               <div
@@ -924,7 +1039,7 @@ export default function ScannerTerminal({
               <span className="text-xs font-bold text-white font-mono">{(burnPreview.rawReclaimSol).toFixed(5)} SOL</span>
             </div>
             <div className="p-2.5 bg-black/40 border border-white/5">
-              <span className="text-[8px] text-slate-500 font-mono uppercase block mb-1">BURNER SPECIAL COMMISSION</span>
+              <span className="text-[8px] text-slate-500 font-mono uppercase block mb-1">PROTOCOL COMMISSION</span>
               <span className="text-xs font-bold text-red-400 font-mono">{(burnPreview.totalProtocolFeeSol).toFixed(5)} SOL</span>
             </div>
             <div className="p-2.5 bg-black/40 border border-white/5">
@@ -932,13 +1047,6 @@ export default function ScannerTerminal({
               <span className="text-xs font-bold text-[#14F195] font-mono flex items-center gap-0.5">
                 <Sparkle className="w-3 h-3 text-[#14F195]" />
                 {(burnPreview.totalNetReclaimSol).toFixed(5)} SOL
-              </span>
-            </div>
-            <div className="p-2.5 bg-black/40 border border-white/5">
-              <span className="text-[8px] text-slate-500 font-mono uppercase block mb-1">MINED $BURNER LOYALTY</span>
-              <span className="text-xs font-bold text-orange-400 font-mono flex items-center gap-0.5">
-                <Coins className="w-3 h-3 text-orange-400" />
-                +{Math.round(burnPreview.reclaimedBurnerTokens).toLocaleString()}
               </span>
             </div>
           </div>
@@ -953,7 +1061,7 @@ export default function ScannerTerminal({
                 </span>
               </div>
               <p className="text-[9px] text-slate-500 font-sans leading-tight">
-                Increases reactor heat to unlock transaction fee discounts & $BURNER mining boosts.
+                Increases reactor heat to unlock greater transaction fee discounts.
               </p>
             </div>
 
@@ -1010,14 +1118,14 @@ export default function ScannerTerminal({
             <p className="text-slate-500 font-sans text-[10px] uppercase tracking-widest">Selected Account</p>
             <p className="text-white font-bold">{totalSelectedCount} checked</p>
           </div>
-          
+
           <div className="space-y-0.5 text-center">
             <p className="text-slate-500 font-sans text-[10px] uppercase tracking-widest">Gross SOL Reclaim</p>
             <p className="text-slate-300 font-bold">{(burnPreview?.rawReclaimSol ?? totalReclaimSol).toFixed(5)} SOL</p>
           </div>
 
           <div className="space-y-0.5 text-right">
-            <p className="text-slate-500 font-sans text-[10px] uppercase tracking-widest">Est. Est. Net Gain</p>
+            <p className="text-slate-500 font-sans text-[10px] uppercase tracking-widest">Est. Net Gain</p>
             <p className="text-[#14F195] font-bold flex items-center justify-end gap-1 text-sm">
               <Sparkle className="w-3.5 h-3.5 animate-pulse text-[#14F195]" />
               {(burnPreview?.totalNetReclaimSol ?? totalNetGainSol).toFixed(5)} SOL
@@ -1025,20 +1133,28 @@ export default function ScannerTerminal({
           </div>
         </div>
 
-        <button
-          onClick={handleIgniteClick}
-          onMouseEnter={() => sound.playHoverPluck()}
-          disabled={totalSelectedCount === 0 || isBurning || isScanning}
-          className="w-full relative py-4 rounded-none font-display font-black text-xs text-white tracking-[0.25em] uppercase transition-all duration-300 overflow-hidden disabled:opacity-35 disabled:cursor-not-allowed bg-flame-orange hover:bg-orange-600 cursor-pointer"
-        >
-          <span className="relative flex items-center justify-center gap-2">
-            <Trash2 className="w-3.5 h-3.5 fill-white" />
-            {isBurning ? `${t.step3Badge}...` : `${t.heroHeadingBurn} & RECLAIM (${totalSelectedCount} ACCS)`}
-          </span>
-        </button>
+        {walletAddress ? (
+          <button
+            onClick={handleIgniteClick}
+            onMouseEnter={() => sound.playHoverPluck()}
+            disabled={totalSelectedCount === 0 || isBurning || isScanning}
+            className="w-full relative py-4 rounded-none font-display font-black text-xs text-white tracking-[0.25em] uppercase transition-all duration-300 overflow-hidden disabled:opacity-35 disabled:cursor-not-allowed bg-flame-orange hover:bg-orange-600 cursor-pointer"
+          >
+            <span className="relative flex items-center justify-center gap-2">
+              <Trash2 className="w-3.5 h-3.5 fill-white" />
+              {isBurning ? `${t.step3Badge}...` : `${t.heroHeadingBurn} & RECLAIM`}
+            </span>
+          </button>
+        ) : (
+          <div className="w-full py-3 text-center font-mono text-[10px] text-slate-500 uppercase tracking-wider">
+            Connect wallet via header to execute burns
+          </div>
+        )}
 
         <p className="text-[10px] text-center text-slate-500 font-mono mt-3.5 uppercase tracking-wide">
-          Safe execution guaranteed. Dynamic protocol splits incentivize active token combustion.
+          {walletAddress
+            ? "Safe execution guaranteed. Dynamic protocol splits incentivize active token combustion."
+            : "Read-only scan results — connect your wallet to execute burns."}
         </p>
       </div>
     </div>

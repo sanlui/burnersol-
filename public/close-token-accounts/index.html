@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B0E14" />
+    <title>Close Token Accounts — Reclaim SOL Rent | BurnerSOL</title>
+    <meta name="description" content="Close empty Solana token accounts and reclaim your SOL rent. BurnerSOL lets you batch-close accounts and recover locked rent in one transaction." />
+    <meta name="keywords" content="close token accounts, close empty token accounts, Solana close account, reclaim SOL rent, SPL token account, BurnerSOL, wallet cleaner, Solana rent recovery" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href="https://burnersol.io/close-token-accounts" />
+    <link rel="alternate" hreflang="x-default" href="https://burnersol.io/close-token-accounts?lang=x-default" />
+    <link rel="alternate" hreflang="en" href="https://burnersol.io/close-token-accounts?lang=en" />
+    <link rel="alternate" hreflang="es" href="https://burnersol.io/close-token-accounts?lang=es" />
+    <link rel="alternate" hreflang="pt" href="https://burnersol.io/close-token-accounts?lang=pt" />
+    <link rel="alternate" hreflang="fr" href="https://burnersol.io/close-token-accounts?lang=fr" />
+    <link rel="alternate" hreflang="de" href="https://burnersol.io/close-token-accounts?lang=de" />
+    <link rel="alternate" hreflang="it" href="https://burnersol.io/close-token-accounts?lang=it" />
+    <link rel="alternate" hreflang="tr" href="https://burnersol.io/close-token-accounts?lang=tr" />
+    <link rel="alternate" hreflang="ru" href="https://burnersol.io/close-token-accounts?lang=ru" />
+    <link rel="alternate" hreflang="ja" href="https://burnersol.io/close-token-accounts?lang=ja" />
+    <link rel="alternate" hreflang="ko" href="https://burnersol.io/close-token-accounts?lang=ko" />
+    <link rel="alternate" hreflang="zh" href="https://burnersol.io/close-token-accounts?lang=zh" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://burnersol.io/close-token-accounts" />
+    <meta property="og:title" content="Close Token Accounts — Reclaim SOL Rent | BurnerSOL" />
+    <meta property="og:description" content="Close empty Solana token accounts and reclaim your SOL rent. BurnerSOL lets you batch-close accounts and recover locked rent in one transaction." />
+    <meta property="og:image" content="https://burnersol.io/token-logo.png" />
+    <meta property="og:site_name" content="BurnerSOL" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Close Token Accounts — Reclaim SOL Rent | BurnerSOL" />
+    <meta name="twitter:description" content="Close empty Solana token accounts and reclaim your SOL rent. BurnerSOL lets you batch-close accounts and recover locked rent in one transaction." />
+    <meta name="twitter:image" content="https://burnersol.io/token-logo.png" />
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": "https://burnersol.io/close-token-accounts#webpage",
+        "url": "https://burnersol.io/close-token-accounts",
+        "name": "Close Token Accounts — Reclaim SOL Rent | BurnerSOL",
+        "description": "Close empty Solana token accounts and reclaim your SOL rent. BurnerSOL lets you batch-close accounts and recover locked rent in one transaction.",
+        "isPartOf": { "@type": "WebSite", "url": "https://burnersol.io", "name": "BurnerSOL" },
+        "about": { "@type": "Thing", "name": "Solana token account closure" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I close empty token accounts on Solana?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Connect your wallet to BurnerSOL, scan for empty token accounts, review the list, and sign the batch-close transaction. BurnerSOL handles the rest and returns the rent to your wallet."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens when I close a token account?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Closing a token account removes it from the Solana blockchain and returns the rent deposit to your wallet. If you need that token later, a new account will be created automatically when you receive it."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I close token accounts that held NFTs?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, if the NFT has been transferred out and the account has a zero balance, it can be closed. BurnerSOL identifies all zero-balance accounts regardless of what token or NFT they previously held."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How many token accounts can I close at once?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "BurnerSOL batches all eligible accounts into a single transaction. You can close dozens or even hundreds of empty accounts in one step, minimizing network fees and saving time."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will closing token accounts affect my wallet balance?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Closing empty accounts increases your wallet's SOL balance by returning the rent deposits. It does not affect your other tokens, NFTs, or staked positions."
+            }
+          }
+        ]
+      }
+    ]
+    </script>
+    <style>
+      :root { color-scheme: dark; font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0a0a0a; color: #f8fafc; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: #0a0a0a; color: #cbd5e1; }
+      body::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(249,115,22,0.08), transparent 340px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(180deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: auto, 72px 72px, 72px 72px; opacity: .55; }
+      main { position: relative; width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 72px; }
+      header { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 18px 0 52px; border-bottom: 1px solid rgba(255,255,255,0.10); }
+      a { color: #fb923c; }
+      .brand { display: inline-flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 900; letter-spacing: -0.03em; text-transform: uppercase; }
+      .brand img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid rgba(255,255,255,0.12); }
+      .status { color: #fb923c; border: 1px solid rgba(249,115,22,0.28); background: rgba(249,115,22,0.09); padding: 9px 12px; font-size: 12px; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; }
+      .hero, article { max-width: 900px; padding: 52px 0 22px; }
+      article { margin-top: 0; padding: 54px 0 0; }
+      h1 { margin: 0; color: #fff; font-size: clamp(42px, 7vw, 86px); line-height: .92; letter-spacing: -0.06em; text-transform: uppercase; }
+      h2 { margin: 0 0 10px; color: #fff; font-size: 22px; letter-spacing: -0.025em; }
+      h3 { margin: 0 0 6px; color: #fff; font-size: 17px; }
+      .lead, article p { margin: 22px 0 0; max-width: 760px; color: #cbd5e1; font-size: clamp(17px, 2.1vw, 21px); line-height: 1.62; }
+      article p { font-size: 18px; }
+      .eyebrow { margin: 0 0 14px; color: #f97316; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border-radius: 0; background: #f97316; color: #050505; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; border: 1px solid #f97316; }
+      .button.secondary { color: #f8fafc; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 48px; }
+      .card { min-height: 170px; padding: 22px; border-radius: 0; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.10); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+      .card p { font-size: 15px; }
+      p { color: #cbd5e1; line-height: 1.65; }
+      .faq { margin-top: 58px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.10); }
+      .faq h2 { max-width: 820px; font-size: clamp(30px, 4vw, 46px); line-height: 1.02; }
+      details { border-top: 1px solid rgba(255,255,255,0.12); padding: 18px 0; }
+      summary { cursor: pointer; font-weight: 800; color: #fff; }
+      footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.10); color: #94a3b8; font-size: 13px; line-height: 1.7; }
+      footer a { margin-right: 16px; }
+      @media (max-width: 760px) { main { width: min(100% - 28px, 1120px); padding-top: 16px; } header { align-items: flex-start; flex-direction: column; padding-bottom: 28px; } .grid { grid-template-columns: 1fr; } .actions a, .button { width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <a class="brand" href="/"><img src="/token-logo.png" alt="BurnerSOL logo" /><span>BurnerSOL</span></a>
+        <span class="status">Close accounts</span>
+      </header>
+      <section class="hero">
+        <p class="eyebrow">SPL Token Account Closure</p>
+        <h1>Close empty token accounts and reclaim your SOL</h1>
+        <p class="lead">Empty SPL token accounts on Solana lock up rent that could be in your wallet. BurnerSOL scans your accounts, identifies every zero-balance token account, and lets you close them all in a single batched transaction to reclaim your SOL.</p>
+        <div class="actions">
+          <a class="button" href="/">Close accounts now</a>
+          <a class="button secondary" href="/wallet-cleaner">Wallet cleaner</a>
+        </div>
+      </section>
+      <section class="grid" aria-label="Token account closure features">
+        <article class="card">
+          <p class="eyebrow">Smart detection</p>
+          <h2>Find all closeable accounts</h2>
+          <p>BurnerSOL examines every token account in your wallet and identifies which ones have a zero balance and are eligible for closure. Each account shows its rent amount so you know exactly what you will recover.</p>
+        </article>
+        <article class="card">
+          <p class="eyebrow">Batch processing</p>
+          <h2>Close hundreds at once</h2>
+          <p>Manually closing token accounts one by one is tedious and expensive. BurnerSOL groups all eligible accounts into a single transaction, dramatically reducing both time and Solana network costs.</p>
+        </article>
+        <article class="card">
+          <p class="eyebrow">Rent returned</p>
+          <h2>Get your SOL deposit back</h2>
+          <p>Each token account on Solana holds a rent deposit of approximately 0.00203 SOL. When you close an empty account, that deposit is returned to your wallet. The more accounts you close, the more SOL you recover.</p>
+        </article>
+        <article class="card">
+          <p class="eyebrow">Safe operation</p>
+          <h2>Only empty accounts are touched</h2>
+          <p>BurnerSOL strictly targets accounts with a zero balance. Accounts holding tokens, NFTs, or other assets are never included in the close operation, ensuring your portfolio remains intact.</p>
+        </article>
+        <article class="card">
+          <p class="eyebrow">Transparent review</p>
+          <h2>Review before you sign</h2>
+          <p>Before any transaction is sent, BurnerSOL presents a complete list of accounts to be closed with their rent amounts. You review and approve the entire batch before signing with your wallet.</p>
+        </article>
+        <article class="card">
+          <p class="eyebrow">Non-custodial</p>
+          <h2>Your keys stay safe</h2>
+          <p>BurnerSOL connects directly to your Solana wallet and never requests private keys or seed phrases. You sign the transaction yourself, maintaining full custody of your assets throughout the process.</p>
+        </article>
+      </section>
+      <section class="faq">
+        <p class="eyebrow">Close Token Accounts — Frequently Asked Questions</p>
+        <h2>Everything about closing Solana token accounts</h2>
+        <details>
+          <summary>How do I close empty token accounts on Solana?</summary>
+          <p>Connect your wallet to BurnerSOL, scan for empty token accounts, review the list and rent amounts, and sign the batch-close transaction. BurnerSOL handles the rest and returns the rent to your wallet.</p>
+        </details>
+        <details>
+          <summary>What happens when I close a token account?</summary>
+          <p>Closing a token account removes it from the Solana blockchain and returns the rent deposit to your wallet. If you need that token later, a new account will be created automatically when you receive it again.</p>
+        </details>
+        <details>
+          <summary>Can I close token accounts that held NFTs?</summary>
+          <p>Yes, if the NFT has been transferred out and the account has a zero balance, it can be closed. BurnerSOL identifies all zero-balance accounts regardless of what token or NFT they previously held.</p>
+        </details>
+        <details>
+          <summary>How many token accounts can I close at once?</summary>
+          <p>BurnerSOL batches all eligible accounts into a single transaction. You can close dozens or even hundreds of empty accounts in one step, minimizing network fees and saving time.</p>
+        </details>
+        <details>
+          <summary>Will closing token accounts affect my wallet balance?</summary>
+          <p>Closing empty accounts increases your wallet's SOL balance by returning the rent deposits. It does not affect your other tokens, NFTs, staked positions, or any other assets in your wallet.</p>
+        </details>
+      </section>
+      <footer>
+        <p>
+          <a href="/">Main app</a>
+          <a href="/recover-sol">Recover SOL</a>
+          <a href="/wallet-cleaner">Wallet cleaner</a>
+          <a href="/close-token-accounts">Close token accounts</a>
+          <a href="/remove-spam-nfts">Remove spam NFTs</a>
+          <a href="/recover-rent">Recover rent</a>
+        </p>
+        <p>BurnerSOL is a non-custodial wallet tool. It does not hold private keys and does not guarantee asset prices, token value, trading liquidity, or profit. Cryptographic assets involve ongoing risk.</p>
+      </footer>
+    </main>
+  </body>
+</html>

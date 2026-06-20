@@ -2,45 +2,99 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://burnersol.com/guides/solana-token-burner/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://burnersol.io/guides/solana-wallet-cleaner/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.75</priority>
-
   </url>
   <url>
-    <loc>https://burnersol.com/guides/solana-wallet-cleaner/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://burnersol.io/guides/solana-token-burner/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.75</priority>
-
   </url>
   <url>
-    <loc>https://burnersol.com/guides/reclaim-sol-rent/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://burnersol.io/guides/reclaim-sol-rent/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.75</priority>
-
   </url>
   <url>
-    <loc>https://burnersol.com/guides/burn-spl-tokens/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-
+    <loc>https://burnersol.io/guides/burn-spl-tokens/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://burnersol.com/guides/burn-lp-tokens-lock-liquidity-solana/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-
+    <loc>https://burnersol.io/guides/burn-lp-tokens-lock-liquidity-solana/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://burnersol.com/guides/sol-incinerator/</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-
+    <loc>https://burnersol.io/guides/sol-incinerator/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/guides/how-to-recover-sol-from-token-accounts/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/guides/what-is-solana-rent/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/guides/how-solana-rent-exemption-works/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/guides/how-to-remove-spam-nfts/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/guides/how-to-close-spl-token-accounts/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/guides/how-to-close-token-2022-accounts/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/guides/solana-wallet-cleanup-guide/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/guides/solana-wallet-security-best-practices/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/guides/recover-sol-from-phantom-wallet/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://burnersol.io/guides/recover-sol-from-solflare-wallet/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
