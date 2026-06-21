@@ -6,6 +6,7 @@ import CombustionChamber from "./components/CombustionChamber";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import BurnSuccessModal from "./components/BurnSuccessModal";
+import BurnConfirmModal from "./components/BurnConfirmModal";
 import FooterHUD from "./components/FooterHUD";
 import { TrashItem, BurnTransaction } from "./types";
 import { sound } from "./utils/audio";
@@ -117,11 +118,14 @@ const handleMouseLeaveSection = () => {
   const [activeTab, setActiveTab ] = useState<"cleaner" | "protocol">("cleaner");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isBurning, setIsBurning] = useState(false);
-  const [burnIntensity, setBurnIntensity] = useState(0);
+  const [burnIntensity, setBurnIntensity] = useState(1);
   const [coreTemp, setCoreTemp] = useState(2842); // °C
 
   // Notification Modals
   const [showBurnSuccess, setShowBurnSuccess] = useState(false);
+  const [showBurnConfirm, setShowBurnConfirm] = useState(false);
+  const [pendingBurnItems, setPendingBurnItems] = useState<TrashItem[]>([]);
+  const [pendingBurnIntensity, setPendingBurnIntensity] = useState(1);
   const [isCopied, setIsCopied] = useState(false);
   const [reclaimSummary, setReclaimSummary] = useState<{
     itemCount: number;
@@ -309,7 +313,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
   }, [walletAddress]);
 
   // Trigger Burn / Incinerate Process
-  const handleBurnItems = async (itemsToBurn: TrashItem[]) => {
+  const handleBurnItems = async (itemsToBurn: TrashItem[], burnIntensityFromUI: number) => {
     if (itemsToBurn.length === 0 || isBurning) return;
 
     if (!connected || !publicKey || !sendTransaction || !connection) {
@@ -328,20 +332,29 @@ const loadInitialTxs = (): BurnTransaction[] => {
       safetyCheck.warnings.forEach((warn) => pushNotification(`⚠ Safe Guard Warning: ${warn}`));
     }
 
+    // Store pending items and show confirmation modal
+    setPendingBurnItems(itemsToBurn);
+    setPendingBurnIntensity(burnIntensityFromUI);
+    setShowBurnConfirm(true);
+  };
+
+  // Execute burn after confirmation
+  const executeBurn = async () => {
+    setShowBurnConfirm(false);
     setIsBurning(true);
-    setBurnIntensity(1);
     sound.startFurnaceRoar();
-    pushNotification(`🔥 Building transaction for ${itemsToBurn.length} items...`);
+    pushNotification(`🔥 Building transaction for ${pendingBurnItems.length} items...`);
 
     try {
       const { buildAndSendBurnTransaction } = await import("./utils/burnTransaction");
 
       const result = await buildAndSendBurnTransaction(
-        itemsToBurn,
+        pendingBurnItems,
         publicKey,
         sendTransaction,
         connection,
-        burnIntensity
+        pendingBurnIntensity,
+        wallet
       );
 
       if (result.success) {
@@ -350,11 +363,11 @@ const loadInitialTxs = (): BurnTransaction[] => {
 
         const solToReclaim = result.totalReclaimedSol;
         setReclaimSummary({
-          itemCount: itemsToBurn.length,
+          itemCount: pendingBurnItems.length,
           solReclaimed: solToReclaim,
           protocolFeePaid: result.protocolFeeSol,
           netReclaimed: result.netReclaimedSol,
-          itemsList: itemsToBurn.map((i) => i.symbol).join(", "),
+          itemsList: pendingBurnItems.map((i) => i.symbol).join(", "),
           rewardsMinted: result.protocolFeeSol * giftMultiplier,
           txSignature: result.signature,
         });
@@ -371,7 +384,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
           type: "burn",
           amount: result.totalReclaimedSol,
           fee: result.protocolFeeSol,
-          tokenSymbol: itemsToBurn.map((i) => i.symbol).join(","),
+          tokenSymbol: pendingBurnItems.map((i) => i.symbol).join(","),
           network: "solana",
           chain: "solana",
           walletName: walletProvider || "wallet",
@@ -393,7 +406,6 @@ const loadInitialTxs = (): BurnTransaction[] => {
       pushNotification(`❌ Transaction error: ${err?.message || "Unknown error"}`);
     } finally {
       setIsBurning(false);
-      setBurnIntensity(0);
       sound.stopFurnaceRoar();
     }
   };
@@ -562,6 +574,18 @@ const loadInitialTxs = (): BurnTransaction[] => {
         setShowBurnSuccess={setShowBurnSuccess}
         reclaimSummary={reclaimSummary}
         coinSymbol={coinSymbol}
+      />
+
+      {/* Burn Confirmation Dialog Modal */}
+      <BurnConfirmModal
+        showConfirm={showBurnConfirm}
+        setShowConfirm={setShowBurnConfirm}
+        items={pendingBurnItems}
+        totalReclaimSol={pendingBurnItems.reduce((acc, item) => acc + item.reclaimableSol, 0)}
+        protocolFeeSol={pendingBurnItems.reduce((acc, item) => acc + item.reclaimableSol, 0) * getSmartDynamicFeePercent() / 100}
+        netReclaimSol={pendingBurnItems.reduce((acc, item) => acc + item.reclaimableSol, 0) * (1 - getSmartDynamicFeePercent() / 100)}
+        onConfirm={executeBurn}
+        isProcessing={isBurning}
       />
 
       {/* Footer area */}

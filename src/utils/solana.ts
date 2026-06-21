@@ -403,6 +403,7 @@ export async function fetchHeliusAllAssetsDAS(walletAddress: string): Promise<He
 }
 
 export interface FungibleTokenAccount {
+  pubkey: string;
   mint: string;
   amount: string;
   decimals: number;
@@ -447,6 +448,7 @@ export async function fetchHeliusFungibleTokens(walletAddress: string): Promise<
           const info = item.account.data.parsed.info;
           const ta = info.tokenAmount;
           allTokens.push({
+            pubkey: item.pubkey,
             mint: info.mint,
             amount: ta.amount,
             decimals: ta.decimals,

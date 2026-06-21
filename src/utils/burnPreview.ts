@@ -28,7 +28,7 @@ export interface BurnPreviewReport {
 
 export function generateBurnPreview(
   selectedItems: TrashItem[],
-  burnIntensity: number = 0
+  burnIntensity: number = 1
 ): BurnPreviewReport {
   const previewItems = selectedItems.map(item => {
     const riskScore = item.riskReport?.score ?? (item.isScam ? 90 : 10);

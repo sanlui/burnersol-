@@ -17,7 +17,6 @@ import {
   Flame,
   Coins,
   Zap,
-  Activity
 } from "lucide-react";
 import { sound } from "../utils/audio";
 import { evaluateAssetRisk, getSmartDynamicFeePercent, determineBurnability, getSimulatedInfo } from "../utils/riskEngine";
@@ -28,7 +27,7 @@ import ResilientImage from "./ResilientImage";
 
 interface ScannerTerminalProps {
   walletAddress?: string | null;
-  onBurnSelect: (items: TrashItem[]) => void;
+  onBurnSelect: (items: TrashItem[], intensity: number) => void;
   isBurning: boolean;
   walletBalance: number;
   language?: string;
@@ -302,8 +301,6 @@ export default function ScannerTerminal({
           type = "account";
         } else if (tokenBalance === 0) {
           type = "account";
-        } else if (decimals === 0 && tokenBalance === 1) {
-          type = "nft";
         }
 
         let name = known?.name || asset.name || `SPL Asset (${mint.slice(0, 4)}...${mint.slice(-4)})`;
@@ -368,7 +365,7 @@ export default function ScannerTerminal({
         const report = evaluateAssetRisk(name, symbol, riskInputs);
 
         rpcItems.push({
-          id: ft.mint,
+          id: ft.pubkey,
           name,
           symbol,
           type: "token",
@@ -607,7 +604,13 @@ export default function ScannerTerminal({
   const totalNetGainSol = totalReclaimSol - finalProtocolFeeFrontend;
 
   const handleIgniteClick = () => {
-    onBurnSelect(selectedItems);
+    setItems(prev => prev.map(item => {
+      if (selectedItems.some(si => si.id === item.id)) {
+        return { ...item, selected: false };
+      }
+      return item;
+    }));
+    onBurnSelect(selectedItems, burnIntensity);
   };
 
   const getIcon = (type: string) => {
@@ -1049,64 +1052,6 @@ export default function ScannerTerminal({
                 {(burnPreview.totalNetReclaimSol).toFixed(5)} SOL
               </span>
             </div>
-          </div>
-
-          {/* Interactive Combustion Heat Presets Selector */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 bg-black/50 p-3 border border-white/5">
-            <div className="space-y-0.5">
-              <div className="flex items-center gap-1.5">
-                <Activity className="w-3.5 h-3.5 text-flame-orange shrink-0" />
-                <span className="text-[10px] font-mono text-slate-300 font-bold uppercase tracking-wide">
-                  COMBUSTION TEMPERATURE CONTROLS
-                </span>
-              </div>
-              <p className="text-[9px] text-slate-500 font-sans leading-tight">
-                Increases reactor heat to unlock greater transaction fee discounts.
-              </p>
-            </div>
-
-            {/* Presets Button Array */}
-            <div className="flex items-center gap-1.5 self-stretch md:self-auto">
-              <button 
-                onClick={(e) => { e.stopPropagation(); sound.playHoverPluck(); setBurnIntensity(1); }}
-                className={`flex-1 md:flex-none px-3 py-1.5 font-mono text-[9px] tracking-wider uppercase border transition-all ${
-                  burnIntensity === 1 
-                    ? "border-emerald-500/50 bg-emerald-950/20 text-emerald-400 font-bold shadow-[0_0_8px_rgba(16,185,129,0.1)]"
-                    : "border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                1x COLD
-              </button>
-              <button 
-                onClick={(e) => { e.stopPropagation(); sound.playHoverPluck(); setBurnIntensity(2); }}
-                className={`flex-1 md:flex-none px-3 py-1.5 font-mono text-[9px] tracking-wider uppercase border transition-all ${
-                  burnIntensity === 2 
-                    ? "border-orange-500/50 bg-orange-950/20 text-orange-400 font-bold shadow-[0_0_8px_rgba(244,99,40,0.15)]"
-                    : "border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                2x FIERY
-              </button>
-              <button 
-                onClick={(e) => { e.stopPropagation(); sound.playHoverPluck(); setBurnIntensity(3); }}
-                className={`flex-1 md:flex-none px-3 py-1.5 font-mono text-[9px] tracking-wider uppercase border transition-all ${
-                  burnIntensity === 3 
-                    ? "border-red-500/50 bg-red-950/20 text-red-400 font-bold animate-pulse shadow-[0_0_12px_rgba(228,37,37,0.25)]"
-                    : "border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                3x OVERDRIVE
-              </button>
-            </div>
-          </div>
-
-          {/* Fee Discount and Gas estimate line */}
-          <div className="flex items-center justify-between text-[9px] font-mono text-slate-500 uppercase">
-            <span className="flex items-center gap-1">
-              <Zap className="w-3 h-3 text-yellow-400 shrink-0" />
-              Heat Discount: <strong className="text-white">{(burnPreview.burnIntensityBonusPct * 100).toFixed(0)}% Off Reclaim Split</strong>
-            </span>
-            <span>Est Solana Fee: <strong className="text-white">{(burnPreview.estimatedSolanaTxFee).toFixed(6)} SOL</strong></span>
           </div>
         </div>
       )}

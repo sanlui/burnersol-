@@ -3,11 +3,12 @@ export default async function handler(req, res) {
   if (!mint) return res.status(400).json({ error: "missing mint" });
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000);
+  const timeout = setTimeout(() => controller.abort(), 8000);
 
   try {
-    const upstream = await fetch(`https://tokens.jup.ag/token/${mint}`, {
+    const upstream = await fetch(`https://api.jup.ag/tokens/v1/token/${mint}`, {
       signal: controller.signal,
+      headers: { "Content-Type": "application/json" },
     });
     clearTimeout(timeout);
 
