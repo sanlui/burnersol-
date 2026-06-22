@@ -1,14 +1,13 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-
-const SOL_MINT = 'So11111111111111111111111111111111111111112';
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const response = await fetch(`https://api.jup.ag/price/v2?ids=${SOL_MINT}`, {
+    const SOL_MINT = 'So11111111111111111111111111111111111111112';
+    const ids = req.query.ids || SOL_MINT;
+    const url = 'https://api.jup.ag/price/v2?ids=' + ids;
+    const response = await fetch(url, {
       headers: {
         'Accept': 'application/json',
       },
@@ -19,6 +18,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const data = await response.json();
+    res.setHeader('Cache-Control', 'public, max-age=15');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     return res.status(200).json(data);
   } catch (error) {
     console.error('Price API error:', error);
