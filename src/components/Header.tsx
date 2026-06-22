@@ -107,7 +107,7 @@ export default function Header({ walletBalance }: HeaderProps) {
               type="button"
               onClick={() => { sound.playHoverPluck(); setVisible(true); }}
               aria-label="Connect Solana wallet"
-              className="flex border border-flame-orange/40 hover:border-flame-orange px-3.5 py-2 text-[10px] font-mono uppercase tracking-[0.14em] items-center gap-2 bg-flame-orange/10 text-flame-orange transition-all shrink-0 cursor-pointer font-bold animate-pulse"
+              className="flex border border-flame-orange hover:border-flame-orange px-3.5 py-2 text-[10px] font-mono uppercase tracking-[0.14em] items-center gap-2 bg-flame-orange text-black transition-all shrink-0 cursor-pointer font-bold animate-pulse"
             >
               <span>CONNECT WALLET</span>
             </button>

@@ -28,7 +28,7 @@ export default function Footer({ handleMouseEnterSection, handleMouseLeaveSectio
 
           {/* Column 2: Protocol links */}
           <div className="md:col-span-3 space-y-3">
-            <h5 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Protocol</h5>
+            <h4 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Protocol</h4>
             <nav aria-label="Protocol pages">
               <div className="flex flex-col gap-2 font-mono text-[10px] uppercase tracking-wider">
               <Link
@@ -61,7 +61,7 @@ export default function Footer({ handleMouseEnterSection, handleMouseLeaveSectio
 
           {/* Column 3: Resources & Info */}
           <div className="md:col-span-3 space-y-3">
-            <h5 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Resources & Info</h5>
+            <h4 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Resources & Info</h4>
             <nav aria-label="Resources and information">
               <div className="flex flex-col gap-2 font-mono text-[10px] uppercase tracking-wider">
               <Link
@@ -103,7 +103,7 @@ export default function Footer({ handleMouseEnterSection, handleMouseLeaveSectio
           {/* Column 4: Legal & Social */}
           <div className="md:col-span-2 space-y-4">
             <div className="space-y-3">
-              <h5 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Legal</h5>
+              <h4 className="font-mono text-[9px] text-flame-orange uppercase tracking-[0.2em] font-bold">Legal</h4>
               <nav aria-label="Legal pages">
                 <div className="flex flex-col gap-2 font-mono text-[10px] uppercase tracking-wider">
                 <Link
