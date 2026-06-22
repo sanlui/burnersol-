@@ -71,12 +71,14 @@ export default function Header({ walletBalance }: HeaderProps) {
             </div>
           )}
 
-          <div className="flex items-center gap-2.5 px-3 py-1.5 border border-white/10 text-[11px] font-mono bg-white/[0.02]" role="status" aria-label={`SOL balance: ${walletBalance.toFixed(2)}`}>
-            <span className="text-white font-bold">
-              {walletBalance.toFixed(2)}
-            </span>
-            <span className="text-[9px] text-slate-500 font-bold">SOL</span>
-          </div>
+{connected && (
+            <div className="flex items-center gap-2.5 px-3 py-1.5 border border-white/10 text-[11px] font-mono bg-white/[0.02]" role="status" aria-label={`SOL balance: ${walletBalance.toFixed(2)}`}>
+              <span className="text-white font-bold">
+                {walletBalance.toFixed(2)}
+              </span>
+              <span className="text-[9px] text-slate-500 font-bold">SOL</span>
+            </div>
+          )}
 
           {connecting ? (
             <button

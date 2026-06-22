@@ -75,8 +75,8 @@ const handleMouseLeaveSection = () => {
   }, []);
 
   // Wallet Balances (Synchronized)
-  const [walletBalance, setWalletBalance] = useState(1.452); // SOL
-  const [burnerBalance, setBurnerBalance] = useState(125000); // $BURNER
+  const [walletBalance, setWalletBalance] = useState(0); // SOL
+  const [burnerBalance, setBurnerBalance] = useState(0); // $BURNER
 
   // Web3 Dynamic Wallet State & Connections (from wallet adapter)
   const { publicKey, wallet, connected, sendTransaction, connection } = useSafeWallet();
