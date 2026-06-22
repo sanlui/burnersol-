@@ -2,12 +2,14 @@
  * BurnerSol - RPC Resilience & DOS Protection Layer for Solana Mainnet Connection
  * Includes request throttling, concurrency limiting, request deduplication,
  * global retry restrictions, and token payload capping.
+ * 
+ * SECURITY: RPC calls should be made through server-side API routes to avoid
+ * exposing API keys in the client bundle. This module uses public RPC endpoints only.
  */
 
-// Global constant fallback endpoints
-const PRIMARY_SOLANA_RPC = import.meta.env.VITE_SOLANA_RPC_URL || "https://solana-mainnet.g.alchemy.com/v2/XhvbwzXZcW2UhCcCj5cC1";
+// Public fallback endpoints (no API key required)
+const PUBLIC_SOLANA_RPC = "https://api.mainnet-beta.solana.com";
 const FALLBACK_SOLANA_RPC = "https://solana-api.projectserum.com";
-const HELIUS_RPC = `https://mainnet.helius-rpc.com/?api-key=${import.meta.env.VITE_HELIUS_API_KEY || ""}`;
 
 // Cache for active requests to allow immediate deduplication
 const activePromises = new Map<string, Promise<any>>();
@@ -153,19 +155,14 @@ export async function executeResilientRpc(
   };
 
   try {
-    return await tryNode(PRIMARY_SOLANA_RPC);
+    return await tryNode(PUBLIC_SOLANA_RPC);
   } catch (primaryError) {
-    console.warn("Primary Alchemy RPC failed. Trying Helius...");
+    console.warn("Primary Solana public RPC failed. Trying Serum fallback...");
     try {
-      return await tryNode(HELIUS_RPC);
-    } catch (heliusError) {
-      console.warn("Helius RPC failed. Retrying with Serum public fallback...");
-      try {
-        return await tryNode(FALLBACK_SOLANA_RPC);
-      } catch (fallbackError) {
-        console.error("All resilient RPC attempts failed.", fallbackError);
-        return null;
-      }
+      return await tryNode(FALLBACK_SOLANA_RPC);
+    } catch (fallbackError) {
+      console.error("All resilient RPC attempts failed.", fallbackError);
+      return null;
     }
   }
 }
@@ -272,70 +269,21 @@ export async function fetchHeliusAllAssetsDAS(walletAddress: string): Promise<He
 
   try {
     while (page <= MAX_PAGES) {
+      // Route through server-side API to avoid exposing API keys
       const response = await executeResilientFetch<any>(
-        HELIUS_RPC,
+        `/api/solana/scan`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            jsonrpc: "2.0",
-            id: 1,
-            method: "getAssetsByOwner",
-            params: {
-              ownerAddress: walletAddress,
-              page,
-              limit: PAGE_SIZE,
-              sortBy: { sortBy: "created", sortDirection: "desc" },
-            }
-          }),
+          body: JSON.stringify({ walletAddress, page, pageSize: PAGE_SIZE }),
         },
         12000,
         2
       );
 
-      if (!response?.result?.items || response.result.items.length === 0) break;
+      if (!response?.items || response.items.length === 0) break;
 
-      // === FULL HELIUS DAS LOG ===
-      console.log("[DAS] getAssetsByOwner PAGE", page, "- Total items in response:", response.result.items.length);
-      if (page === 1 && response.result.items.length > 0) {
-        console.log("[DAS] === FULL RAW ITEM #0 (complete object) ===");
-        console.log(JSON.stringify(response.result.items[0], null, 2));
-        console.log("[DAS] === FIELD-BY-FIELD EXTRACTION for item #0 ===");
-        const sample = response.result.items[0];
-        console.log({
-          "item.id": sample.id,
-          "item.interface": sample.interface,
-          "item.content": sample.content,
-          "item.content.links": sample.content?.links,
-          "item.content.metadata": sample.content?.metadata,
-          "item.content.metadata.name": sample.content?.metadata?.name,
-          "item.content.metadata.symbol": sample.content?.metadata?.symbol,
-          "item.content.metadata.description": sample.content?.metadata?.description,
-          "item.content.metadata.attributes": sample.content?.metadata?.attributes,
-          "item.content.links.image": sample.content?.links?.image,
-          "item.token_info": sample.token_info,
-          "item.token_info.decimals": sample.token_info?.decimals,
-          "item.token_info.balance": sample.token_info?.balance,
-          "item.token_info.supply": sample.token_info?.supply,
-          "item.token_info.token_program": sample.token_info?.token_program,
-          "item.account_info": sample.account_info,
-          "item.account_info.lamports": sample.account_info?.lamports,
-          "item.grouping": sample.grouping,
-          "item.compression": sample.compression,
-          "item.creators": sample.creators,
-          "item.seller_fee_basis_points": sample.seller_fee_basis_points,
-          "item.supply": sample.supply,
-          "item.frozen": sample.frozen,
-        });
-        // Log ALL top-level keys
-        console.log("[DAS] All top-level keys of item:", Object.keys(sample));
-        if (sample.content) console.log("[DAS] All keys of content:", Object.keys(sample.content));
-        if (sample.content?.metadata) console.log("[DAS] All keys of metadata:", Object.keys(sample.content.metadata));
-        if (sample.content?.links) console.log("[DAS] All keys of links:", Object.keys(sample.content.links));
-      }
-      // === END LOG ===
-
-      for (const item of response.result.items) {
+      for (const item of response.items) {
         const content = item.content || {};
         const metadata = content.metadata || {};
         const links = content.links || {};
@@ -392,7 +340,7 @@ export async function fetchHeliusAllAssetsDAS(walletAddress: string): Promise<He
         });
       }
 
-      if (response.result.items.length < PAGE_SIZE) break;
+      if (response.items.length < PAGE_SIZE) break;
       page++;
     }
   } catch (error) {

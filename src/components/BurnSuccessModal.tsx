@@ -52,7 +52,7 @@ export default function BurnSuccessModal({
         {/* Icon header */}
         <div className="flex flex-col items-center justify-center text-center gap-3 py-4">
           <div className="w-12 h-12 bg-flame-orange transform rotate-45 flex items-center justify-center border border-black animate-pulse">
-            <img src="/fire.gif" alt="Flame" className="w-5 h-5 object-contain -rotate-45" loading="lazy" aria-hidden="true" />
+            <img src="/fire.png" alt="Flame" className="w-5 h-5 object-contain -rotate-45" loading="lazy" aria-hidden="true" />
           </div>
           <div className="space-y-1">
             <h3 id="burn-success-title" className="font-display font-bold italic text-white text-xl tracking-wide uppercase mt-4">

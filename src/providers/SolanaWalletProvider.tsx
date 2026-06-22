@@ -64,7 +64,7 @@ function WalletProviderInner({ children }: Props) {
 
         if (cancelled) return;
 
-        const endpoint = `https://mainnet.helius-rpc.com/?api-key=${import.meta.env.VITE_HELIUS_API_KEY || ""}`;
+        const endpoint = "https://api.mainnet-beta.solana.com";
         const {
           ConnectionProvider: CP,
           WalletProvider: WP,

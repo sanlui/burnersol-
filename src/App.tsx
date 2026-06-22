@@ -1,8 +1,6 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, lazy } from "react";
 import confetti from "canvas-confetti";
 import ScannerTerminal from "./components/ScannerTerminal";
-import GlobalBurnFeed from "./components/GlobalBurnFeed";
-import CombustionChamber from "./components/CombustionChamber";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import BurnSuccessModal from "./components/BurnSuccessModal";
@@ -15,6 +13,9 @@ import { simulateAndValidateBurn } from "./utils/transactionSafety";
 import { saveBurnTransaction, loadBurnHistory } from "./utils/burnHistory";
 import { useSafeWallet } from "./providers/SolanaWalletProvider";
 import { ORIGINAL_CHART_DATA } from "./constants/footerDetails";
+
+const GlobalBurnFeed = lazy(() => import("./components/GlobalBurnFeed"));
+const CombustionChamber = lazy(() => import("./components/CombustionChamber"));
 
 interface PriceAlert {
   id: string;
@@ -507,7 +508,7 @@ const loadInitialTxs = (): BurnTransaction[] => {
                 {t.heroHeadingReclaim} <span className="font-serif font-light text-slate-300">SOL</span>.
               </h1>
               
-              <p className="max-w-xl text-sm sm:text-base text-slate-400 leading-relaxed font-light">
+              <p className="max-w-xl text-sm sm:text-base text-slate-300 leading-relaxed font-light">
                 {t.heroSubtitle}
               </p>
             </div>

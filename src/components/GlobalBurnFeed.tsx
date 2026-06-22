@@ -123,7 +123,7 @@ export default function GlobalBurnFeed({ personalBurnHistory = [] }: GlobalBurnF
 
       <div className="px-6 py-5 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/[0.01]">
         <div className="flex items-center gap-3">
-          <img src="/fire.gif" alt="" className="w-10 h-10" loading="lazy" aria-hidden="true" />
+          <img src="/fire.png" alt="" className="w-10 h-10" loading="lazy" aria-hidden="true" />
           <div className="text-left">
             <h3 className="font-display font-bold italic text-white tracking-widest uppercase text-xs">
               {labels.globalFeedTitle}

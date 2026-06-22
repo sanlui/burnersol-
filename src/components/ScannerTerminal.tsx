@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TrashItem } from "../types";
 import { validateBurnability } from "../utils/burnTransaction";
 import {
@@ -210,6 +210,16 @@ export default function ScannerTerminal({
   const [burnPreview, setBurnPreview] = useState<BurnPreviewReport | null>(null);
   const [burnIntensity, setBurnIntensity] = useState(1);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const progressTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (progressTimerRef.current) {
+        clearInterval(progressTimerRef.current);
+        progressTimerRef.current = null;
+      }
+    };
+  }, []);
 
   const runWalletScan = async (address: string | null) => {
     if (!address || address.length < 32) {
@@ -224,10 +234,9 @@ export default function ScannerTerminal({
     setExpandedItemId(null);
     setScanSource("alchemy-mainnet");
 
-    let progressTimer: NodeJS.Timeout;
     let progressVal = 0;
 
-    progressTimer = setInterval(() => {
+    progressTimerRef.current = setInterval(() => {
       progressVal += Math.floor(Math.random() * 15) + 5;
       if (progressVal >= 90) progressVal = 90;
       setScanProgress(progressVal);
@@ -244,7 +253,7 @@ export default function ScannerTerminal({
       if (resp.ok) {
         const data = await resp.json();
         if (data && data.success && data.items && data.items.length > 0) {
-          clearInterval(progressTimer);
+          if (progressTimerRef.current) clearInterval(progressTimerRef.current);
           const scannedItems = enforceSpamThresholdCapping(data.items || []);
           const computedItems = scannedItems.map((item: TrashItem) => ({
             ...item,
@@ -429,7 +438,7 @@ export default function ScannerTerminal({
         ...item,
       }));
 
-      clearInterval(progressTimer);
+      if (progressTimerRef.current) clearInterval(progressTimerRef.current);
       setItems(computedItems);
       setScanSource("alchemy-mainnet");
       setScanProgress(100);
@@ -441,7 +450,7 @@ export default function ScannerTerminal({
       console.error("Client-side RPC fallback also failed:", rpcErr);
     }
 
-    clearInterval(progressTimer);
+    if (progressTimerRef.current) clearInterval(progressTimerRef.current);
     setItems([]);
     setScanSource("alchemy-mainnet");
     setScanProgress(100);
@@ -801,7 +810,7 @@ export default function ScannerTerminal({
           </div>
         ) : !walletAddress && items.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center py-6 gap-5 text-center">
-            <img src="/fire.gif" alt="Coins" className="w-8 h-8 object-cover rounded-full" loading="lazy" aria-hidden="true" />
+            <img src="/fire.png" alt="Coins" className="w-10 h-10 object-cover rounded-full" loading="lazy" aria-hidden="true" />
             <div className="space-y-1 max-w-md">
               <h4 className="font-display font-medium text-white text-xs uppercase tracking-widest">
                 REAL-TIME DIAGNOSTICS

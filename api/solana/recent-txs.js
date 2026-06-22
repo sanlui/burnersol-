@@ -1,5 +1,5 @@
-const HELIUS_RPC = "https://mainnet.helius-rpc.com/?api-key=228a6dca-c288-4f6a-b85c-23561fb9e946";
-const ALCHEMY_RPC = "https://solana-mainnet.g.alchemy.com/v2/XhvbwzXZcW2UhCcCj5cC1";
+const HELIUS_RPC = `https://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY || ""}`;
+const ALCHEMY_RPC = process.env.ALCHEMY_SOLANA_RPC_URL || "";
 
 const KNOWN_MINTS = {
   "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": "USDC",
@@ -72,7 +72,8 @@ function buildItem(sig, signer, asset, amount, solReclaimed, fee, slot, ageLabel
 }
 
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  const allowedOrigin = process.env.ALLOWED_ORIGIN || "https://burnersol.com";
+  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "OPTIONS") return res.status(200).end();

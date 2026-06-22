@@ -25,7 +25,7 @@ export default function SwapTerminal({
     swapImpactLabel: "SLIPPAGE IMPACT",
     swapButtonActive: "SWAPPING...",
     swapButtonLabel: "SWAP NOW",
-    swapSecuredBy: "SECURED BY JUPITER AGGREGATOR",
+    swapSecuredBy: "BURNERSOL PROTOCOL v1.0",
   };
 
   const [fromToken, setFromToken] = useState<"SOL" | "BURNER">("SOL");
@@ -213,7 +213,7 @@ export default function SwapTerminal({
           <div className="flex items-center justify-between">
             <span className="text-[10px] uppercase tracking-widest text-slate-500">{t.swapRouteLabel}</span>
             <span className="text-emerald-400 flex items-center gap-1 text-[11px] font-bold">
-              {t.swapRouteLabel === "ROUTE PATHING" ? "JUPITER DIRECT API" : t.swapRouteLabel === "PERCORSO DEL ROUTER" ? "API JUPITER DIRETTA" : "JUPITER MAINNET API"} <Zap className="w-3 h-3 fill-emerald-400" />
+              {t.swapRouteLabel === "ROUTE PATHING" ? "BURN PROTOCOL" : "PROTOCOLLO BURN"} <Zap className="w-3 h-3 fill-emerald-400" />
             </span>
           </div>
           <div className="flex items-center justify-between">
