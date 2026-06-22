@@ -41,10 +41,11 @@ export default function FooterHUD({
         </div>
         <button
           onClick={() => setHoveredSection(null)}
+          aria-label="Close info portal"
           className="p-1 hover:bg-white/10 text-slate-500 hover:text-white transition-all cursor-pointer border border-transparent hover:border-white/10"
           title="Close"
         >
-          <X className="w-3.5 h-3.5" />
+          <X className="w-3.5 h-3.5" aria-hidden="true" />
         </button>
       </div>
 

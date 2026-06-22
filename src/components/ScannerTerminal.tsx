@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { TrashItem } from "../types";
+import { validateBurnability } from "../utils/burnTransaction";
 import {
-  ShieldAlert, 
-  Trash2, 
-  Sparkle, 
-  RefreshCw, 
-  Layers, 
-  Image as ImageIcon, 
-  Check, 
+  ShieldAlert,
+  Trash2,
+  Sparkle,
+  RefreshCw,
+  Layers,
+  Image as ImageIcon,
+  Check,
   AlertTriangle,
   ChevronDown,
   ChevronUp,
@@ -27,6 +28,8 @@ import ResilientImage from "./ResilientImage";
 
 interface ScannerTerminalProps {
   walletAddress?: string | null;
+  walletPublicKey?: any;
+  connection?: any;
   onBurnSelect: (items: TrashItem[], intensity: number) => void;
   isBurning: boolean;
   walletBalance: number;
@@ -185,6 +188,8 @@ const ENRICHED_DEFAULT_TRASH_ITEMS: TrashItem[] = RAW_TRASH_ITEMS.map((item) => 
 
 export default function ScannerTerminal({
   walletAddress,
+  walletPublicKey,
+  connection,
   onBurnSelect,
   isBurning,
   walletBalance,
@@ -205,8 +210,6 @@ export default function ScannerTerminal({
   const [burnPreview, setBurnPreview] = useState<BurnPreviewReport | null>(null);
   const [burnIntensity, setBurnIntensity] = useState(1);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
-
-  const fetchGasEstimate = async () => {};
 
   const runWalletScan = async (address: string | null) => {
     if (!address || address.length < 32) {
@@ -330,6 +333,24 @@ export default function ScannerTerminal({
         const riskInputs = getSimulatedInfo(name, symbol, isSpam);
         const report = evaluateAssetRisk(name, symbol, riskInputs);
 
+        const tempItemForCheck = {
+          id: mint,
+          name,
+          symbol,
+          type,
+          amount: tokenBalance,
+          valueUsd: 0,
+          reclaimableSol,
+          decimals,
+          mintAddress: mint,
+          isScam: isSpam || report.level === "SCAM",
+          descriptor,
+          riskReport: report,
+          inputs: riskInputs,
+        };
+
+        const isItemBurnable = determineBurnability(tempItemForCheck);
+
         rpcItems.push({
           id: mint,
           name,
@@ -364,6 +385,24 @@ export default function ScannerTerminal({
         const riskInputs = getSimulatedInfo(name, symbol, isSpam);
         const report = evaluateAssetRisk(name, symbol, riskInputs);
 
+        const tempFungibleItem = {
+          id: ft.pubkey,
+          name,
+          symbol,
+          type: "token" as const,
+          amount: ft.uiAmount,
+          valueUsd: 0,
+          reclaimableSol: 0.002039,
+          decimals: ft.decimals,
+          mintAddress: ft.mint,
+          isScam: isSpam || report.level === "SCAM",
+          descriptor: `${symbol} — Fungible token, ${ft.uiAmount.toLocaleString()} units.`,
+          riskReport: report,
+          inputs: riskInputs,
+        };
+
+        const isFungibleBurnable = determineBurnability(tempFungibleItem);
+
         rpcItems.push({
           id: ft.pubkey,
           name,
@@ -378,7 +417,7 @@ export default function ScannerTerminal({
           isScam: isSpam || report.level === "SCAM",
           descriptor: `${symbol} — Fungible token, ${ft.uiAmount.toLocaleString()} units.`,
           riskReport: report,
-          selected: isSpam,
+          selected: isSpam && isFungibleBurnable,
           metadataSource: "helius" as const,
           inputs: riskInputs,
         });
@@ -388,50 +427,14 @@ export default function ScannerTerminal({
 
       const computedItems = allItems.map(item => ({
         ...item,
-        isBurnable: determineBurnability(item),
       }));
-
-      // === FRONTEND MAPPING LOG ===
-      if (computedItems.length > 0) {
-        console.log("[DAS->Frontend] Total items mapped:", computedItems.length);
-        console.log("[DAS->Frontend] === FIRST MAPPED TrashItem (raw) ===");
-        console.log(JSON.stringify(computedItems[0], null, 2));
-        console.log("[DAS->Frontend] === Field check for first item ===");
-        const fi = computedItems[0];
-        console.log({
-          id: fi.id,
-          name: fi.name,
-          name_undefined: fi.name === undefined,
-          symbol: fi.symbol,
-          symbol_undefined: fi.symbol === undefined,
-          type: fi.type,
-          amount: fi.amount,
-          amount_undefined: fi.amount === undefined,
-          valueUsd: fi.valueUsd,
-          reclaimableSol: fi.reclaimableSol,
-          decimals: fi.decimals,
-          decimals_undefined: fi.decimals === undefined,
-          mintAddress: fi.mintAddress,
-          imageUrl: fi.imageUrl,
-          imageUrl_undefined: fi.imageUrl === undefined,
-          isScam: fi.isScam,
-          descriptor: fi.descriptor,
-          descriptor_undefined: fi.descriptor === undefined,
-          riskReport: fi.riskReport,
-          riskReport_undefined: fi.riskReport === undefined,
-          selected: fi.selected,
-          metadataSource: fi.metadataSource,
-          inputs: fi.inputs,
-          isBurnable: fi.isBurnable,
-        });
-      }
-      // === END LOG ===
 
       clearInterval(progressTimer);
       setItems(computedItems);
       setScanSource("alchemy-mainnet");
       setScanProgress(100);
       setIsScanning(false);
+
       return;
 
     } catch (rpcErr) {
@@ -494,6 +497,22 @@ export default function ScannerTerminal({
 
     queryLiveJupiterPrices();
   }, [isScanning]);
+
+  useEffect(() => {
+    if (!walletPublicKey || !connection || items.length === 0 || isScanning) return;
+
+    const validateItemsOnChain = async () => {
+      const updatedItems = await Promise.all(
+        items.map(async (item) => {
+          const status = await validateBurnability(item, walletPublicKey, connection);
+          return { ...item, burnStatus: status };
+        })
+      );
+      setItems(updatedItems);
+    };
+
+    validateItemsOnChain();
+  }, [items.length, walletPublicKey, connection, isScanning]);
 
   // Retrieve the backend burn preview / simulation report
   const selectedItems = items.filter(i => i.selected);
@@ -667,9 +686,10 @@ export default function ScannerTerminal({
           onClick={handleScan}
           onMouseEnter={() => sound.playHoverPluck()}
           disabled={isScanning || isBurning}
+          aria-label={isScanning ? t.step1Badge : t.p_diagnostics}
           className="flex items-center gap-2 px-4 py-2 text-[10px] font-mono rounded-none border border-white/20 hover:border-white hover:bg-white hover:text-black disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 uppercase tracking-widest cursor-pointer"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${isScanning ? "animate-spin" : ""}`} />
+          <RefreshCw className={`w-3.5 h-3.5 ${isScanning ? "animate-spin" : ""}`} aria-hidden="true" />
           {isScanning ? t.step1Badge + "..." : t.p_diagnostics.toUpperCase()}
         </button>
       </div>
@@ -781,7 +801,7 @@ export default function ScannerTerminal({
           </div>
         ) : !walletAddress && items.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center py-6 gap-5 text-center">
-            <img src="/fire.gif" alt="Coins" className="w-8 h-8 object-cover rounded-full" />
+            <img src="/fire.gif" alt="Coins" className="w-8 h-8 object-cover rounded-full" loading="lazy" aria-hidden="true" />
             <div className="space-y-1 max-w-md">
               <h4 className="font-display font-medium text-white text-xs uppercase tracking-widest">
                 REAL-TIME DIAGNOSTICS
@@ -932,15 +952,11 @@ export default function ScannerTerminal({
                           {level}: {score}%
                         </span>
                         <span className="text-slate-500">•</span>
-                        {item.isBurnable === true ? (
-                          <span className="px-1.5 py-0.5 border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 text-[9px] font-bold uppercase tracking-wider">
-                            Bruciabile
-                          </span>
-                        ) : (
-                          <span className="px-1.5 py-0.5 border border-red-500/30 bg-red-950/40 text-red-400 text-[9px] font-bold uppercase tracking-wider">
-                            Non Bruciabile
-                          </span>
-                        )}
+                        <div className={`w-2.5 h-2.5 rounded-sm ${
+                            item.burnStatus === 'valid' ? 'bg-emerald-400' :
+                            item.burnStatus === 'unknown' ? 'bg-yellow-400' :
+                            'bg-red-500'
+                          }`} title={`On-chain: ${item.burnStatus || 'checking...'}`} />
                         <span className="text-slate-500">•</span>
                         <span className="text-slate-400 font-bold flex items-center gap-0.5 text-orange-400/90">
                           <Percent className="w-2.5 h-2.5" />

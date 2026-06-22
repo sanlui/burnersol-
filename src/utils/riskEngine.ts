@@ -142,15 +142,57 @@ export function evaluateAssetRisk(
   };
 }
 
+const PROTECTED_PROTOCOL_NAMES = [
+  "WATCHSOL",
+  "CFL",
+  "GACHA",
+  "BURNERSOL",
+  "BURNER",
+  "BSOL",
+];
+
+function isProtectedProtocolAsset(item: TrashItem): boolean {
+  const name = (item.name || item.symbol || "").toUpperCase();
+  return PROTECTED_PROTOCOL_NAMES.some(x => name.includes(x));
+}
+
+const KNOWN_VALUABLE_TOKENS = [
+  "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", // USDC
+  "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", // USDT
+  "So11111111111111111111111111111111111111112", // WSOL
+  "JUPyiwrYJF2ip9vdJjN2BLm9S85FmP9X9bJ65h6Nzo6", // JUP
+  "DezXAZ8z7PnrnRJjz3wX4mP97EGAtfA6AtC8Zq1A2Uq", // BONK
+  "mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So", // mSOL
+  "7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj", // stSOL
+];
+
 /**
- * Determines if an asset is safely burnable based on risk, value, and type.
+ * Determines if an asset is technically burnable.
+ *
+ * GREEN = can be burned (technical capability exists)
+ * RED = cannot be burned (technical barrier)
+ *
+ * Value/risk assessment is purely informational - user decides what to burn.
  */
 export function determineBurnability(item: TrashItem): boolean {
   if (item.type === "account") return true;
   if (item.type === "nft") return true;
   if (item.type === "lp") return true;
-  if (item.type === "token") return true;
-  return true;
+
+  if (item.type === "token") {
+    const hasValidMint = item.mintAddress && item.mintAddress.length >= 32;
+    if (!hasValidMint) return false;
+
+    const hasPositiveAmount = item.amount && item.amount > 0;
+    if (hasPositiveAmount) return true;
+
+    const hasReclaimableSol = item.reclaimableSol && item.reclaimableSol > 0;
+    if (hasReclaimableSol) return true;
+
+    return false;
+  }
+
+  return false;
 }
 
 /**

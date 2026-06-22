@@ -12,7 +12,7 @@ const SOL_MINT = "So11111111111111111111111111111111111111112";
 export default function Header({ walletBalance }: HeaderProps) {
   const { publicKey, connecting, connected, disconnecting, disconnect, setVisible } =
     useSafeWallet();
-  const [solPrice, setSolPrice] = useState<number | null>(null);
+  const [solPrice, setSolPrice] = useState<number>(-1);
 
   const shortAddress = publicKey
     ? `${publicKey.toBase58().slice(0, 5)}...${publicKey.toBase58().slice(-4)}`
@@ -23,13 +23,19 @@ export default function Header({ walletBalance }: HeaderProps) {
       try {
         const controller = new AbortController();
         const id = setTimeout(() => controller.abort(), 5000);
-        const res = await fetch(`/api/jupiter/price?ids=${SOL_MINT}`, { signal: controller.signal });
+        const res = await fetch(`https://api.jup.ag/price/v2?ids=${SOL_MINT}`, { signal: controller.signal });
         clearTimeout(id);
-        if (!res.ok) return;
+        if (!res.ok) {
+          setSolPrice(-1);
+          return;
+        }
         const data = await res.json();
         const price = data?.data?.[SOL_MINT]?.price;
         if (price) setSolPrice(Number(price));
-      } catch {}
+        else setSolPrice(-1);
+      } catch {
+        setSolPrice(-1);
+      }
     };
 
     fetchPrice();
@@ -58,7 +64,7 @@ export default function Header({ walletBalance }: HeaderProps) {
         </div>
 
         <nav className="flex items-center gap-3 sm:gap-4 shrink-0" aria-label="Wallet connection">
-          {solPrice && (
+          {solPrice >= 0 && (
             <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 text-[11px] font-mono bg-white/[0.02]" role="status" aria-live="polite">
               <TrendingUp className="w-3 h-3 text-emerald-400" aria-hidden="true" />
               <span className="text-emerald-400 font-bold">${solPrice.toFixed(2)}</span>

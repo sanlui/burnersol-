@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
 
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' wss: https: http:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.googletagmanager.com/gtag; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' wss: https: http:; base-uri 'self'; form-action 'self';" />
 
     <script id="sandbox-polyfill-patch">
       (function() {
@@ -23,7 +23,7 @@
           defineOn(window);
           defineOn(Window.prototype);
           defineOn(globalThis);
-          
+
           if (window.navigator && window.navigator.sendBeacon) {
             let currentSendBeacon = window.navigator.sendBeacon;
             const defineSB = (obj) => {
@@ -45,30 +45,30 @@
         }
       })();
     </script>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes" />
     <meta name="theme-color" content="#030303" />
-    
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
-    
-    <link rel="canonical" href="https://burnersol.io" />
-    <link rel="alternate" hreflang="x-default" href="https://burnersol.io" />
-    <link rel="alternate" hreflang="en" href="https://burnersol.io/?lang=en" />
-    <link rel="alternate" hreflang="es" href="https://burnersol.io/?lang=es" />
-    <link rel="alternate" hreflang="pt" href="https://burnersol.io/?lang=pt" />
-    <link rel="alternate" hreflang="fr" href="https://burnersol.io/?lang=fr" />
-    <link rel="alternate" hreflang="de" href="https://burnersol.io/?lang=de" />
-    <link rel="alternate" hreflang="it" href="https://burnersol.io/?lang=it" />
-    <link rel="alternate" hreflang="tr" href="https://burnersol.io/?lang=tr" />
-    <link rel="alternate" hreflang="ru" href="https://burnersol.io/?lang=ru" />
-    <link rel="alternate" hreflang="ja" href="https://burnersol.io/?lang=ja" />
-    <link rel="alternate" hreflang="ko" href="https://burnersol.io/?lang=ko" />
-    <link rel="alternate" hreflang="zh" href="https://burnersol.io/?lang=zh" />
+
+    <link rel="canonical" href="https://www.burnersol.com" />
+    <link rel="alternate" hreflang="x-default" href="https://www.burnersol.com" />
+    <link rel="alternate" hreflang="en" href="https://www.burnersol.com/?lang=en" />
+    <link rel="alternate" hreflang="es" href="https://www.burnersol.com/?lang=es" />
+    <link rel="alternate" hreflang="pt" href="https://www.burnersol.com/?lang=pt" />
+    <link rel="alternate" hreflang="fr" href="https://www.burnersol.com/?lang=fr" />
+    <link rel="alternate" hreflang="de" href="https://www.burnersol.com/?lang=de" />
+    <link rel="alternate" hreflang="it" href="https://www.burnersol.com/?lang=it" />
+    <link rel="alternate" hreflang="tr" href="https://www.burnersol.com/?lang=tr" />
+    <link rel="alternate" hreflang="ru" href="https://www.burnersol.com/?lang=ru" />
+    <link rel="alternate" hreflang="ja" href="https://www.burnersol.com/?lang=ja" />
+    <link rel="alternate" hreflang="ko" href="https://www.burnersol.com/?lang=ko" />
+    <link rel="alternate" hreflang="zh" href="https://www.burnersol.com/?lang=zh" />
 
     <title>Recover SOL | Solana Wallet Cleaner &amp; Rent Recovery Tool | BurnerSOL</title>
-    <meta name="description" content="Recover locked SOL from unused token accounts on Solana. Close empty SPL accounts, remove spam NFTs, and reclaim wallet rent with BurnerSOL — the fastest non-custodial Solana wallet cleaner." />
+    <meta name="description" content="Recover locked SOL from unused token accounts on Solana. Close empty SPL accounts, remove spam NFTs, and reclaim wallet rent with BurnerSOL." />
     <meta name="keywords" content="recover SOL, reclaim SOL, Solana rent recovery, wallet cleanup, Solana wallet cleaner, close token accounts, remove spam NFTs, close SPL token accounts, recover token account rent, burn unwanted tokens, Phantom wallet cleanup, Solflare wallet cleanup, SOL rent reclaim" />
     <meta name="author" content="BurnerSOL" />
     
@@ -77,29 +77,40 @@
     <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://burnersol.io" />
-    <meta property="og:title" content="Recover SOL | Solana Wallet Cleaner & Rent Recovery Tool | BurnerSOL" />
+    <meta property="og:url" content="https://www.burnersol.com" />
+    <meta property="og:title" content="Recover SOL | Solana Wallet Cleaner & Rent Tool | BurnerSOL" />
     <meta property="og:description" content="Recover locked SOL from unused token accounts on Solana. Close empty SPL accounts, remove spam NFTs, and reclaim wallet rent with BurnerSOL." />
-    <meta property="og:image" content="https://burnersol.io/token-logo.png" />
+    <meta property="og:image" content="https://www.burnersol.com/token-logo.png" />
     <meta property="og:site_name" content="BurnerSOL" />
     <meta property="og:locale" content="en_US" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Recover SOL | Solana Wallet Cleaner & Rent Recovery Tool | BurnerSOL" />
+    <meta name="twitter:title" content="Recover SOL | Solana Wallet Cleaner & Rent Tool | BurnerSOL" />
     <meta name="twitter:description" content="Recover locked SOL from unused token accounts. Close empty SPL accounts, remove spam NFTs, and reclaim wallet rent on Solana." />
-    <meta name="twitter:image" content="https://burnersol.io/token-logo.png" />
+    <meta name="twitter:image" content="https://www.burnersol.com/token-logo.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://solana-mainnet.g.alchemy.com" />
+    <link rel="preconnect" href="https://mainnet.helius-rpc.com" />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://solana-mainnet.g.alchemy.com" />
+    <link rel="dns-prefetch" href="https://mainnet.helius-rpc.com" />
+
+    <!-- Google Analytics GA4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "@id": "https://burnersol.io/#application",
+      "@id": "https://www.burnersol.com/#application",
       "name": "BurnerSOL — Solana Wallet Cleaner & Rent Recovery Tool",
       "operatingSystem": "All modern web browsers",
       "applicationCategory": "DeFiApplication",
@@ -121,13 +132,13 @@
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "@id": "https://burnersol.io/#website",
-      "url": "https://burnersol.io",
+      "@id": "https://www.burnersol.com/#website",
+      "url": "https://www.burnersol.com",
       "name": "BurnerSOL",
       "description": "Recover SOL and clean your Solana wallet with BurnerSOL",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://burnersol.io/?search={search_term_string}",
+        "target": "https://www.burnersol.com/?search={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     }
@@ -136,23 +147,72 @@
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "@id": "https://burnersol.io/#organization",
+      "@id": "https://www.burnersol.com/#organization",
       "name": "BurnerSOL",
-      "url": "https://burnersol.io",
-      "logo": "https://burnersol.io/token-logo.png",
+      "url": "https://www.burnersol.com",
+      "logo": "https://www.burnersol.com/token-logo.png",
+      "description": "Non-custodial Solana wallet cleaner for recovering locked SOL from unused token accounts.",
       "sameAs": [
         "https://twitter.com/burnersol",
-        "https://github.com/burnersol"
-      ]
+        "https://x.com/50Buiz",
+        "https://github.com/sanlui/burnersol-",
+        "https://discord.gg/wrDUNuB5"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": ["English"]
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://www.burnersol.com/#business",
+      "name": "BurnerSOL",
+      "description": "Solana wallet cleaner and rent recovery tool",
+      "url": "https://www.burnersol.com",
+      "logo": "https://www.burnersol.com/token-logo.png",
+      "priceRange": "Free",
+      "serviceType": "Cryptocurrency Wallet Cleanup Service",
+      "areaServed": "Worldwide",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Wallet Cleaning Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "SPL Token Account Cleanup"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "NFT Spam Removal"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Rent Recovery"
+            }
+          }
+        ]
+      }
     }
     </script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "@id": "https://burnersol.io/#webapp",
+      "@id": "https://www.burnersol.com/#webapp",
       "name": "BurnerSOL — Solana Wallet Cleaner",
-      "url": "https://burnersol.io",
+      "url": "https://www.burnersol.com",
       "description": "Free non-custodial Solana wallet cleaner. Recover SOL from unused token accounts, close empty SPL and Token-2022 accounts, remove spam NFTs, and reclaim wallet rent.",
       "applicationCategory": "DeFiApplication",
       "operatingSystem": "Any",

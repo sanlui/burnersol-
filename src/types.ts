@@ -1,5 +1,7 @@
 export type RiskLevel = "SAFE" | "SUSPICIOUS" | "HIGH_RISK" | "SCAM";
 
+export type BurnStatus = "valid" | "invalid" | "unknown";
+
 export interface RiskReport {
   score: number;
   confidence: number;
@@ -26,6 +28,7 @@ export interface TrashItem {
   riskReport?: RiskReport;
   metadataSource?: "helius" | "rpc" | "local";
   inputs?: RiskCategoryInputs;
+  burnStatus?: BurnStatus;
 }
 
 export interface RiskCategoryInputs {

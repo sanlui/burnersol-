@@ -1,0 +1,55 @@
+# BurnerSOL - Solana Wallet Cleaner & Rent Recovery Tool
+
+## Overview
+BurnerSOL is a non-custodial Solana wallet cleaner that helps users recover locked SOL from unused token accounts, close empty SPL accounts, remove spam NFTs, and reclaim wallet rent deposits.
+
+## Key Features
+- Recover SOL from unused token accounts on Solana
+- Close empty SPL and Token-2022 accounts
+- Remove spam NFTs from wallets
+- Reclaim wallet rent deposits instantly
+- Non-custodial - never has access to your private keys
+- Works with Phantom, Solflare, Backpack, and all Solana wallets
+
+## Main URL
+https://www.burnersol.com
+
+## Supported Wallets
+- Phantom
+- Solflare
+- Backpack
+- All wallets using Solana wallet adapter standard
+
+## How It Works
+1. Connect your Solana wallet
+2. BurnerSOL scans for empty/unsued token accounts
+3. Select accounts to close
+4. Confirm transaction - rent is returned to your wallet
+
+## Technology
+- Built on Solana blockchain
+- Uses SPL Token and Token-2022 standards
+- High-performance RPC nodes (Alchemy, Helius)
+- Instant state rent recovery
+
+## Legal
+- Terms of Service: /terms
+- Privacy Policy: /privacy
+- Security practices: /security
+
+## Contact
+- Website: https://www.burnersol.com
+- Twitter/X: https://x.com/50Buiz
+- GitHub: https://github.com/sanlui/burnersol-
+- Discord: https://discord.gg/wrDUNuB5
+
+## Pages
+- / - Main wallet cleaner interface
+- /reclaim-sol - Rent recovery information
+- /how-it-works - How the protocol works
+- /about - About BurnerSOL
+- /faq - Frequently asked questions
+- /security - Security information
+- /contact - Contact information
+- /terms - Terms and conditions
+- /privacy - Privacy policy

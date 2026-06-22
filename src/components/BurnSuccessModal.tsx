@@ -52,7 +52,7 @@ export default function BurnSuccessModal({
         {/* Icon header */}
         <div className="flex flex-col items-center justify-center text-center gap-3 py-4">
           <div className="w-12 h-12 bg-flame-orange transform rotate-45 flex items-center justify-center border border-black animate-pulse">
-            <img src="/fire.gif" alt="Flame" className="w-5 h-5 object-contain -rotate-45" />
+            <img src="/fire.gif" alt="Flame" className="w-5 h-5 object-contain -rotate-45" loading="lazy" aria-hidden="true" />
           </div>
           <div className="space-y-1">
             <h3 id="burn-success-title" className="font-display font-bold italic text-white text-xl tracking-wide uppercase mt-4">
@@ -151,10 +151,11 @@ export default function BurnSuccessModal({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => sound.playHoverPluck()}
+              aria-label="Share on X (Twitter)"
               className="py-1.5 bg-[#0b0b0b]/80 border border-white/10 text-slate-300 hover:text-white hover:border-[#1d9bf0]/40 hover:bg-[#1d9bf0]/10 leading-none text-[9px] font-mono tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-1.5"
               style={{ cursor: "pointer" }}
             >
-              <Share2 className="w-3 h-3 text-[#1d9bf0] shrink-0" />
+              <Share2 className="w-3 h-3 text-[#1d9bf0] shrink-0" aria-hidden="true" />
               SHARE ON X
             </a>
           </div>

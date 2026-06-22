@@ -1,0 +1,5 @@
+Contact: mailto:security@burnersol.com
+Expires: 2027-12-31T23:59:59.000Z
+Encryption: https://www.burnersol.com/.well-known/pgp-key.txt
+Policy: https://burnersol.com/security
+Hiring: https://burnersol.com/careers

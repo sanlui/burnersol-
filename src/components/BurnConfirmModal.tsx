@@ -1,6 +1,5 @@
 import { Flame, AlertTriangle } from "lucide-react";
 import { TrashItem } from "../types";
-import { burnPreview } from "../types";
 
 interface BurnConfirmModalProps {
   showConfirm: boolean;

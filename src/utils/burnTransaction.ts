@@ -23,6 +23,46 @@ const VALID_TOKEN_PROGRAMS = new Set([
   TOKEN_2022_PROGRAM_ID.toBase58(),
 ]);
 
+export type { BurnStatus } from "../types";
+
+export async function validateBurnability(
+  item: { mintAddress?: string; type: string; id: string },
+  walletPublicKey: PublicKey,
+  connection: any
+): Promise<"valid" | "invalid" | "unknown"> {
+  try {
+    if (item.type === "account") {
+      const accountPubkey = new PublicKey(item.id);
+      const accountData = await connection.getAccountInfo(accountPubkey, "confirmed");
+      if (!accountData) return "invalid";
+      if (accountData.lamports === 0) return "invalid";
+      return "valid";
+    }
+
+    if (item.type === "nft" || item.type === "token") {
+      if (!item.mintAddress) return "invalid";
+
+      const mintPubkey = new PublicKey(item.mintAddress);
+      const tokenAccountInfo = await findTokenAccountsByOwnerAndMint(connection, walletPublicKey, mintPubkey);
+
+      if (!tokenAccountInfo) {
+        return "invalid";
+      }
+
+      return "valid";
+    }
+
+    if (item.type === "lp") {
+      return "unknown";
+    }
+
+    return "unknown";
+  } catch (err) {
+    console.warn("validateBurnability error:", err);
+    return "unknown";
+  }
+}
+
 async function findTokenAccountsByOwnerAndMint(
   connection: any,
   owner: PublicKey,
@@ -36,11 +76,13 @@ async function findTokenAccountsByOwnerAndMint(
   isWrappedSol: boolean;
 } | null> {
   try {
-    const response = await connection.getTokenAccountsByOwner(owner, {
+    const response = await connection.getParsedTokenAccountsByOwner(owner, {
       mint: mint,
     }, "confirmed");
 
     const value = response.result?.value || response.value;
+    console.log(`[Burn] Looking for token account by mint ${mint.toBase58()}, found ${value?.length || 0} accounts`);
+
     if (!value || value.length === 0) {
       return null;
     }

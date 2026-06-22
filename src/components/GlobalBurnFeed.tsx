@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  Flame,
   CheckCircle,
-  Globe,
   Search,
   ExternalLink,
-  Activity,
-  Cpu,
   X,
   RefreshCw,
-  Wallet
+  Wallet,
+  Cpu,
+  Activity
 } from "lucide-react";
 import { sound } from "../utils/audio";
 import { BurnTransaction } from "../types";
@@ -125,7 +123,7 @@ export default function GlobalBurnFeed({ personalBurnHistory = [] }: GlobalBurnF
 
       <div className="px-6 py-5 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/[0.01]">
         <div className="flex items-center gap-3">
-          <img src="/fire.gif" alt="" className="w-10 h-10" />
+          <img src="/fire.gif" alt="" className="w-10 h-10" loading="lazy" aria-hidden="true" />
           <div className="text-left">
             <h3 className="font-display font-bold italic text-white tracking-widest uppercase text-xs">
               {labels.globalFeedTitle}
@@ -154,8 +152,8 @@ export default function GlobalBurnFeed({ personalBurnHistory = [] }: GlobalBurnF
             onChange={(e) => { setSearchQuery(e.target.value); sound.playHoverPluck(); }}
           />
           {searchQuery && (
-            <button onClick={() => { setSearchQuery(""); sound.playHoverPluck(); }} className="absolute right-2.5 top-2.5">
-              <X className="w-3 h-3 text-slate-500 hover:text-white" />
+            <button onClick={() => { setSearchQuery(""); sound.playHoverPluck(); }} aria-label="Clear search" className="absolute right-2.5 top-2.5">
+              <X className="w-3 h-3 text-slate-500 hover:text-white" aria-hidden="true" />
             </button>
           )}
         </div>
@@ -163,9 +161,10 @@ export default function GlobalBurnFeed({ personalBurnHistory = [] }: GlobalBurnF
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
           <button
             onClick={() => { sound.playHoverPluck(); loadFeed(); }}
+            aria-label="Refresh feed"
             className="px-2.5 py-1 text-[8.5px] font-mono font-bold flex items-center gap-1 border border-white/10 hover:border-white/30 text-slate-400 hover:text-white transition-all"
           >
-            <RefreshCw className={`w-2.5 h-2.5 shrink-0 ${isLoading ? "animate-spin" : ""}`} />
+            <RefreshCw className={`w-2.5 h-2.5 shrink-0 ${isLoading ? "animate-spin" : ""}`} aria-hidden="true" />
           </button>
         </div>
       </div>

@@ -321,15 +321,11 @@ const loadInitialTxs = (): BurnTransaction[] => {
       return;
     }
 
-    // Secure Transaction Simulation & Pre-Flight Validation Layer
+    // On-chain validation happened during scan - burnStatus tells us if valid
+    // Just show warnings from pre-flight check
     const safetyCheck = simulateAndValidateBurn(itemsToBurn, walletBalance, 0.000005);
-    if (!safetyCheck.safe) {
-      pushNotification(`❌ Security Block: ${safetyCheck.reason}`);
-      return;
-    }
-
     if (safetyCheck.warnings && safetyCheck.warnings.length > 0) {
-      safetyCheck.warnings.forEach((warn) => pushNotification(`⚠ Safe Guard Warning: ${warn}`));
+      safetyCheck.warnings.forEach((warn) => pushNotification(`⚠ ${warn}`));
     }
 
     // Store pending items and show confirmation modal
@@ -527,8 +523,10 @@ const loadInitialTxs = (): BurnTransaction[] => {
                 
                 {/* Diagnostic List Portal (Right Side) */}
                 <div className="lg:col-span-12 xl:col-span-12 font-sans">
-                  <ScannerTerminal 
+                  <ScannerTerminal
                     walletAddress={walletAddress}
+                    walletPublicKey={publicKey}
+                    connection={connection}
                     onBurnSelect={handleBurnItems}
                     isBurning={isBurning}
                     walletBalance={walletBalance}

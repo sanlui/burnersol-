@@ -88,9 +88,10 @@ export default function SwapTerminal({
           <button
             onClick={() => setShowSettings(!showSettings)}
             onMouseEnter={() => sound.playHoverPluck()}
+            aria-label="Toggle swap settings"
             className="p-2 rounded-none border border-white/10 hover:border-white/20 text-slate-400 hover:text-white transition-all bg-white/[0.01] cursor-pointer"
           >
-            <Settings2 className="w-4 h-4" />
+            <Settings2 className="w-4 h-4" aria-hidden="true" />
           </button>
           
           {showSettings && (
@@ -150,6 +151,7 @@ export default function SwapTerminal({
               <button
                 onClick={handleMax}
                 onMouseEnter={() => sound.playHoverPluck()}
+                aria-label="Set maximum amount"
                 className="px-2 py-0.5 text-[9px] font-mono rounded-none border border-white/10 hover:border-flame-orange/40 hover:text-flame-orange text-slate-400 cursor-pointer"
               >
                 MAX
@@ -169,9 +171,10 @@ export default function SwapTerminal({
             onClick={handleSwitch}
             onMouseEnter={() => sound.playHoverPluck()}
             disabled={isSwapping}
+            aria-label="Switch token direction"
             className="p-2 ml-0 rounded-none bg-[#0e0e0e] border border-white/10 text-slate-400 hover:text-flame-orange hover:border-flame-orange/40 hover:scale-110 active:scale-95 duration-300 shadow-md cursor-pointer"
           >
-            <ArrowDownUp className="w-3.5 h-3.5" />
+            <ArrowDownUp className="w-3.5 h-3.5" aria-hidden="true" />
           </button>
         </div>
 
