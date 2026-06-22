@@ -32,6 +32,16 @@ const SafeWalletContext = createContext<WalletState>({
   connection: null,
 });
 
+// Lazy connection singleton - only loads @solana/web3.js when first accessed
+let solanaConnection: any = null;
+const getSolanaConnection = async () => {
+  if (!solanaConnection) {
+    const { Connection, clusterApiUrl } = await import('@solana/web3.js');
+    solanaConnection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
+  }
+  return solanaConnection;
+};
+
 export function useSafeWallet() {
   return useContext(SafeWalletContext);
 }
@@ -76,7 +86,7 @@ function WalletProviderInner({ children }: Props) {
           new solflareMod.SolflareWalletAdapter(),
         ];
 
-        const conn = new web3Mod.Connection(endpoint, "confirmed");
+        const conn = await getSolanaConnection();
 
         setModules({ CP, WP, WMP, useWallet, useWalletModal, endpoint, adapters, conn });
 
