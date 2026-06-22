@@ -23,7 +23,7 @@ export default function Header({ walletBalance }: HeaderProps) {
       try {
         const controller = new AbortController();
         const id = setTimeout(() => controller.abort(), 5000);
-        const res = await fetch(`https://api.jup.ag/price/v2?ids=${SOL_MINT}`, { signal: controller.signal });
+        const res = await fetch(`/api/jupiter/price?ids=${SOL_MINT}`, { signal: controller.signal });
         clearTimeout(id);
         if (!res.ok) {
           setSolPrice(-1);
